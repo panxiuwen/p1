@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Pan&#39;s websit">
+    <title>使用Hexo框架建站 - Pan&#39;s websit</title>
+    <meta name="author" content="Sean Pan">
+    
+        <meta name="keywords" content="hexo,javascript">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍如何使用Hexo框架在Github托管静态网站，本教程的代码适用Win&#x2F;Linux&#x2F;Mac\n\n\n一、Hexo的安装与初始化1.1安装请配置好git和Node并安装hexo配置git部分详见Git的使用配置Node部分详见Node使用的相关笔记如果较慢，建议使用Fastgithub代理\n1npm install hexo-cli -g\n1.2初始化初始化工程文件，假设我们本地存放blog的位置是d:&#x2F;tools&#x2F;blog&#x2F;目录中不要有中文和空格\n1234cd d:/toolshexo init blogcd blognpm install\n1.3配置文件修改&#x2F;_config.yml\n123456789url：必须要设置，否则某些资源会变成exmple.com，这个问题我也没解决permalink：决定生成blog的链接pretty_urls：全部设置成false，否则访问还得加.htmlDirectory：决定各文件存放位置post_asset_folder：设置为true后，资源文件都会在对应标题的title文件夹里直接调用relative_link：笔者亲测有bug，建议关闭此选项index_generator：决定页面生成文章的数量和顺序deploy：决定部署方式theme：设置主题\n1.4预览12hexo cl\t\t//清除旧文件hexo s -p 80 -i 192.168.1.100\t//运行hexo内建的http服务器\n\n二、部署1.在自己的http服务器上部署设置好链接后执行\n1hexo g\n然后将生成的public文件夹上传&#x2F;同步&#x2F;软连接到http服务器即可设置快速生成脚本\n123alias hg1=&quot;cd /app/blog/blog&amp;&amp;hexo g&quot;alias hg2=&quot;cd /app/blog/blog2&amp;&amp;hexo g&quot;alias hg3=&quot;cd /app/blog/blog3&amp;&amp;hexo g&quot;\n\n2.在Github上部署在github上需要注册一个和名字相同的仓库，例如我Github链接是https://github.com/panxiuwen/注册的仓库的名称就应该是”panxiuwen.github.io”安装hexo-deployer-git\n1npm install hexo-deployer-git --save\n在_config文件中添加deploy信息\n12345deploy:  type: git  repo: https://github.com/panxiuwen/panxiuwen.github.io.git  branch: &quot;master&quot;  message: &quot;update blog&quot;\n也可以注册ssh公钥，然后repo替换成ssh的地址，注册方法见git的使用\n12345deploy:  type: git  repo: &quot;git@github.com:panxiuwen/panxiuwen.github.io.git&quot;  branch: &quot;master&quot;  message: &quot;update blog&quot;\n上传代码到github\n123hexo cl\t//如果不出现资源文件错误，可以不执行，每次生成都很废硬盘hexo g\t//这一步是为了生成静态文件，若不执行，则hexo d不会改动hexo d\t//部署\n修改仓库的Settings-Pages，在Source中选择Master分支，点Save\n\n三、加载公式1.加载公式如果网页中不加入公式的话，可以不考虑这一步，毕竟生成网页时渲染公式也是要耗费电脑资源的安装hexo-math\n1npm install hexo-math --save\n如果要禁用外部css，禁用后mathjax正常，katex无法渲染\n12345math:  katex:    css: false  mathjax:    css: false\n使用公式参考Markdown的高阶用法注意一个网页中的公式数量有限制，笔者测试的结果是大约是320个\n2.安装Tranquilpeak主题这是笔者使用的主题，走的MaterialDesign+简约风，如果你喜欢别的，也可以用其他主题，很成熟的如Next，Fluid等老牌主题教程和文档多，对新手很友好。综上如果你不是特别喜欢这个主题，完全可以跳过此步并选择其他主题。请提前安装好依赖否则将报错\n1apt-get install python3 python3-dev make g++\n下载Tranquilpeak主题，并放在&#x2F;blog&#x2F;themes目录中在主题目录运行\n1npm install &amp;&amp; npm run prod\n主题相关资源文件\n\n\n\n侧边栏图标存储目录：&#x2F;themes&#x2F;tranquilpeak&#x2F;node_modules&#x2F;@fortawesome&#x2F;fontawesome-free&#x2F;svgs&#x2F;brands侧边栏布局修改：&#x2F;tranquilpeak&#x2F;_config.yml侧边栏显示内容修改：&#x2F;tranquilpeak&#x2F;languages&#x2F;zh-cn.yml添加网站图标：favicon.svg放在&#x2F;tranquilpeak&#x2F;source&#x2F;assets&#x2F;images&#x2F;中，在&#x2F;tranquilpeak&#x2F;_config.yml里的favicon键后添加文件名即可更新需要替换重要的数据文件\n\n\n&#x2F;blog&#x2F;_config.yml&#x2F;blog&#x2F;source&#x2F;&#x2F;blog&#x2F;themes&#x2F;tranquilpeak&#x2F;_config.yml&#x2F;blog&#x2F;themes&#x2F;tranquilpeak&#x2F;languages&#x2F;zh-cn.yml&#x2F;blog&#x2F;themes&#x2F;tranquilpeak&#x2F;source&#x2F;assets&#x2F;images&#x2F;\n\n删除标题中的“发表在XXX”\n\n修改blog&#x2F;themes&#x2F;tranquilpeak&#x2F;layout&#x2F;_partial&#x2F;post&#x2F;meta.ejs\n\n1&lt;% if ((post.categories) &amp;&amp; (post.categories.length &lt; 0)) &#123; %&gt;\n此主题的表格存在溢出问题，使用建议参考Markdown的高阶用法\n\n四、一些问题和小技巧1.Could not read from remote repository.Please make sure you have the correct access rightsssh未配置好，见git的使用\n2.链接到其他文章拿本站为例，本站挂在github上的链接为\n1https://panxiuwen.github.io\n那么从\n1https://panxiuwen.github.io/post/1007\n跳转到\n1https://panxiuwen.github.io/post/2017\n只需在1007的Markdown文件里写入写下面的链接代码即可\n1[名字随便起](/post/2017/)\n3.Tranquilpeak在Linxu上安装出现的问题提示\n1Node Sass does not yet support your current environment: Linux 64-bit with Unsupported runtime\n尝试使用，多等一会，真是慢到吐血\n1npm rebuild node-sass\n\n4.文件夹大小写问题上传到github上的文件夹默认是不区分大小写的，且github有历史记录的功能，所以一旦改了目录的大小写，将会再也无法更改导致网站404，查阅资料得知可通过修改github配置文件解决修改“&#x2F;blog&#x2F;.deploy_git&#x2F;.git&#x2F;config”中的\n1ignorecase = false\n5.嵌入Bilibili视频分享-&gt;嵌入代码\n1234&#123;% raw %&#125;&lt;div style=&quot;position: relative; width: 100%; height: 0; padding-bottom: 75%;&quot;&gt;&lt;iframe src=&quot;//player.bilibili.com/player.html?aid=93802760&amp;bvid=BV1tE411x76k&amp;cid=160149744&amp;page=1&quot; scrolling=&quot;no&quot; border=&quot;0&quot; frameborder=&quot;no&quot; framespacing=&quot;0&quot; allowfullscreen=&quot;true&quot; style=&quot;position: absolute; width: 100%; height: 100%; Left: 0; top: 0;&quot; &gt;&lt;/iframe&gt;&lt;/div&gt;&#123;% endraw %&#125;\n五、建立多镜像点由于本人的站点使用了绝对链接，导致每次部署&#x2F;调试&#x2F;更换镜像都会产生不同的文件，导致每次操作都得清除缓存，所以磁盘擦写量很大，想了个每次只用更新一次文件的方法假设我的blog目录是&#x2F;blog，此文件夹作为调试文件夹，url&#x3D;http://192.168.192.100/那么我们建立&#x2F;blogg文件夹作为Github节点，其中url设置为https://panxiuwen.github.io/建立&#x2F;blogc作为Cloudflare节点，其中url设置为https://panxiuwen.pages.dev/设置.github、node_modules、scaffolds、source、themes软连接文件夹到新文件夹设置.gitignore、package.json、package-lock.json软连接文件到新文件夹将一键部署hexo.py和_config.yml文件复制到新文件夹，其中一键部署hexo.py文件内容在后面对于Windows\n12345678mklink &quot;E:\\Store\\blogp\\package.json&quot; &quot;E:\\Store\\blog\\package.json&quot;mklink &quot;E:\\Store\\blogp\\.gitignore&quot; &quot;E:\\Store\\blog\\.gitignore&quot;mklink &quot;E:\\Store\\blogp\\package-lock.json&quot; &quot;E:\\Store\\blog\\package-lock.json&quot;mklink /d &quot;E:\\Store\\blogp\\.github&quot; &quot;E:\\Store\\blog\\.github&quot;mklink /d &quot;E:\\Store\\blogp\\node_modules&quot; &quot;E:\\Store\\blog\\node_modules&quot;mklink /d &quot;E:\\Store\\blogp\\scaffolds&quot; &quot;E:\\Store\\blog\\scaffolds&quot;mklink /d &quot;E:\\Store\\blogp\\source3&quot; &quot;E:\\Store\\blog\\source3&quot;mklink /d &quot;E:\\Store\\blogp\\themes&quot; &quot;E:\\Store\\blog\\themes&quot;\n对于Linux\n1234567ln /app/blog/blog/package.json /app/blog/blogg/package.json -sln /app/blog/blog/.gitignore /app/blog/blogg/.gitignore -sln /app/blog/blog/package-lock.json /app/blog/blogg/package-lock.json -sln /app/blog/blog/.github /app/blog/blogg/.github -sln /app/blog/blog/node_modules /app/blog/blogg/node_modules -sln /app/blog/blog/scaffolds /app/blog/blogg/scaffolds -sln /app/blog/blog/themes /app/blog/blogg/themes -s\n若将生成的静态文件链接至Web服务器\n1ln /app/blog/blog2/public /var/www/html/p2 -s\n\n1.搭建Cloudflare镜像站Cloudflare是全球顶级的CDN供应商，为用户免费托管网站，每月免费部署500次，可设置100个domains，不限访问带宽和流量，每个站点可存储20k个文件，最大文件为25M，详见Limits，虽然节点在美国，但打开速度甚至比gitee还快。首先进入Cloudflare官网，Page-&gt;创建项目-&gt;连接到Git-&gt;登陆Github后选择一个仓库-&gt;选择分支-&gt;开始部署注意页面部署后无法修改url，Page的url就是”项目名称+.pages.dev”，所以部署前要提前写好_config里的url。只需要部署一次，绑定的github仓库更新它就更新了。\n2.搭建Netlify镜像站Netlify每月流量100G，每次只能同时部署一个项目，每月5小时的部署时长，搭建方法与前面两个类似，速度和github半斤八两，比github稳定那么一丢丢。进入Netlify官网，也限制月流量100G，直接照着前两个搞就行了。\n3.搭建Vercel镜像站现貌似已经无法访问，Vercel每月流量100G，速度比Cloudflare慢一点但还是比Github快不少，在Billing-Plant查看用量。进入Vercel官网，注册后选择Continuewith GitHub，成功后新建一个项目，选择存放主页代码的仓库，点击 Import导入该仓库，再点Deploy开始部署。点击 Go to Dashboard，进入项目主界面。点击上方的 Settings，选择Domains修改域名。对于XXX.vercel.app 这个域名，你只能修改XXX这一部分，注意修改部署前_config.yml里的url。\n\n4.搭建Gitlab镜像站笔者实在是玩不转，读者可以自己弄\n\n5.不建议搭建的镜像站GiteeGitee是国内Git服务提供商，提供免费的GitePage服务，实名认证通常审核1天每次更新完仓库需手动部署，但是屏蔽规则和屏蔽词太多，可能是公司太小，算法不太健全，而且免费服务还能怎样，考虑这么多虽然选择原谅它，但我还是懒得弄了。腾讯云腾讯云是国内顶级服务器提供商，可以使用Serverless进行部署使用serverless工具部署，给的免费域名很难记，用起来的话肯定得绑自己的域名的，计费规则复杂，教程可参考部署 Hexo 博客阿里云腾讯云是国内顶级服务器提供商，可以使用OSS进行部署使用hexo-deployer-ali-oss工具进行部署，给的免费域名很难记，用起来的话肯定得绑自己的域名的，计费方式复杂，教程可参考阿里云OSS部署Hexo教程七牛云七牛云是国内的服务器提供商，可以使用kodo进行部署使用hexo-qiniu-sync工具进行部署，不给免费域名，教程可参考hexo托管七牛云\n\n6.Python一键调试&#x2F;部署代码每次使用命令太麻烦？该脚本通过读取配置文件中的url实现部署和调试使用前需要安装pyyaml\n1pip install pyyaml -i https://pypi.tuna.tsinghua.edu.cn/simple\n如果需要多个站点，部署到多个仓库，可使用Python脚本辅助运行脚本的存放和运行都应该在blog文件夹根目录内，代码为如下\n1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950import osimport yamlf = open(&quot;_config.yml&quot;, &quot;r&quot;, encoding=&quot;utf-8&quot;)date=yaml.load(f, Loader=yaml.FullLoader)url=date[&quot;url&quot;]repo=date[&quot;deploy&quot;][&quot;repo&quot;]source=date[&quot;source_dir&quot;]### 仅调试，链接为http://192.168.192.100if url ==&quot;http://192.168.192.100/&quot;:    os.system(&quot;hexo cl&quot;)    os.system(&quot;cmd/c start hexo s&quot;)### 页面1，链接为http://192.168.192.200/k，资源目录在/source，部署于自己的服务器上elif url ==&quot;http://192.168.192.200/k&quot;:    if source==&quot;source&quot;:        os.system(&quot;hexo cl&quot;)        os.system(&quot;cmd/c start hexo g&quot;)    else:        os.system(&quot;msg %username% /w /v 资源文件夹不对&quot;)### 页面2，链接为http://192.168.192.200/n，资源目录在/source2，部署于自己的服务器上elif url ==&quot;http://192.168.192.200/n&quot;:    if source==&quot;source2&quot;:        os.system(&quot;hexo cl&quot;)        os.system(&quot;cmd/c start hexo g&quot;)    else:        os.system(&quot;msg %username% /w /v 资源文件夹不对&quot;)### 页面1，链接为https://panxiuwen.pages.dev/，资源目录在/source，仓库位于git@github.com:panxiuwen/panxiuwen.github.io.gitelif url ==&quot;https://panxiuwen.github.io/&quot;:    os.system(&quot;hexo cl&quot;)    if repo==&quot;git@github.com:panxiuwen/panxiuwen.github.io.git&quot;:        if source==&quot;source&quot;:            os.system(&quot;hexo cl&quot;)            os.system(&quot;cmd/c start hexo d&quot;)        else:            os.system(&quot;msg %username% /w /v 资源文件夹不对&quot;)    else:        os.system(&quot;msg %username% /w /v 目标仓库不对&quot;)### 页面2，链接为https://panxiuwen.pages.dev/，资源目录在/source2，仓库位于git@github.com:panxiuwen/CloudflarePage.gitelif url ==&quot;https://panxiuwen.pages.dev/&quot;:    if repo==&quot;git@github.com:panxiuwen/CloudflarePage.git&quot;:        if source==&quot;source2&quot;:            os.system(&quot;hexo cl&quot;)            os.system(&quot;cmd/c start hexo d&quot;)        else:            os.system(&quot;msg %username% /w /v 资源文件夹不对&quot;)    else:        os.system(&quot;msg %username% /w /v 目标仓库不对&quot;)else:    os.system(&quot;msg %username% /w /v 请检查url是否正确&quot;)\n\n六、常见问题1.Template render error: (unknown path) Error: unexpected end of comment检查文章中是否有&#123; #字符串，如果有就删掉\n七、参考文档将Hexo仓库Hexo主题仓库Tranquilpeak的仓库Hexo-math的仓库\n","dateCreated":"2022-06-01T00:00:00+08:00","dateModified":"2023-02-27T23:52:04+08:00","datePublished":"2022-06-01T00:00:00+08:00","description":"本文介绍如何使用Hexo框架在Github托管静态网站，本教程的代码适用Win&#x2F;Linux&#x2F;Mac","headline":"使用Hexo框架建站","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2017/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2017/","keywords":"Develop","thumbnailUrl":"cover.jpg"}</script>
+    <meta name="description" content="本文介绍如何使用Hexo框架在Github托管静态网站，本教程的代码适用Win&#x2F;Linux&#x2F;Mac">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="使用Hexo框架建站">
+<meta property="og:url" content="https://panxiuwen.github.io/posts/2017/index.html">
+<meta property="og:site_name" content="Pan&#39;s websit">
+<meta property="og:description" content="本文介绍如何使用Hexo框架在Github托管静态网站，本教程的代码适用Win&#x2F;Linux&#x2F;Mac">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-27T15:52:04.430Z">
+<meta property="article:author" content="Sean Pan">
+<meta property="article:tag" content="Develop">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@982202733">
+<meta property="fb:app_id" content="[object Object]">
+    
+        <link rel="publisher" href="https://plus.google.com/982202733"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/posts/2017/cover.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2017/cover.jpg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Pan&#39;s websit
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">Sean Pan</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>不似天涯，卷起杨花似雪花</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="知乎"
+                        >
+                        <i class="sidebar-button-icon fab fa-zhihu" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">知乎</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://music.163.com/#/user/home?id=70816221"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="网易云"
+                        >
+                        <i class="sidebar-button-icon fab fa-tiktok" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">网易云</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/panxiuwen/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://gitee.com/sean982202733/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Gitee"
+                        >
+                        <i class="sidebar-button-icon fab fa-google" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Gitee</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:panxiuwen_sean@qq.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            使用Hexo框架建站
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-06-01T00:00:00+08:00">
+	
+		    2022年 6月 01日
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Develop/">Develop</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>本文介绍如何使用Hexo框架在Github托管静态网站，本教程的代码适用Win&#x2F;Linux&#x2F;Mac</p>
+<span id="more"></span>
+<hr>
+<h3 id="一、Hexo的安装与初始化"><a href="#一、Hexo的安装与初始化" class="headerlink" title="一、Hexo的安装与初始化"></a>一、Hexo的安装与初始化</h3><h4 id="1-1安装"><a href="#1-1安装" class="headerlink" title="1.1安装"></a>1.1安装</h4><p>请配置好git和Node并安装hexo<br>配置git部分详见<a href="/posts/2013/">Git的使用</a><br>配置Node部分详见<a href="/posts/4018/">Node使用的相关笔记</a><br>如果较慢，建议使用Fastgithub代理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+<h4 id="1-2初始化"><a href="#1-2初始化" class="headerlink" title="1.2初始化"></a>1.2初始化</h4><p>初始化工程文件，假设我们本地存放blog的位置是d:&#x2F;tools&#x2F;blog&#x2F;目录中不要有中文和空格</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd d:/tools</span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<h4 id="1-3配置文件"><a href="#1-3配置文件" class="headerlink" title="1.3配置文件"></a>1.3配置文件</h4><p>修改&#x2F;_config.yml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">url：必须要设置，否则某些资源会变成exmple.com，这个问题我也没解决</span><br><span class="line">permalink：决定生成blog的链接</span><br><span class="line">pretty_urls：全部设置成false，否则访问还得加.html</span><br><span class="line">Directory：决定各文件存放位置</span><br><span class="line">post_asset_folder：设置为true后，资源文件都会在对应标题的title文件夹里直接调用</span><br><span class="line">relative_link：笔者亲测有bug，建议关闭此选项</span><br><span class="line">index_generator：决定页面生成文章的数量和顺序</span><br><span class="line">deploy：决定部署方式</span><br><span class="line">theme：设置主题</span><br></pre></td></tr></table></figure>
+<h4 id="1-4预览"><a href="#1-4预览" class="headerlink" title="1.4预览"></a>1.4预览</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo cl		//清除旧文件</span><br><span class="line">hexo s -p 80 -i 192.168.1.100	//运行hexo内建的http服务器</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="二、部署"><a href="#二、部署" class="headerlink" title="二、部署"></a>二、部署</h3><h4 id="1-在自己的http服务器上部署"><a href="#1-在自己的http服务器上部署" class="headerlink" title="1.在自己的http服务器上部署"></a>1.在自己的http服务器上部署</h4><p>设置好链接后执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure>
+<p>然后将生成的public文件夹上传&#x2F;同步&#x2F;软连接到http服务器即可<br>设置快速生成脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alias hg1=&quot;cd /app/blog/blog&amp;&amp;hexo g&quot;</span><br><span class="line">alias hg2=&quot;cd /app/blog/blog2&amp;&amp;hexo g&quot;</span><br><span class="line">alias hg3=&quot;cd /app/blog/blog3&amp;&amp;hexo g&quot;</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="2-在Github上部署"><a href="#2-在Github上部署" class="headerlink" title="2.在Github上部署"></a>2.在Github上部署</h4><p>在github上需要注册一个和名字相同的仓库，例如我Github链接是<a target="_blank" rel="noopener" href="https://github.com/panxiuwen/">https://github.com/panxiuwen/</a><br>注册的仓库的名称就应该是”panxiuwen.github.io”<br>安装hexo-deployer-git</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>在_config文件中添加deploy信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/panxiuwen/panxiuwen.github.io.git</span><br><span class="line">  branch: &quot;master&quot;</span><br><span class="line">  message: &quot;update blog&quot;</span><br></pre></td></tr></table></figure>
+<p>也可以注册ssh公钥，然后repo替换成ssh的地址，注册方法见<a href="/posts/2013/">git的使用</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: &quot;git@github.com:panxiuwen/panxiuwen.github.io.git&quot;</span><br><span class="line">  branch: &quot;master&quot;</span><br><span class="line">  message: &quot;update blog&quot;</span><br></pre></td></tr></table></figure>
+<p>上传代码到github</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo cl	//如果不出现资源文件错误，可以不执行，每次生成都很废硬盘</span><br><span class="line">hexo g	//这一步是为了生成静态文件，若不执行，则hexo d不会改动</span><br><span class="line">hexo d	//部署</span><br></pre></td></tr></table></figure>
+<p>修改仓库的Settings-Pages，在Source中选择Master分支，点Save</p>
+<hr>
+<h3 id="三、加载公式"><a href="#三、加载公式" class="headerlink" title="三、加载公式"></a>三、加载公式</h3><h4 id="1-加载公式"><a href="#1-加载公式" class="headerlink" title="1.加载公式"></a>1.加载公式</h4><p><strong>如果网页中不加入公式的话，可以不考虑这一步，毕竟生成网页时渲染公式也是要耗费电脑资源的</strong><br>安装hexo-math</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-math --save</span><br></pre></td></tr></table></figure>
+<p>如果要禁用外部css，禁用后mathjax正常，katex无法渲染</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">math:</span><br><span class="line">  katex:</span><br><span class="line">    css: false</span><br><span class="line">  mathjax:</span><br><span class="line">    css: false</span><br></pre></td></tr></table></figure>
+<p>使用公式参考<a href="/posts/2024/">Markdown的高阶用法</a><br>注意一个网页中的公式数量有限制，笔者测试的结果是大约是320个</p>
+<h4 id="2-安装Tranquilpeak主题"><a href="#2-安装Tranquilpeak主题" class="headerlink" title="2.安装Tranquilpeak主题"></a>2.安装Tranquilpeak主题</h4><p>这是笔者使用的主题，走的MaterialDesign+简约风，如果你喜欢别的，也可以用其他主题，很成熟的如Next，Fluid等老牌主题教程和文档多，对新手很友好。<strong>综上如果你不是特别喜欢这个主题，完全可以跳过此步并选择其他主题。</strong><br>请提前安装好依赖否则将报错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python3 python3-dev make g++</span><br></pre></td></tr></table></figure>
+<p>下载<a target="_blank" rel="noopener" href="https://github.com/LouisBarranqueiro/hexo-theme-tranquilpeak">Tranquilpeak主题</a>，并放在&#x2F;blog&#x2F;themes目录中在主题目录运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install &amp;&amp; npm run prod</span><br></pre></td></tr></table></figure>
+<p><strong>主题相关资源文件</strong></p>
+<blockquote>
+<blockquote>
+</blockquote>
+<p>侧边栏图标存储目录：&#x2F;themes&#x2F;tranquilpeak&#x2F;node_modules&#x2F;@fortawesome&#x2F;fontawesome-free&#x2F;svgs&#x2F;brands<br>侧边栏布局修改：&#x2F;tranquilpeak&#x2F;_config.yml<br>侧边栏显示内容修改：&#x2F;tranquilpeak&#x2F;languages&#x2F;zh-cn.yml<br>添加网站图标：favicon.svg放在&#x2F;tranquilpeak&#x2F;source&#x2F;assets&#x2F;images&#x2F;中，在&#x2F;tranquilpeak&#x2F;_config.yml里的favicon键后添加文件名即可<br><strong>更新需要替换重要的数据文件</strong></p>
+<blockquote>
+</blockquote>
+<p>&#x2F;blog&#x2F;_config.yml<br>&#x2F;blog&#x2F;source&#x2F;&#x2F;blog&#x2F;themes&#x2F;tranquilpeak&#x2F;_config.yml<br>&#x2F;blog&#x2F;themes&#x2F;tranquilpeak&#x2F;languages&#x2F;zh-cn.yml<br>&#x2F;blog&#x2F;themes&#x2F;tranquilpeak&#x2F;source&#x2F;assets&#x2F;images&#x2F;</p>
+</blockquote>
+<p><strong>删除标题中的“发表在XXX”</strong></p>
+<blockquote>
+<p>修改blog&#x2F;themes&#x2F;tranquilpeak&#x2F;layout&#x2F;_partial&#x2F;post&#x2F;meta.ejs</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;% if ((post.categories) &amp;&amp; (post.categories.length &lt; 0)) &#123; %&gt;</span><br></pre></td></tr></table></figure>
+<p>此主题的表格存在溢出问题，使用建议参考<a href="/posts/2024/">Markdown的高阶用法</a></p>
+<hr>
+<h3 id="四、一些问题和小技巧"><a href="#四、一些问题和小技巧" class="headerlink" title="四、一些问题和小技巧"></a>四、一些问题和小技巧</h3><h4 id="1-Could-not-read-from-remote-repository-Please-make-sure-you-have-the-correct-access-rights"><a href="#1-Could-not-read-from-remote-repository-Please-make-sure-you-have-the-correct-access-rights" class="headerlink" title="1.Could not read from remote repository.Please make sure you have the correct access rights"></a>1.Could not read from remote repository.Please make sure you have the correct access rights</h4><p>ssh未配置好，见<a href="/posts/2013/">git的使用</a></p>
+<h4 id="2-链接到其他文章"><a href="#2-链接到其他文章" class="headerlink" title="2.链接到其他文章"></a>2.链接到其他文章</h4><p>拿本站为例，本站挂在github上的链接为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://panxiuwen.github.io</span><br></pre></td></tr></table></figure>
+<p>那么从</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://panxiuwen.github.io/post/1007</span><br></pre></td></tr></table></figure>
+<p>跳转到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://panxiuwen.github.io/post/2017</span><br></pre></td></tr></table></figure>
+<p>只需在1007的Markdown文件里写入写下面的链接代码即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[名字随便起](/post/2017/)</span><br></pre></td></tr></table></figure>
+<h4 id="3-Tranquilpeak在Linxu上安装出现的问题"><a href="#3-Tranquilpeak在Linxu上安装出现的问题" class="headerlink" title="3.Tranquilpeak在Linxu上安装出现的问题"></a>3.Tranquilpeak在Linxu上安装出现的问题</h4><p>提示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Node Sass does not yet support your current environment: Linux 64-bit with Unsupported runtime</span><br></pre></td></tr></table></figure>
+<p>尝试使用，多等一会，真是慢到吐血</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm rebuild node-sass</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="4-文件夹大小写问题"><a href="#4-文件夹大小写问题" class="headerlink" title="4.文件夹大小写问题"></a>4.文件夹大小写问题</h4><p>上传到github上的文件夹默认是不区分大小写的，且github有历史记录的功能，所以一旦改了目录的大小写，将会再也无法更改导致网站404，查阅资料得知可通过修改github配置文件解决<br>修改“&#x2F;blog&#x2F;.deploy_git&#x2F;.git&#x2F;config”中的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ignorecase = false</span><br></pre></td></tr></table></figure>
+<h4 id="5-嵌入Bilibili视频"><a href="#5-嵌入Bilibili视频" class="headerlink" title="5.嵌入Bilibili视频"></a>5.嵌入Bilibili视频</h4><p>分享-&gt;嵌入代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line">&lt;div style=&quot;position: relative; width: 100%; height: 0; padding-bottom: 75%;&quot;&gt;</span><br><span class="line">&lt;iframe src=&quot;//player.bilibili.com/player.html?aid=93802760&amp;bvid=BV1tE411x76k&amp;cid=160149744&amp;page=1&quot; scrolling=&quot;no&quot; border=&quot;0&quot; frameborder=&quot;no&quot; framespacing=&quot;0&quot; allowfullscreen=&quot;true&quot; style=&quot;position: absolute; width: 100%; height: 100%; Left: 0; top: 0;&quot; &gt;&lt;/iframe&gt;&lt;/div&gt;</span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="五、建立多镜像点"><a href="#五、建立多镜像点" class="headerlink" title="五、建立多镜像点"></a>五、建立多镜像点</h3><p>由于本人的站点使用了绝对链接，导致每次部署&#x2F;调试&#x2F;更换镜像都会产生不同的文件，导致每次操作都得清除缓存，所以磁盘擦写量很大，想了个每次只用更新一次文件的方法<br>假设我的blog目录是&#x2F;blog，此文件夹作为调试文件夹，url&#x3D;<code>http://192.168.192.100/</code><br>那么我们建立&#x2F;blogg文件夹作为Github节点，其中url设置为<code>https://panxiuwen.github.io/</code><br>建立&#x2F;blogc作为Cloudflare节点，其中url设置为<code>https://panxiuwen.pages.dev/</code><br>设置.github、node_modules、scaffolds、source、themes软连接文件夹到新文件夹<br>设置.gitignore、package.json、package-lock.json软连接文件到新文件夹<br>将一键部署hexo.py和_config.yml文件复制到新文件夹，其中一键部署hexo.py文件内容在后面<br>对于Windows</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mklink &quot;E:\Store\blogp\package.json&quot; &quot;E:\Store\blog\package.json&quot;</span><br><span class="line">mklink &quot;E:\Store\blogp\.gitignore&quot; &quot;E:\Store\blog\.gitignore&quot;</span><br><span class="line">mklink &quot;E:\Store\blogp\package-lock.json&quot; &quot;E:\Store\blog\package-lock.json&quot;</span><br><span class="line">mklink /d &quot;E:\Store\blogp\.github&quot; &quot;E:\Store\blog\.github&quot;</span><br><span class="line">mklink /d &quot;E:\Store\blogp\node_modules&quot; &quot;E:\Store\blog\node_modules&quot;</span><br><span class="line">mklink /d &quot;E:\Store\blogp\scaffolds&quot; &quot;E:\Store\blog\scaffolds&quot;</span><br><span class="line">mklink /d &quot;E:\Store\blogp\source3&quot; &quot;E:\Store\blog\source3&quot;</span><br><span class="line">mklink /d &quot;E:\Store\blogp\themes&quot; &quot;E:\Store\blog\themes&quot;</span><br></pre></td></tr></table></figure>
+<p>对于Linux</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ln /app/blog/blog/package.json /app/blog/blogg/package.json -s</span><br><span class="line">ln /app/blog/blog/.gitignore /app/blog/blogg/.gitignore -s</span><br><span class="line">ln /app/blog/blog/package-lock.json /app/blog/blogg/package-lock.json -s</span><br><span class="line">ln /app/blog/blog/.github /app/blog/blogg/.github -s</span><br><span class="line">ln /app/blog/blog/node_modules /app/blog/blogg/node_modules -s</span><br><span class="line">ln /app/blog/blog/scaffolds /app/blog/blogg/scaffolds -s</span><br><span class="line">ln /app/blog/blog/themes /app/blog/blogg/themes -s</span><br></pre></td></tr></table></figure>
+<p>若将生成的静态文件链接至Web服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln /app/blog/blog2/public /var/www/html/p2 -s</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-搭建Cloudflare镜像站"><a href="#1-搭建Cloudflare镜像站" class="headerlink" title="1.搭建Cloudflare镜像站"></a>1.搭建Cloudflare镜像站</h4><p>Cloudflare是全球顶级的CDN供应商，为用户免费托管网站，每月免费部署500次，可设置100个domains，不限访问带宽和流量，每个站点可存储20k个文件，最大文件为25M，详见<a target="_blank" rel="noopener" href="https://developers.cloudflare.com/pages/platform/limits/">Limits</a>，虽然节点在美国，但打开速度甚至比gitee还快。<br>首先进入<a target="_blank" rel="noopener" href="https://dash.cloudflare.com/">Cloudflare官网</a>，Page-&gt;创建项目-&gt;连接到Git-&gt;登陆Github后选择一个仓库-&gt;选择分支-&gt;开始部署<br><strong>注意页面部署后无法修改url，Page的url就是”项目名称+.pages.dev”，所以部署前要提前写好_config里的url</strong>。只需要部署一次，绑定的github仓库更新它就更新了。</p>
+<h4 id="2-搭建Netlify镜像站"><a href="#2-搭建Netlify镜像站" class="headerlink" title="2.搭建Netlify镜像站"></a>2.搭建Netlify镜像站</h4><p>Netlify每月流量100G，每次只能同时部署一个项目，每月5小时的部署时长，搭建方法与前面两个类似，速度和github半斤八两，比github稳定那么一丢丢。<br>进入<a target="_blank" rel="noopener" href="https://www.netlify.com/">Netlify官网</a>，也限制月流量100G，直接照着前两个搞就行了。</p>
+<h4 id="3-搭建Vercel镜像站"><a href="#3-搭建Vercel镜像站" class="headerlink" title="3.搭建Vercel镜像站"></a>3.搭建Vercel镜像站</h4><p>现貌似已经无法访问，Vercel每月流量100G，速度比Cloudflare慢一点但还是比Github快不少，在<a target="_blank" rel="noopener" href="https://vercel.com/account/billing">Billing-Plant</a>查看用量。<br>进入<a target="_blank" rel="noopener" href="https://vercel.com/">Vercel官网</a>，注册后选择Continuewith GitHub，成功后新建一个项目，选择存放主页代码的仓库，点击 Import导入该仓库，再点Deploy开始部署。<br>点击 Go to Dashboard，进入项目主界面。点击上方的 Settings，选择Domains修改域名。对于XXX.vercel.app 这个域名，你只能修改XXX这一部分，注意修改部署前_config.yml里的url。</p>
+<hr>
+<h4 id="4-搭建Gitlab镜像站"><a href="#4-搭建Gitlab镜像站" class="headerlink" title="4.搭建Gitlab镜像站"></a>4.搭建Gitlab镜像站</h4><p>笔者实在是玩不转，读者可以自己弄</p>
+<hr>
+<h4 id="5-不建议搭建的镜像站"><a href="#5-不建议搭建的镜像站" class="headerlink" title="5.不建议搭建的镜像站"></a>5.不建议搭建的镜像站</h4><p><strong>Gitee</strong><br>Gitee是国内Git服务提供商，提供免费的GitePage服务，实名认证通常审核1天每次更新完仓库需手动部署，但是屏蔽规则和屏蔽词太多，可能是公司太小，算法不太健全，而且免费服务还能怎样，考虑这么多虽然选择原谅它，但我还是懒得弄了。<br><strong>腾讯云</strong><br>腾讯云是国内顶级服务器提供商，可以使用Serverless进行部署<br>使用serverless工具部署，给的免费域名很难记，用起来的话肯定得绑自己的域名的，计费规则复杂，教程可参考<a target="_blank" rel="noopener" href="https://cloud.tencent.com/document/product/1154/40217">部署 Hexo 博客</a><br><strong>阿里云</strong><br>腾讯云是国内顶级服务器提供商，可以使用OSS进行部署<br>使用hexo-deployer-ali-oss工具进行部署，给的免费域名很难记，用起来的话肯定得绑自己的域名的，计费方式复杂，教程可参考<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/b16356059d0f">阿里云OSS部署Hexo教程</a><br><strong>七牛云</strong><br>七牛云是国内的服务器提供商，可以使用kodo进行部署<br>使用hexo-qiniu-sync工具进行部署，不给免费域名，教程可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43842636/article/details/90049193">hexo托管七牛云</a></p>
+<hr>
+<h4 id="6-Python一键调试-x2F-部署代码"><a href="#6-Python一键调试-x2F-部署代码" class="headerlink" title="6.Python一键调试&#x2F;部署代码"></a>6.Python一键调试&#x2F;部署代码</h4><p>每次使用命令太麻烦？该脚本通过读取配置文件中的url实现部署和调试<br>使用前需要安装pyyaml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyyaml -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+<p>如果需要多个站点，部署到多个仓库，可使用Python脚本辅助运行<br>脚本的存放和运行都应该在blog文件夹根目录内，代码为如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import yaml</span><br><span class="line"></span><br><span class="line">f = open(&quot;_config.yml&quot;, &quot;r&quot;, encoding=&quot;utf-8&quot;)</span><br><span class="line">date=yaml.load(f, Loader=yaml.FullLoader)</span><br><span class="line">url=date[&quot;url&quot;]</span><br><span class="line">repo=date[&quot;deploy&quot;][&quot;repo&quot;]</span><br><span class="line">source=date[&quot;source_dir&quot;]</span><br><span class="line">### 仅调试，链接为http://192.168.192.100</span><br><span class="line">if url ==&quot;http://192.168.192.100/&quot;:</span><br><span class="line">    os.system(&quot;hexo cl&quot;)</span><br><span class="line">    os.system(&quot;cmd/c start hexo s&quot;)</span><br><span class="line">### 页面1，链接为http://192.168.192.200/k，资源目录在/source，部署于自己的服务器上</span><br><span class="line">elif url ==&quot;http://192.168.192.200/k&quot;:</span><br><span class="line">    if source==&quot;source&quot;:</span><br><span class="line">        os.system(&quot;hexo cl&quot;)</span><br><span class="line">        os.system(&quot;cmd/c start hexo g&quot;)</span><br><span class="line">    else:</span><br><span class="line">        os.system(&quot;msg %username% /w /v 资源文件夹不对&quot;)</span><br><span class="line">### 页面2，链接为http://192.168.192.200/n，资源目录在/source2，部署于自己的服务器上</span><br><span class="line">elif url ==&quot;http://192.168.192.200/n&quot;:</span><br><span class="line">    if source==&quot;source2&quot;:</span><br><span class="line">        os.system(&quot;hexo cl&quot;)</span><br><span class="line">        os.system(&quot;cmd/c start hexo g&quot;)</span><br><span class="line">    else:</span><br><span class="line">        os.system(&quot;msg %username% /w /v 资源文件夹不对&quot;)</span><br><span class="line">### 页面1，链接为https://panxiuwen.pages.dev/，资源目录在/source，仓库位于git@github.com:panxiuwen/panxiuwen.github.io.git</span><br><span class="line">elif url ==&quot;https://panxiuwen.github.io/&quot;:</span><br><span class="line">    os.system(&quot;hexo cl&quot;)</span><br><span class="line">    if repo==&quot;git@github.com:panxiuwen/panxiuwen.github.io.git&quot;:</span><br><span class="line">        if source==&quot;source&quot;:</span><br><span class="line">            os.system(&quot;hexo cl&quot;)</span><br><span class="line">            os.system(&quot;cmd/c start hexo d&quot;)</span><br><span class="line">        else:</span><br><span class="line">            os.system(&quot;msg %username% /w /v 资源文件夹不对&quot;)</span><br><span class="line">    else:</span><br><span class="line">        os.system(&quot;msg %username% /w /v 目标仓库不对&quot;)</span><br><span class="line">### 页面2，链接为https://panxiuwen.pages.dev/，资源目录在/source2，仓库位于git@github.com:panxiuwen/CloudflarePage.git</span><br><span class="line">elif url ==&quot;https://panxiuwen.pages.dev/&quot;:</span><br><span class="line">    if repo==&quot;git@github.com:panxiuwen/CloudflarePage.git&quot;:</span><br><span class="line">        if source==&quot;source2&quot;:</span><br><span class="line">            os.system(&quot;hexo cl&quot;)</span><br><span class="line">            os.system(&quot;cmd/c start hexo d&quot;)</span><br><span class="line">        else:</span><br><span class="line">            os.system(&quot;msg %username% /w /v 资源文件夹不对&quot;)</span><br><span class="line">    else:</span><br><span class="line">        os.system(&quot;msg %username% /w /v 目标仓库不对&quot;)</span><br><span class="line"></span><br><span class="line">else:</span><br><span class="line">    os.system(&quot;msg %username% /w /v 请检查url是否正确&quot;)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="六、常见问题"><a href="#六、常见问题" class="headerlink" title="六、常见问题"></a>六、常见问题</h3><p><em><strong>1.Template render error: (unknown path) Error: unexpected end of comment</strong></em><br>检查文章中是否有<code>&#123; #</code>字符串，如果有就删掉</p>
+<h3 id="七、参考文档"><a href="#七、参考文档" class="headerlink" title="七、参考文档"></a>七、参考文档</h3><p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">将Hexo仓库</a><br><a target="_blank" rel="noopener" href="https://hexo.io/themes/">Hexo主题仓库</a><br><a target="_blank" rel="noopener" href="https://github.com/LouisBarranqueiro/hexo-theme-tranquilpeak">Tranquilpeak的仓库</a><br><a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-math">Hexo-math的仓库</a></p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Develop/" rel="tag">Develop</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/3000/"
+                    data-tooltip="不确定原理为啥不确定啊？又被傅里叶懂完了"
+                    aria-label="上一篇: 不确定原理为啥不确定啊？又被傅里叶懂完了"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4016/"
+                    data-tooltip="Java使用相关笔记"
+                    aria-label="下一篇: Java使用相关笔记"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Sean Pan. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/3000/"
+                    data-tooltip="不确定原理为啥不确定啊？又被傅里叶懂完了"
+                    aria-label="上一篇: 不确定原理为啥不确定啊？又被傅里叶懂完了"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4016/"
+                    data-tooltip="Java使用相关笔记"
+                    aria-label="下一篇: Java使用相关笔记"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">Sean Pan</h4>
+        
+            <div id="about-card-bio"><p>不似天涯，卷起杨花似雪花</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Master in YNU</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Kunming China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

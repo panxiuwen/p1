@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Pan&#39;s websit">
+    <title>安装Linux驱动 - Pan&#39;s websit</title>
+    <meta name="author" content="Sean Pan">
+    
+        <meta name="keywords" content="hexo,javascript">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了Debian驱动安装相关的笔记\n\nCentOS 7 CUDA驱动安装920M最高的CUDA版本是10.1\nDebian CUDA驱动安装禁用Nouveau\n1nano /etc/modprobe.d/blacklist-nouveau.conf\n添加内容\n12blacklist nouveauoptions nouveau modeset=0\n生效\n12sudo update-initramfs -ureboot\n安装依赖\n1apt-get install software-properties-common\n安装cuda\n12345sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/3bf863cc.pubsudo add-apt-repository &quot;deb https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/ /&quot;sudo add-apt-repository contribsudo apt-get updatesudo apt-get -y install cuda-11-6\nNVCC路径\n1/usr/local/cuda-11.8/bin/nvcc\nPS：安装完cuda驱动就不用再安装GPU驱动了查看N卡信息\n1nvidia-smi\n\nCentOS CUDA驱动安装禁用驱动\n123nano /usr/lib/modprobe.d/dist-blacklist.confblacklist nouveauoptions nouveau modeset=0\n重建镜像\n123dracut --forcecp /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r).img.bakdracut /boot/initramfs-$(uname -r).img $(uname -r)\n安装内核\n1yum install &quot;kernel-devel-uname-r == $(uname -r)&quot; yum distro-sync\n如果没有nouveau，就可以开始安装\n123lsmod|grep nouveauyum install gccsudo sh cuda_10.1.105_418.39_linux.run\n\n安装ax200驱动首先添加non-free源\n12345678nano /etc/apt/sources.listdeb http://deb.debian.org/debian bullseye main contrib non-freedeb-src http://deb.debian.org/debian bullseye main contrib non-freedeb http://deb.debian.org/debian-security/ bullseye-security main contrib non-freedeb-src http://deb.debian.org/debian-security/ bullseye-security main contrib non-freedeb http://deb.debian.org/debian bullseye-updates main contrib non-freedeb-src http://deb.debian.org/debian bullseye-updates main contrib non-free\n安装并配置iwlwifi\n1234apt updateapt install firmware-iwlwifimodprobe -r iwlwifimodprobe iwlwifi\nWifi相关1ifconfig -a\t//查看所有网卡，看有没有wlxxx0\n扫描wifi\n1iwlist wlxxx0 scan\n安装wireless-tools\n1apt-get install wireless-tools\n如果出现“Interface doesn’t support scanning : Network is down”，激活网卡\n1sudo ifconfig wlxxx0 up\n配置interfaces\n1nano /etc/network/interfaces\n写入下面内容\n1234allow-hotplug wlxxx0auto wlxxx0iface wlxxx0 inet dhcpwpa-conf /etc/wpa_supplicant/wpa_supplicant.conf\nwifi配置文件：\n1nano /etc/wpa_supplicant/wpa_supplicant.conf\n文件内容如下\n12345678910111213country=CNnetwork=&#123;        ssid=&quot;NTest&quot;        psk=&quot;12345678&quot;        key_mgmt=WPA-PSK        disabled=1&#125;network=&#123;        ssid=&quot;River_Test&quot;        psk=&quot;12345678&quot;&#125;\n输入下面的命令生效\n1ifup wlp6s0\n扫描热点：\n1sudo iwlist scan | grep ESSID\n\nAMD显卡驱动(已弃坑)在Linux® Drivers for AMD Radeon™页面选择系统下载安装\n123456apt install ./amdgpu-install_xxxxxxx-xxxxxx_all.debapt updateapt upgrade -yamdgpu-install --no-dkmsapt install rocm-devreboot\n配置环境\n1234ls -l /dev/dri/render*usermod -a -G render $LOGNAMEusermod -a -G video $LOGNAMEreboot\n测试，不报错就是安装好了\n123rocm-smi\t# 显示gpu性能监控/opt/rocm/bin/rocminfo\t#查看显卡信息1/opt/rocm/opencl/bin/clinfo\t#查看显卡信息1\n添加path\n1echo ‘export PATH=$PATH:/opt/rocm/bin:/opt/rocm/profiler/bin:/opt/rocm/opencl/bin/x86_64’ | sudo tee -a /etc/profile.d/rocm.sh\n\n香橙派armbian GPU驱动先按照官方要求安装\n1234567891011sudo add-apt-repository ppa:liujianfeng1994/panfork-mesasudo add-apt-repository ppa:liujianfeng1994/rockchip-multimediasudo apt updatesudo apt dist-upgradesudo apt install mali-g610-firmware rockchip-multimedia-configsudo apt install libgl1-mesa-dev malirun libmali-g610-x11sudo apt install mesa-opencl-icd mesa-vdpau-drivers mesa-va-driverssudo apt install libegl-mesa0 libegl1-mesa-dev libgl1-mesa-dri libwayland-egl1-mesa libgles2-mesa libgles2-mesa-dev libosmesa6-devsudo apt install libvulkan-dev mesa-vulkan-drivers vulkan-toolssudo apt install libgbm libglapi-mesasudo apt install mesa-common-dev mesa-utils libosmesa6-dev\n安装查看软件\n1apt-get install mesa-utils inxi\n\n1inxi -Fc0\n\nIntel 核显驱动(未验证)安装核显\n12apt-get install intel-media-va-driver mesa-vulkan-drivers\n如果在linux上使用，需要安装 libvulkan驱动\n1apt-get install libvulkan1 libvulkan-dev mesa-vulkan-drivers vulkan-tools\n如果出现 WARNING: lavapipe is not a conformant vulkan implementation, testing use only首先查看icd配置文件\n1ls /usr/share/vulkan/icd.d\n本教程使用igpu，所以显示\n1intel_icd.x86_64.json  lvp_icd.x86_64.json  radeon_icd.x86_64.json\n我们将igpu指定为\n1export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json\n查看vulkan设备\n1vulkaninfo | grep driverName\n如果出现 vkEnumerateInstanceExtensionProperties failed with ERROR_INITIALIZATION_FAILED可以判定是GPU驱动的问题，暂时无解\n参考Ubuntu 22.04安装AMD显卡驱动\n","dateCreated":"2022-10-22T00:00:00+08:00","dateModified":"2023-03-01T23:03:58+08:00","datePublished":"2022-10-22T00:00:00+08:00","description":"本文介绍了Debian驱动安装相关的笔记","headline":"安装Linux驱动","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/4013/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/4013/","keywords":"Linux"}</script>
+    <meta name="description" content="本文介绍了Debian驱动安装相关的笔记">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="安装Linux驱动">
+<meta property="og:url" content="https://panxiuwen.github.io/posts/4013/index.html">
+<meta property="og:site_name" content="Pan&#39;s websit">
+<meta property="og:description" content="本文介绍了Debian驱动安装相关的笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T15:03:58.634Z">
+<meta property="article:author" content="Sean Pan">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@982202733">
+<meta property="fb:app_id" content="[object Object]">
+    
+        <link rel="publisher" href="https://plus.google.com/982202733"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Pan&#39;s websit
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">Sean Pan</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>不似天涯，卷起杨花似雪花</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="知乎"
+                        >
+                        <i class="sidebar-button-icon fab fa-zhihu" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">知乎</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://music.163.com/#/user/home?id=70816221"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="网易云"
+                        >
+                        <i class="sidebar-button-icon fab fa-tiktok" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">网易云</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/panxiuwen/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://gitee.com/sean982202733/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Gitee"
+                        >
+                        <i class="sidebar-button-icon fab fa-google" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Gitee</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:panxiuwen_sean@qq.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            安装Linux驱动
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-10-22T00:00:00+08:00">
+	
+		    2022年 10月 22日
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Linux/">Linux</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>本文介绍了Debian驱动安装相关的笔记</p>
+<span id="more"></span>
+<h3 id="CentOS-7-CUDA驱动安装"><a href="#CentOS-7-CUDA驱动安装" class="headerlink" title="CentOS 7 CUDA驱动安装"></a>CentOS 7 CUDA驱动安装</h3><p>920M最高的CUDA版本是<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-10.1-download-archive-base?target_os=Linux&target_arch=x86_64&target_distro=CentOS&target_version=7">10.1</a></p>
+<h3 id="Debian-CUDA驱动安装"><a href="#Debian-CUDA驱动安装" class="headerlink" title="Debian CUDA驱动安装"></a>Debian CUDA驱动安装</h3><p>禁用Nouveau</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/modprobe.d/blacklist-nouveau.conf</span><br></pre></td></tr></table></figure>
+<p>添加内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blacklist nouveau</span><br><span class="line">options nouveau modeset=0</span><br></pre></td></tr></table></figure>
+<p>生效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo update-initramfs -u</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<p>安装依赖</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install software-properties-common</span><br></pre></td></tr></table></figure>
+<p>安装cuda</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/3bf863cc.pub</span><br><span class="line">sudo add-apt-repository &quot;deb https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/ /&quot;</span><br><span class="line">sudo add-apt-repository contrib</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get -y install cuda-11-6</span><br></pre></td></tr></table></figure>
+<p>NVCC路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/cuda-11.8/bin/nvcc</span><br></pre></td></tr></table></figure>
+<p>PS：安装完cuda驱动就不用再安装GPU驱动了<br>查看N卡信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="CentOS-CUDA驱动安装"><a href="#CentOS-CUDA驱动安装" class="headerlink" title="CentOS CUDA驱动安装"></a>CentOS CUDA驱动安装</h3><p>禁用驱动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nano /usr/lib/modprobe.d/dist-blacklist.conf</span><br><span class="line">blacklist nouveau</span><br><span class="line">options nouveau modeset=0</span><br></pre></td></tr></table></figure>
+<p>重建镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dracut --force</span><br><span class="line">cp /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r).img.bak</span><br><span class="line">dracut /boot/initramfs-$(uname -r).img $(uname -r)</span><br></pre></td></tr></table></figure>
+<p>安装内核</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install &quot;kernel-devel-uname-r == $(uname -r)&quot; yum distro-sync</span><br></pre></td></tr></table></figure>
+<p>如果没有nouveau，就可以开始安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lsmod|grep nouveau</span><br><span class="line">yum install gcc</span><br><span class="line">sudo sh cuda_10.1.105_418.39_linux.run</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="安装ax200驱动"><a href="#安装ax200驱动" class="headerlink" title="安装ax200驱动"></a>安装ax200驱动</h3><p>首先添加non-free源</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/apt/sources.list</span><br><span class="line"></span><br><span class="line">deb http://deb.debian.org/debian bullseye main contrib non-free</span><br><span class="line">deb-src http://deb.debian.org/debian bullseye main contrib non-free</span><br><span class="line">deb http://deb.debian.org/debian-security/ bullseye-security main contrib non-free</span><br><span class="line">deb-src http://deb.debian.org/debian-security/ bullseye-security main contrib non-free</span><br><span class="line">deb http://deb.debian.org/debian bullseye-updates main contrib non-free</span><br><span class="line">deb-src http://deb.debian.org/debian bullseye-updates main contrib non-free</span><br></pre></td></tr></table></figure>
+<p>安装并配置iwlwifi</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt install firmware-iwlwifi</span><br><span class="line">modprobe -r iwlwifi</span><br><span class="line">modprobe iwlwifi</span><br></pre></td></tr></table></figure>
+<h3 id="Wifi相关"><a href="#Wifi相关" class="headerlink" title="Wifi相关"></a>Wifi相关</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig -a	//查看所有网卡，看有没有wlxxx0</span><br></pre></td></tr></table></figure>
+<p>扫描wifi</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iwlist wlxxx0 scan</span><br></pre></td></tr></table></figure>
+<p>安装wireless-tools</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install wireless-tools</span><br></pre></td></tr></table></figure>
+<p>如果出现“Interface doesn’t support scanning : Network is down”，激活网卡</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ifconfig wlxxx0 up</span><br></pre></td></tr></table></figure>
+<p>配置interfaces</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/network/interfaces</span><br></pre></td></tr></table></figure>
+<p>写入下面内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">allow-hotplug wlxxx0</span><br><span class="line">auto wlxxx0</span><br><span class="line">iface wlxxx0 inet dhcp</span><br><span class="line">wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf</span><br></pre></td></tr></table></figure>
+<p>wifi配置文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/wpa_supplicant/wpa_supplicant.conf</span><br></pre></td></tr></table></figure>
+<p>文件内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">country=CN</span><br><span class="line"></span><br><span class="line">network=&#123;</span><br><span class="line">        ssid=&quot;NTest&quot;</span><br><span class="line">        psk=&quot;12345678&quot;</span><br><span class="line">        key_mgmt=WPA-PSK</span><br><span class="line">        disabled=1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">network=&#123;</span><br><span class="line">        ssid=&quot;River_Test&quot;</span><br><span class="line">        psk=&quot;12345678&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输入下面的命令生效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifup wlp6s0</span><br></pre></td></tr></table></figure>
+<p>扫描热点：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iwlist scan | grep ESSID</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="AMD显卡驱动-已弃坑"><a href="#AMD显卡驱动-已弃坑" class="headerlink" title="AMD显卡驱动(已弃坑)"></a>AMD显卡驱动(已弃坑)</h3><p>在<a target="_blank" rel="noopener" href="https://www.amd.com/en/support/linux-drivers">Linux® Drivers for AMD Radeon™</a>页面选择系统下载<br>安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">apt install ./amdgpu-install_xxxxxxx-xxxxxx_all.deb</span><br><span class="line">apt update</span><br><span class="line">apt upgrade -y</span><br><span class="line">amdgpu-install --no-dkms</span><br><span class="line">apt install rocm-dev</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<p>配置环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ls -l /dev/dri/render*</span><br><span class="line">usermod -a -G render $LOGNAME</span><br><span class="line">usermod -a -G video $LOGNAME</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<p>测试，不报错就是安装好了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rocm-smi	# 显示gpu性能监控</span><br><span class="line">/opt/rocm/bin/rocminfo	#查看显卡信息1</span><br><span class="line">/opt/rocm/opencl/bin/clinfo	#查看显卡信息1</span><br></pre></td></tr></table></figure>
+<p>添加path</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo ‘export PATH=$PATH:/opt/rocm/bin:/opt/rocm/profiler/bin:/opt/rocm/opencl/bin/x86_64’ | sudo tee -a /etc/profile.d/rocm.sh</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="香橙派armbian-GPU驱动"><a href="#香橙派armbian-GPU驱动" class="headerlink" title="香橙派armbian GPU驱动"></a>香橙派armbian GPU驱动</h3><p>先按照官方要求安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:liujianfeng1994/panfork-mesa</span><br><span class="line">sudo add-apt-repository ppa:liujianfeng1994/rockchip-multimedia</span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt dist-upgrade</span><br><span class="line">sudo apt install mali-g610-firmware rockchip-multimedia-config</span><br><span class="line">sudo apt install libgl1-mesa-dev malirun libmali-g610-x11</span><br><span class="line">sudo apt install mesa-opencl-icd mesa-vdpau-drivers mesa-va-drivers</span><br><span class="line">sudo apt install libegl-mesa0 libegl1-mesa-dev libgl1-mesa-dri libwayland-egl1-mesa libgles2-mesa libgles2-mesa-dev libosmesa6-dev</span><br><span class="line">sudo apt install libvulkan-dev mesa-vulkan-drivers vulkan-tools</span><br><span class="line">sudo apt install libgbm libglapi-mesa</span><br><span class="line">sudo apt install mesa-common-dev mesa-utils libosmesa6-dev</span><br></pre></td></tr></table></figure>
+<p>安装查看软件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install mesa-utils inxi</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">inxi -Fc0</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="Intel-核显驱动-未验证"><a href="#Intel-核显驱动-未验证" class="headerlink" title="Intel 核显驱动(未验证)"></a>Intel 核显驱动(未验证)</h3><p>安装核显</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install intel-media-va-driver mesa-vulkan-drivers</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>如果在linux上使用，需要安装 libvulkan驱动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libvulkan1 libvulkan-dev mesa-vulkan-drivers vulkan-tools</span><br></pre></td></tr></table></figure>
+<p>如果出现 WARNING: lavapipe is not a conformant vulkan implementation, testing use only<br>首先查看icd配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /usr/share/vulkan/icd.d</span><br></pre></td></tr></table></figure>
+<p>本教程使用igpu，所以显示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">intel_icd.x86_64.json  lvp_icd.x86_64.json  radeon_icd.x86_64.json</span><br></pre></td></tr></table></figure>
+<p>我们将igpu指定为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json</span><br></pre></td></tr></table></figure>
+<p>查看vulkan设备</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vulkaninfo | grep driverName</span><br></pre></td></tr></table></figure>
+<p>如果出现 vkEnumerateInstanceExtensionProperties failed with ERROR_INITIALIZATION_FAILED<br>可以判定是GPU驱动的问题，暂时无解</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://tsukkomi.org/post/install-amdgpu-on-ubuntu-22-04">Ubuntu 22.04安装AMD显卡驱动</a></p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Linux/" rel="tag">Linux</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4014/"
+                    data-tooltip="染料与显微镜内容"
+                    aria-label="上一篇: 染料与显微镜内容"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4015/"
+                    data-tooltip="软件储备"
+                    aria-label="下一篇: 软件储备"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Sean Pan. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4014/"
+                    data-tooltip="染料与显微镜内容"
+                    aria-label="上一篇: 染料与显微镜内容"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4015/"
+                    data-tooltip="软件储备"
+                    aria-label="下一篇: 软件储备"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">Sean Pan</h4>
+        
+            <div id="about-card-bio"><p>不似天涯，卷起杨花似雪花</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Master in YNU</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Kunming China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

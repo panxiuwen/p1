@@ -1,0 +1,677 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Pan&#39;s websit">
+    <title>StableDiffusion服务器搭建 - Pan&#39;s websit</title>
+    <meta name="author" content="Sean Pan">
+    
+        <meta name="keywords" content="hexo,javascript">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"搭建随机生成Waifu的前端，基于StableDiffusion\n\n\n\n一、前端部署Linux下内存4G的设备，Windows下内存8G的设备未启动成功过N卡配置GPU版的Torch，参考机器学习相关笔记有条件的话还是建议在Linux上部署，笔者测试的结果是在Linux下只吃GPU，但在win上就是CPU吃一点，GPU几乎只能吃一半不到，速度慢了不少安装Git和Python3.11，使用命令行下载Stable-diffusion-webui和相关库\n12git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.gitpip install gfpgan clip\n如果是linux系统，还需要安装GL库(装了NV的同学请忽略)\n1apt-get install primus-libs\n运行launch.py，慢慢等它下载文件，等它找不到模型后自动报错退出对于RTX显卡，在launch.py文件里修改，根据你自己的要求改ip和端口号\n1args = shlex.split(&quot;--listen --port 8080&quot;)\n如果是非RTX卡，需要禁用半精度浮点，如果小于4GB需启用低显存\n1args = shlex.split(&quot;--listen --port 8080 --lowvram --precision full --no-half&quot;)\n如果使用CPU运算，使用下面的命令\n1args = shlex.split(&quot;--listen --port 8080 --skip-torch-cuda-test --precision full --no-half&quot;)\n如果使用screen后台设置alias\n1alias sd=&quot;cd /app/stable-diffusion-webui&amp;&amp;screen -dm python3 launch.py --listen --port 2334 --skip-torch-cuda-test --precision full --no-half&quot;\n\n配置文件修改ui-config.json可以设置默认参数Prompt填\n1anime,1girl,loli,overknee socks,school uniform\nNegative prompt填\n1lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry\nSampling Steps改成30，CFG Scale改成11，据说效果最好Batch count是点一次运行的次数，随便改大，但是时间也会变长，Batch size是一次出图数，改大会爆显存分辨率必须是64的整数倍，否则会报错提示：outputs\\txt2img-images文件夹内存有之前生成过的内容\n\nNovelAI模型NovelAI流出版种子下载主模型：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;animefull-latest&#x2F;model.ckpt，改名成animefull-latest.ckpt放到&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;目录里vae权重：将animevae.pt改名成animefull-latest.vae.pt和模型同样的目录模型风格调整：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;modules&#x2F;modules&#x2F;里所有pt文件放入&#x2F;stable-diffusion-webui&#x2F;models&#x2F;hypernetworks文件夹中\nStable-diffusion模型Stable-diffusion模型：sd-v1-4.ckpt或者Waifu Diffusion模型：wd-v1-2-full-ema.ckpt后放在”&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;“文件夹里Chilloutmix：chilloutmix_.safetensors&#x2F;chilloutmix_NiPrunedFp32Fix.safetensors国风2：Gf_style2.ckpt国风Lora：GuoFeng2_Lora.safetensors完美世界：perfectWorld_perfectWorldBakedVAE.safetensors台湾人：taiwanDollLikeness_v10.safetensors韩国人：koreanDollLikeness_v10.safetensors\n\n其他模块启用GFPGAN&#x2F;GFPGANv1.3.pth：脸部修复，在Extras -&gt; BSRGAN 4x中启用realesrgan&#x2F;RealESRGAN_x4plus.pth：超分辨率，在Extras -&gt; ESRGEN 4x中启用NovelAI流出版中的hypernetworks模块在Setting -&gt; Stable Diffusion -&gt; Stable Diffusion finetune hypernetwork中启用\n\n关键词衣服：overknee socks,school uniform,in sailor suit,black_sleeves,white halter top,white swim suit,gothic,leotardwhite dress and black stockings画图：full body figure\n\nBenchMarksNovelaileak only\n\n\n\n  \n    Device\n    RAMPlatform\n    1\n    2\n    3\n    4\n    5\n    6\n    7\n    8\n    9\n    10\n  \n\n\n  \n    12100F+T600\n    16+4\n    Debian\n    2:00\n    2:07\n    2:11\n    2:13\n    2:13\n    2:12\n    2:15\n    2:13\n    2:14\n    2:13\n  \n  \n    12100F+T600\n    16+4\n    Win10\n    2:13\n    2:20\n    2:23\n    2:24\n    2:27\n    2:27\n    2:30\n    2:30\n    2:32\n    2:33\n  \n  \n    4210H+860M\n    16+1\n    Win10\n    3:23\n    3:27\n    3:29\n    3:29\n    3:29\n    3:28\n    3:29\n    3:28\n    3:28\n    3:28\n  \n  \n    3700x\n    32\n    Win11\n    5:48\n    5:49\n    5:47\n    4:52\n    4:52\n    4:56\n    4:55\n    -\n    -\n    -\n  \n  \n    N5105\n    16\n    Debian\n    23:23\n    23:38\n    23:34\n    23:35\n    23:35\n    23:36\n    23:37\n    23:33\n    23:33\n    23:30\n  \n  \n    N5105\n    8\n    Debian\n    23:55\n    23:50\n    23:50\n    23:50\n    23:48\n    23:49\n    23:51\n    23:52\n    23:52\n    23:51\n  \n\n\n\n\n\n相关链接Dskjal教程(日文)NovelAI本地完美部署使用手把手攻略教程\n","dateCreated":"2022-10-13T00:00:00+08:00","dateModified":"2023-03-01T14:50:43+08:00","datePublished":"2022-10-13T00:00:00+08:00","description":"搭建随机生成Waifu的前端，基于StableDiffusion","headline":"StableDiffusion服务器搭建","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2008/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2008/","keywords":"Media, Server, Intelligence","thumbnailUrl":"cover.jpg"}</script>
+    <meta name="description" content="搭建随机生成Waifu的前端，基于StableDiffusion">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="StableDiffusion服务器搭建">
+<meta property="og:url" content="https://panxiuwen.github.io/posts/2008/index.html">
+<meta property="og:site_name" content="Pan&#39;s websit">
+<meta property="og:description" content="搭建随机生成Waifu的前端，基于StableDiffusion">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T06:50:43.220Z">
+<meta property="article:author" content="Sean Pan">
+<meta property="article:tag" content="Media">
+<meta property="article:tag" content="Server">
+<meta property="article:tag" content="Intelligence">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@982202733">
+<meta property="fb:app_id" content="[object Object]">
+    
+        <link rel="publisher" href="https://plus.google.com/982202733"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/posts/2008/cover.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2008/cover.jpg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Pan&#39;s websit
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">Sean Pan</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>不似天涯，卷起杨花似雪花</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="知乎"
+                        >
+                        <i class="sidebar-button-icon fab fa-zhihu" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">知乎</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://music.163.com/#/user/home?id=70816221"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="网易云"
+                        >
+                        <i class="sidebar-button-icon fab fa-tiktok" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">网易云</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/panxiuwen/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://gitee.com/sean982202733/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Gitee"
+                        >
+                        <i class="sidebar-button-icon fab fa-google" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Gitee</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:panxiuwen_sean@qq.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            StableDiffusion服务器搭建
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-10-13T00:00:00+08:00">
+	
+		    2022年 10月 13日
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Intelligence/">Intelligence</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>搭建随机生成Waifu的前端，基于StableDiffusion</p>
+<span id="more"></span>
+
+<hr>
+<h3 id="一、前端部署"><a href="#一、前端部署" class="headerlink" title="一、前端部署"></a>一、前端部署</h3><p>Linux下内存4G的设备，Windows下内存8G的设备未启动成功过<br>N卡配置GPU版的Torch，参考<a href="/posts/4012/">机器学习相关笔记</a><br>有条件的话还是建议在Linux上部署，笔者测试的结果是在Linux下只吃GPU，但在win上就是CPU吃一点，GPU几乎只能吃一半不到，速度慢了不少<br>安装Git和Python3.11，使用命令行下载Stable-diffusion-webui和相关库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</span><br><span class="line">pip install gfpgan clip</span><br></pre></td></tr></table></figure>
+<p>如果是linux系统，还需要安装GL库(装了NV的同学请忽略)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install primus-libs</span><br></pre></td></tr></table></figure>
+<p>运行launch.py，慢慢等它下载文件，等它找不到模型后自动报错退出<br>对于RTX显卡，在launch.py文件里修改，根据你自己的要求改ip和端口号</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">args = shlex.split(&quot;--listen --port 8080&quot;)</span><br></pre></td></tr></table></figure>
+<p>如果是非RTX卡，需要禁用半精度浮点，如果小于4GB需启用低显存</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">args = shlex.split(&quot;--listen --port 8080 --lowvram --precision full --no-half&quot;)</span><br></pre></td></tr></table></figure>
+<p>如果使用CPU运算，使用下面的命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">args = shlex.split(&quot;--listen --port 8080 --skip-torch-cuda-test --precision full --no-half&quot;)</span><br></pre></td></tr></table></figure>
+<p>如果使用screen后台设置alias</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias sd=&quot;cd /app/stable-diffusion-webui&amp;&amp;screen -dm python3 launch.py --listen --port 2334 --skip-torch-cuda-test --precision full --no-half&quot;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>修改ui-config.json可以设置默认参数<br>Prompt填</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">anime,1girl,loli,overknee socks,school uniform</span><br></pre></td></tr></table></figure>
+<p>Negative prompt填</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry</span><br></pre></td></tr></table></figure>
+<p>Sampling Steps改成30，CFG Scale改成11，据说效果最好<br>Batch count是点一次运行的次数，随便改大，但是时间也会变长，Batch size是一次出图数，改大会爆显存<br>分辨率必须是64的整数倍，否则会报错<br>提示：outputs\txt2img-images文件夹内存有之前生成过的内容</p>
+<hr>
+<h3 id="NovelAI模型"><a href="#NovelAI模型" class="headerlink" title="NovelAI模型"></a>NovelAI模型</h3><p><a href="magnet:?xt=urn:btih:5bde442da86265b670a3e5ea3163afad2c6f8ecc">NovelAI流出版种子下载</a><br>主模型：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;animefull-latest&#x2F;model.ckpt，改名成animefull-latest.ckpt放到&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;目录里<br>vae权重：将animevae.pt改名成animefull-latest.vae.pt和模型同样的目录<br>模型风格调整：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;modules&#x2F;modules&#x2F;里所有pt文件放入&#x2F;stable-diffusion-webui&#x2F;models&#x2F;hypernetworks文件夹中</p>
+<h3 id="Stable-diffusion模型"><a href="#Stable-diffusion模型" class="headerlink" title="Stable-diffusion模型"></a>Stable-diffusion模型</h3><p><a target="_blank" rel="noopener" href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Dependencies">Stable-diffusion模型</a>：sd-v1-4.ckpt或者<a target="_blank" rel="noopener" href="https://github.com/harubaru/waifu-diffusion/tree/main/docs/en/weights">Waifu Diffusion模型</a>：wd-v1-2-full-ema.ckpt后放在”&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;“文件夹里<br>Chilloutmix：chilloutmix_.safetensors&#x2F;chilloutmix_NiPrunedFp32Fix.safetensors<br>国风2：Gf_style2.ckpt<br>国风Lora：GuoFeng2_Lora.safetensors<br>完美世界：perfectWorld_perfectWorldBakedVAE.safetensors<br>台湾人：taiwanDollLikeness_v10.safetensors<br>韩国人：koreanDollLikeness_v10.safetensors</p>
+<hr>
+<h3 id="其他模块启用"><a href="#其他模块启用" class="headerlink" title="其他模块启用"></a>其他模块启用</h3><p>GFPGAN&#x2F;GFPGANv1.3.pth：脸部修复，在Extras -&gt; BSRGAN 4x中启用<br>realesrgan&#x2F;RealESRGAN_x4plus.pth：超分辨率，在Extras -&gt; ESRGEN 4x中启用<br>NovelAI流出版中的hypernetworks模块在Setting -&gt; Stable Diffusion -&gt; Stable Diffusion finetune hypernetwork中启用</p>
+<hr>
+<h3 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h3><p>衣服：overknee socks,school uniform,in sailor suit,black_sleeves,white halter top,white swim suit,gothic,leotard<br>white dress and black stockings<br>画图：full body figure</p>
+<hr>
+<h3 id="BenchMarks"><a href="#BenchMarks" class="headerlink" title="BenchMarks"></a>BenchMarks</h3><p>Novelaileak only</p>
+<div style="overflow-x:auto;white-space:nowrap;">
+<table>
+<thead>
+  <tr>
+    <th align="center" >Device</th>
+    <th align="center" >RAMPlatform</th>
+    <th align="center" >1</th>
+    <th align="center" >2</th>
+    <th align="center" >3</th>
+    <th align="center" >4</th>
+    <th align="center" >5</th>
+    <th align="center" >6</th>
+    <th align="center" >7</th>
+    <th align="center" >8</th>
+    <th align="center" >9</th>
+    <th align="center" >10</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td align="center" >12100F+T600</td>
+    <td align="center" >16+4</td>
+    <td align="center" >Debian</td>
+    <td align="center" >2:00</td>
+    <td align="center" >2:07</td>
+    <td align="center" >2:11</td>
+    <td align="center" >2:13</td>
+    <td align="center" >2:13</td>
+    <td align="center" >2:12</td>
+    <td align="center" >2:15</td>
+    <td align="center" >2:13</td>
+    <td align="center" >2:14</td>
+    <td align="center" >2:13</td>
+  </tr>
+  <tr>
+    <td align="center" >12100F+T600</td>
+    <td align="center" >16+4</td>
+    <td align="center" >Win10</td>
+    <td align="center" >2:13</td>
+    <td align="center" >2:20</td>
+    <td align="center" >2:23</td>
+    <td align="center" >2:24</td>
+    <td align="center" >2:27</td>
+    <td align="center" >2:27</td>
+    <td align="center" >2:30</td>
+    <td align="center" >2:30</td>
+    <td align="center" >2:32</td>
+    <td align="center" >2:33</td>
+  </tr>
+  <tr>
+    <td align="center" >4210H+860M</td>
+    <td align="center" >16+1</td>
+    <td align="center" >Win10</td>
+    <td align="center" >3:23</td>
+    <td align="center" >3:27</td>
+    <td align="center" >3:29</td>
+    <td align="center" >3:29</td>
+    <td align="center" >3:29</td>
+    <td align="center" >3:28</td>
+    <td align="center" >3:29</td>
+    <td align="center" >3:28</td>
+    <td align="center" >3:28</td>
+    <td align="center" >3:28</td>
+  </tr>
+  <tr>
+    <td align="center" >3700x</td>
+    <td align="center" >32</td>
+    <td align="center" >Win11</td>
+    <td align="center" >5:48</td>
+    <td align="center" >5:49</td>
+    <td align="center" >5:47</td>
+    <td align="center" >4:52</td>
+    <td align="center" >4:52</td>
+    <td align="center" >4:56</td>
+    <td align="center" >4:55</td>
+    <td align="center" >-</td>
+    <td align="center" >-</td>
+    <td align="center" >-</td>
+  </tr>
+  <tr>
+    <td align="center" >N5105</td>
+    <td align="center" >16</td>
+    <td align="center" >Debian</td>
+    <td align="center" >23:23</td>
+    <td align="center" >23:38</td>
+    <td align="center" >23:34</td>
+    <td align="center" >23:35</td>
+    <td align="center" >23:35</td>
+    <td align="center" >23:36</td>
+    <td align="center" >23:37</td>
+    <td align="center" >23:33</td>
+    <td align="center" >23:33</td>
+    <td align="center" >23:30</td>
+  </tr>
+  <tr>
+    <td align="center" >N5105</td>
+    <td align="center" >8</td>
+    <td align="center" >Debian</td>
+    <td align="center" >23:55</td>
+    <td align="center" >23:50</td>
+    <td align="center" >23:50</td>
+    <td align="center" >23:50</td>
+    <td align="center" >23:48</td>
+    <td align="center" >23:49</td>
+    <td align="center" >23:51</td>
+    <td align="center" >23:52</td>
+    <td align="center" >23:52</td>
+    <td align="center" >23:51</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<hr>
+<h3 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h3><p><a target="_blank" rel="noopener" href="https://dskjal.com/others/waifu-diffusion-workflow.html">Dskjal教程(日文)</a><br><a href="Nhttps://www.bilibili.com/video/BV1Ce4y1U7p8/">NovelAI本地完美部署使用手把手攻略教程</a></p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Intelligence/" rel="tag">Intelligence</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/Media/" rel="tag">Media</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/Server/" rel="tag">Server</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2011/"
+                    data-tooltip="Waifu2x服务器搭建"
+                    aria-label="上一篇: Waifu2x服务器搭建"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2025/"
+                    data-tooltip="论文相关笔记"
+                    aria-label="下一篇: 论文相关笔记"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Sean Pan. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2011/"
+                    data-tooltip="Waifu2x服务器搭建"
+                    aria-label="上一篇: Waifu2x服务器搭建"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2025/"
+                    data-tooltip="论文相关笔记"
+                    aria-label="下一篇: 论文相关笔记"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">Sean Pan</h4>
+        
+            <div id="about-card-bio"><p>不似天涯，卷起杨花似雪花</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Master in YNU</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Kunming China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

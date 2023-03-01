@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Pan&#39;s websit">
+    <title>微生物腐蚀相关 - Pan&#39;s websit</title>
+    <meta name="author" content="Sean Pan">
+    
+        <meta name="keywords" content="hexo,javascript">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文整理博主研究生学习到的腐蚀相关的内容，此部分内容将于笔者毕业后全部解禁\n\n\n其他模块荧光显微镜、激光共聚焦显微镜的内容详见染料与显微镜内容\n腐蚀电极的制备1.使用1000#的砂纸打磨金属片除锈2.铜线剪切长度，12-13cm，用剪刀剪去一端大约0.2 cm的保护橡胶保护层，露出铜，随后用锤子砸扁，弯曲为90度，然后用焊锡将金属片和铜线焊接到一起 (先用铜线蘸一点磷酸，然后在焊接)，检查电极的导电性，备用；如果用磷酸仍然不能焊接上，先贴一点导电胶，然后在加入磷酸焊接。3.用短锯子将其锯PVC管为1cm高的小段，用120#的碳化硅砂纸打磨至平整(跟一个垂直平面的物品(可以竖着的台面)进行对比，看PVC是否与该物品紧贴着，旋转着看，要保证每一个面都是紧贴着的)；4.将电极和PVC管固定在平坦的地面上(注意：先打扫干净地面，随后铺上报纸，在报纸上铺一层废旧的打印纸，打印纸对折分成两张用；先将电极线弯曲90度固定在地面上(一端靠墙，一端与地面平行)，用手机光照射是否有影子，观察是否与地面平行，随后轻轻的从上面将PVC套入，再次用手机贴着地面检查PVC管是否与地面平行；检查金属是否与地面平行，最后用胶布固定在墙面)5.最后用环氧树脂AB胶(先分别将两种胶分别用烧杯(或者可加热的瓶子，最好用实验室一些废旧的瓶子，不必用新瓶装)加热融化后(减少气泡)，冷却几分钟至还有余温(防止突然完全凝固)，按1：1的比例倒入用塑料矿泉水瓶混合；固化剂(黄色可以稍微多一点点)；灌胶速度要快，用一根棒引流(可以用废的电极线)，灌胶后电极透明无气泡且可以看到金属为最佳；这种情况2小时后电极将可以使用，最长不超过8小时)将电极固定备用。5.本人的改进：AB胶分别加热融化后将黄胶注入瓶子，待和白胶一并冷却至室温后将白胶加入搅拌均匀，搅拌混合瞬间会呈现白色，如果气温太低则不会有白色，搅拌速度要慢防止产生二次气泡，半天后变干可使用(放到温度高的地方会干的更快)\n\n电化学工作站的使用1.PARSTAT2263：连接：两根绿色工作电极、红色铂电极、红黄色甘汞电极OCP：PowerCorr →  GalvanicStep → Ecorrvs.timeEIS：PowerSine → SingleSine → DefaultSSPDP：PowerCorr → LinearSweep → PotentidynamicTafel：PowerCorr → LinearSweep → TafelCP：PowerCorr → Cyclic Polarization → Cyclic Polarization其他问题：EIS测试出现无法测试，解决方法，重新选择，测试，然后在Browser，下面MRU，重新点击一个PowerData文件，接着Powersine , Single Sine 就正常可以测试了(软件BUG)。\n2.CHI660e：连接：绿色工作电极 、红色铂电极、白色甘汞电极OCP：Open Circuit Potential - TimeEIS：A.C ImpedanceTafel：Tafel PlotMS：Impedance - PotentialCV：Cyclic VoltammetryDPV：Differential Normal Pulse Voltammetry\n\nEPS制备使用高速冷冻离心法在5mL试管中，在4℃下以7000 g离心10分钟，对细菌悬浮液进行离心。两次离心后回收上清液，然后通过0.22 mm滤膜过滤。使用再生纤维素（RC）膜（光谱中8000MWCO）对上清液进行Milli-Q水透析，以去除低分子量杂质和盐。透析24小时，每3小时更换一次去离子水。收集上清液作为s-EPS。然后将s-EPS溶液冷冻干燥。1\n\n血链球菌更好的培养方案1.Improve BHI 2BHI Medium + hemin 5mg&#x2F;L + 1mg&#x2F;L menadione 或 Trypticase  Yeast  Extract  salts Medium2.Thompson medium (TP) 3Contains 0.25% pig gastric mucin, 0.07% Bacto proteose peptone (BD Biosciences), 0.1 mol&#x2F;L K2HPO4, 0.3% trypticase peptone (BBL, 211921), 0.5% yeast extract, 0.25% KCl, 10 μg&#x2F;ml hemin, 1 μg&#x2F;ml menadione, 0.05% cysteine hydrochloride, 1 mmol&#x2F;L lysine, 1 mmol&#x2F;L glycine, 1 mmol&#x2F;L urea and 5 mmol&#x2F;L arginine. In contrast to original TP, the TP in this study does not contain fetal horse serum.\n\n参考\n- [a] LI S L, QU Q, LI L, et al. Bacillus cereus s-EPS as a dual bio-functional corrosion and scale inhibitor in artificial seawater [J]. Water Res, 2019, 166: 11.\n\n\n- [b] PEYYALA R, KIRAKODU S S, NOVAK K F, et al. Oral Epithelial Cell Responses to Multispecies Microbial Biofilms [J]. Journal of Dental Research, 2013, 92(3): 235-40.\n\n\n- [c] LI X L, SHANG L, BRANDT B W, et al. Saliva-derived microcosm biofilms grown on different oral surfaces in vitro [J]. npj Biofilms Microbomes, 2021, 7(1): 8.\n","dateCreated":"2021-04-28T00:00:00+08:00","dateModified":"2022-11-11T18:01:10+08:00","datePublished":"2021-04-28T00:00:00+08:00","description":"本文整理博主研究生学习到的腐蚀相关的内容，此部分内容将于笔者毕业后全部解禁","headline":"微生物腐蚀相关","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/1004/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/1004/","keywords":"Research","thumbnailUrl":"cover.jpg"}</script>
+    <meta name="description" content="本文整理博主研究生学习到的腐蚀相关的内容，此部分内容将于笔者毕业后全部解禁">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="微生物腐蚀相关">
+<meta property="og:url" content="https://panxiuwen.github.io/posts/1004/index.html">
+<meta property="og:site_name" content="Pan&#39;s websit">
+<meta property="og:description" content="本文整理博主研究生学习到的腐蚀相关的内容，此部分内容将于笔者毕业后全部解禁">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-11-11T10:01:10.000Z">
+<meta property="article:author" content="Sean Pan">
+<meta property="article:tag" content="Research">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@982202733">
+<meta property="fb:app_id" content="[object Object]">
+    
+        <link rel="publisher" href="https://plus.google.com/982202733"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/posts/1004/cover.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/1004/cover.jpg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Pan&#39;s websit
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">Sean Pan</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>不似天涯，卷起杨花似雪花</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="知乎"
+                        >
+                        <i class="sidebar-button-icon fab fa-zhihu" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">知乎</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://music.163.com/#/user/home?id=70816221"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="网易云"
+                        >
+                        <i class="sidebar-button-icon fab fa-tiktok" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">网易云</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/panxiuwen/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://gitee.com/sean982202733/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Gitee"
+                        >
+                        <i class="sidebar-button-icon fab fa-google" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Gitee</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:panxiuwen_sean@qq.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            微生物腐蚀相关
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2021-04-28T00:00:00+08:00">
+	
+		    2021年 4月 28日
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>本文整理博主研究生学习到的腐蚀相关的内容，此部分内容将于笔者毕业后全部解禁</p>
+<span id="more"></span>
+<hr>
+<h3 id="其他模块"><a href="#其他模块" class="headerlink" title="其他模块"></a>其他模块</h3><p>荧光显微镜、激光共聚焦显微镜的内容详见<a href="/posts/4014/">染料与显微镜内容</a></p>
+<h3 id="腐蚀电极的制备"><a href="#腐蚀电极的制备" class="headerlink" title="腐蚀电极的制备"></a>腐蚀电极的制备</h3><p>1.使用1000#的砂纸打磨金属片除锈<br>2.铜线剪切长度，12-13cm，用剪刀剪去一端大约0.2 cm的保护橡胶保护层，露出铜，随后用锤子砸扁，弯曲为90度，然后用焊锡将金属片和铜线焊接到一起 (先用铜线蘸一点磷酸，然后在焊接)，检查电极的导电性，备用；如果用磷酸仍然不能焊接上，先贴一点导电胶，然后在加入磷酸焊接。<br>3.用短锯子将其锯PVC管为1cm高的小段，用120#的碳化硅砂纸打磨至平整(跟一个垂直平面的物品(可以竖着的台面)进行对比，看PVC是否与该物品紧贴着，旋转着看，要保证每一个面都是紧贴着的)；<br>4.将电极和PVC管固定在平坦的地面上(注意：先打扫干净地面，随后铺上报纸，在报纸上铺一层废旧的打印纸，打印纸对折分成两张用；先将电极线弯曲90度固定在地面上(一端靠墙，一端与地面平行)，用手机光照射是否有影子，观察是否与地面平行，随后轻轻的从上面将PVC套入，再次用手机贴着地面检查PVC管是否与地面平行；检查金属是否与地面平行，最后用胶布固定在墙面)<br>5.最后用环氧树脂AB胶(先分别将两种胶分别用烧杯(或者可加热的瓶子，最好用实验室一些废旧的瓶子，不必用新瓶装)加热融化后(减少气泡)，冷却几分钟至还有余温(防止突然完全凝固)，按1：1的比例倒入用塑料矿泉水瓶混合；固化剂(黄色可以稍微多一点点)；灌胶速度要快，用一根棒引流(可以用废的电极线)，灌胶后电极透明无气泡且可以看到金属为最佳；这种情况2小时后电极将可以使用，最长不超过8小时)将电极固定备用。<br>5.本人的改进：AB胶分别加热融化后将黄胶注入瓶子，待和白胶一并冷却至室温后将白胶加入搅拌均匀，搅拌混合瞬间会呈现白色，如果气温太低则不会有白色，搅拌速度要慢防止产生二次气泡，半天后变干可使用(放到温度高的地方会干的更快)</p>
+<hr>
+<h3 id="电化学工作站的使用"><a href="#电化学工作站的使用" class="headerlink" title="电化学工作站的使用"></a>电化学工作站的使用</h3><p>1.PARSTAT2263：<br>连接：两根绿色工作电极、红色铂电极、红黄色甘汞电极<br>OCP：PowerCorr →  GalvanicStep → Ecorrvs.time<br>EIS：PowerSine → SingleSine → DefaultSS<br>PDP：PowerCorr → LinearSweep → Potentidynamic<br>Tafel：PowerCorr → LinearSweep → Tafel<br>CP：PowerCorr → Cyclic Polarization → Cyclic Polarization<br>其他问题：EIS测试出现无法测试，解决方法，重新选择，测试，然后在Browser，下面MRU，重新点击一个PowerData文件，接着Powersine , Single Sine 就正常可以测试了(软件BUG)。</p>
+<p>2.CHI660e：<br>连接：绿色工作电极 、红色铂电极、白色甘汞电极<br>OCP：Open Circuit Potential - Time<br>EIS：A.C Impedance<br>Tafel：Tafel Plot<br>MS：Impedance - Potential<br>CV：Cyclic Voltammetry<br>DPV：Differential Normal Pulse Voltammetry</p>
+<hr>
+<h3 id="EPS制备"><a href="#EPS制备" class="headerlink" title="EPS制备"></a>EPS制备</h3><p>使用高速冷冻离心法在5mL试管中，在4℃下以7000 g离心10分钟，对细菌悬浮液进行离心。两次离心后回收上清液，然后通过0.22 mm滤膜过滤。使用再生纤维素（RC）膜（光谱中8000MWCO）对上清液进行Milli-Q水透析，以去除低分子量杂质和盐。透析24小时，每3小时更换一次去离子水。收集上清液作为s-EPS。然后将s-EPS溶液冷冻干燥。<a href="#refer-anchor-1"><sup>1</sup></a></p>
+<hr>
+<h3 id="血链球菌更好的培养方案"><a href="#血链球菌更好的培养方案" class="headerlink" title="血链球菌更好的培养方案"></a>血链球菌更好的培养方案</h3><p>1.Improve BHI <a href="#refer-anchor-2"><sup>2</sup></a><br>BHI Medium + hemin 5mg&#x2F;L + 1mg&#x2F;L menadione 或 Trypticase  Yeast  Extract  salts Medium<br>2.Thompson medium (TP) <a href="#refer-anchor-3"><sup>3</sup></a><br>Contains 0.25% pig gastric mucin, 0.07% Bacto proteose peptone (BD Biosciences), 0.1 mol&#x2F;L K2HPO4, 0.3% trypticase peptone (BBL, 211921), 0.5% yeast extract, 0.25% KCl, 10 μg&#x2F;ml hemin, 1 μg&#x2F;ml menadione, 0.05% cysteine hydrochloride, 1 mmol&#x2F;L lysine, 1 mmol&#x2F;L glycine, 1 mmol&#x2F;L urea and 5 mmol&#x2F;L arginine. In contrast to original TP, the TP in this study does not contain fetal horse serum.</p>
+<hr>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><div id="refer-anchor-1"></div>
+- [a] LI S L, QU Q, LI L, et al. Bacillus cereus s-EPS as a dual bio-functional corrosion and scale inhibitor in artificial seawater [J]. Water Res, 2019, 166: 11.
+
+<div id="refer-anchor-2"></div>
+- [b] PEYYALA R, KIRAKODU S S, NOVAK K F, et al. Oral Epithelial Cell Responses to Multispecies Microbial Biofilms [J]. Journal of Dental Research, 2013, 92(3): 235-40.
+
+<div id="refer-anchor-3"></div>
+- [c] LI X L, SHANG L, BRANDT B W, et al. Saliva-derived microcosm biofilms grown on different oral surfaces in vitro [J]. npj Biofilms Microbomes, 2021, 7(1): 8.
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Research/" rel="tag">Research</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/1010/"
+                    data-tooltip="备份软件的使用"
+                    aria-label="上一篇: 备份软件的使用"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4008/"
+                    data-tooltip="红外光谱大全"
+                    aria-label="下一篇: 红外光谱大全"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Sean Pan. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/1010/"
+                    data-tooltip="备份软件的使用"
+                    aria-label="上一篇: 备份软件的使用"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4008/"
+                    data-tooltip="红外光谱大全"
+                    aria-label="下一篇: 红外光谱大全"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">Sean Pan</h4>
+        
+            <div id="about-card-bio"><p>不似天涯，卷起杨花似雪花</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Master in YNU</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Kunming China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

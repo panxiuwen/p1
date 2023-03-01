@@ -1,0 +1,629 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Pan&#39;s websit">
+    <title>使用量子化学软件 - Pan&#39;s websit</title>
+    <meta name="author" content="Sean Pan">
+    
+        <meta name="keywords" content="hexo,javascript">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了Materials Studio在Windows下的安装在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译\n\n\nGaussian的部分参考Gaussian的使用\nMaterials Studio修改第一行的XXX为PC的设备名称\n1SERVER XXX ANY 27000\n无论安装位置在什么地方，在安装完成后复制msi2019.lic到\n1C:\\Program Files (x86)\\BIOVIA\\LicensePack\\share\\data\n使用管理员权限打开License Administrator 2019选择C:\\Program Files (x86)\\BIOVIA\\LicensePack\\share\\data\\msi2019.lic完成注册\n\nGamess CPU编译申请源代码，只需要邮箱，速度很快，建议使用IDM下载PS：GAMESS+LIBCCHEM version September 30, 2022 R2 for NVIDIA GPUs源码大小是151.96MB注意编译完了千万别移动文件安装csh\n1sudo apt-get install csh gfortran\n解压源代码\n1tar -zxvf gamess-current.tar.gz\n配置编译环境\n1./config\n回车linux64仨回车gfortran(有大佬知道啥是armflang吗？)另一个窗口打gfortran –v，我出来的是9.2.1 20191008，但是要输9.2打了发现搞笑的是它居然不认……..，果然查源代码之后发现在哪选到9.1，那就自己加一个喽其实树莓派应该可以安装Atlas(谁知道ArmPL是个啥东东)，感觉安装很麻烦，选了none回车虽然我安装了mpi，但是觉得没啥用，选sockets它说选了yes需要消耗大量内存时间进行编译，我先编译出来了再说，选no下一步是需要嘤伟达的GPU(树莓派哭晕)，选no它说输入的信息都存储在install.info里了，请遵守readme.unix里面的内容先编译ddi\n12cd ddi./compddi\n生成了data_server.x、ddikick.x、ddi_test.x、libddi.a四个文件cd主目录，修改comp，搜索case 9.1: 后面加上9.2接下来的操作建议在screen里操作\n1./ compall\n编译的贼慢，还只能用单核编译，不过倒是跳过了很多东西，睡起来再看吧手动执行\n1./lked gamess 00\ngamess目录里建立src目录rungms文件作如下修改：把set TARGET&#x3D;sockets下面的三行改为\n123set SCR=/app/gamess/scrset USERSCR=/app/gamess/scrset GMSPATH=/app/gamess\n\nGamess GPU编译(已弃坑)安装csh\n1sudo apt-get install csh\n安装nvblas\n1apt-get install libnvblas11\n安装(NVIDIA HPC SDK)[https://developer.nvidia.com/nvidia-hpc-sdk-downloads]\n1234curl https://developer.download.nvidia.com/hpc-sdk/ubuntu/DEB-GPG-KEY-NVIDIA-HPC-SDK | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-hpcsdk-archive-keyring.gpgecho &#x27;deb [signed-by=/usr/share/keyrings/nvidia-hpcsdk-archive-keyring.gpg] https://developer.download.nvidia.com/hpc-sdk/ubuntu/amd64 /&#x27; | sudo tee /etc/apt/sources.list.d/nvhpc.listsudo apt-get update -ysudo apt-get install -y nvhpc-22-8\n如果报错\n1The following signatures couldn&#x27;t be verified because the public key is not available: NO_PUBKEY F338EA0E0105AB24\n执行\n1sudo gpg --keyserver https://developer.download.nvidia.cn/hpc-sdk/ubuntu/amd64 --recv-keys F338EA0E0105AB24\n再出错可能需要梯子解压源代码\n1tar -zxvf gamess-current.tar.gz\n配置编译环境\n1./config\n回车linux64仨回车nvfortrandefaultnvblas\nPyQuante解压源代码\n1tar -zxvf PyQuante-1.6.5.tar.gz\n安装Python开发包\n1apt-get install python-dev\n编译Python源代码\n1python setup.py bdist_wheel\n(这个setup.py有问题，开头少了个from setuptools import setup)\n1Pip install PyQuante-1.6.5-cp27-cp27mu-linux_aarch64.whl\n输入python进入交互界面尝试运行\n1from PyQuante.Molecule import Molecule\n输入氢原子\n1h2 = Molecule(&#x27;h2&#x27;,[(1,(0,0,0)),(1,(1.4,0,0))])\n引入HF函数\n12from PyQuante.hartree_fock import rhfen,orbe,orbs = rhf(h2)\n计算水分子的能量\n1print &quot;HF Energy = &quot;,en\n完美附加安装openbabel\n1apt-get install swig openbabel python-openbabel\n测试python-openbabel\n1import openbabel\n还有clibint，不知道怎么安装参考Pyquante项目\n\nPySCF先下载编译libcint\n1234unzip libcint-3.0.20.zipmkdir build; cd buildcmake -DBUILD_SHARED_LIBS=0 ..make install\n在&#x2F;usr&#x2F;local&#x2F;lib里会多出libcint两个文件两个软连接配置环境变量\n1export PYSCF_INC_DIR=/path/to/libcint:/usr/local/lib\n下载编译libxcCd到目录后make还有Python的库，值得安装\n1pylibxc-5.0.0-cp37-cp37m-linux_aarch64.whl\n这个也是Octopus的最核心的库\n1234tar -zxvf pyscf-v1.7.1.tar.gzcd pyscfpython3 setup.py bdist_wheelpip3 install pyscf-1.7.1-cp37-cp37m-linux_aarch64.whl\n运行测试\n1import pyscf\n\nAutodock1tar -zxvf autodocksuite-4.2.6-src.tar.gz\n解压之后得到src文件夹，里面有dock和GUIcd进去之后\n1./configure\n开sreen后make，完了make check，然后make install，这样&#x2F;usr&#x2F;local&#x2F;bin会多俩文件\n\nGromacs先在文档里下载源代码\n安装fftw\n1apt-get install libfftw3-single3 libfftw3-long3 libfftw3-double3 libfftw3-3 libfftw3-bin libfftw3-dev\n生成Gromacs编译文件\n12345tar -zxvf gromacs-2020.2.tar.gzcd /app/gromacs-2020.2mkdir buildcd buildcmake ..\n其实包括官网的教程会在后面加一堆参数，其实不用，它会自动检查，非常方便。检查的内容包括编译器，cuda，opencl，fftw3，还能检测到ARM_NEON\n开始编译\n12make -j4make check\n安装软件\n1make install\n文件就被安装在了&#x2F;usr&#x2F;local&#x2F;gromacs\n建议写到.bashrc里\n1source /usr/local/gromacs/bin/GMXRC\n运行完了测试一下\n1gmx -version\n\nCastep1.安装gfortran\n1apt-get install gfortran\n2.安装liblapacke\n1apt-get install liblapacke-dev\n3.开始编译\n1make -j4","dateCreated":"2020-06-25T00:00:00+08:00","dateModified":"2022-10-29T09:52:07+08:00","datePublished":"2020-06-25T00:00:00+08:00","description":"本文介绍了Materials Studio在Windows下的安装在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译","headline":"使用量子化学软件","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2002/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2002/","keywords":"Linux, Research","thumbnailUrl":"cover.jpg"}</script>
+    <meta name="description" content="本文介绍了Materials Studio在Windows下的安装在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="使用量子化学软件">
+<meta property="og:url" content="https://panxiuwen.github.io/posts/2002/index.html">
+<meta property="og:site_name" content="Pan&#39;s websit">
+<meta property="og:description" content="本文介绍了Materials Studio在Windows下的安装在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-29T01:52:07.000Z">
+<meta property="article:author" content="Sean Pan">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Research">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@982202733">
+<meta property="fb:app_id" content="[object Object]">
+    
+        <link rel="publisher" href="https://plus.google.com/982202733"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/posts/2002/cover.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2002/cover.jpg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Pan&#39;s websit
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">Sean Pan</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>不似天涯，卷起杨花似雪花</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="知乎"
+                        >
+                        <i class="sidebar-button-icon fab fa-zhihu" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">知乎</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://music.163.com/#/user/home?id=70816221"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="网易云"
+                        >
+                        <i class="sidebar-button-icon fab fa-tiktok" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">网易云</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/panxiuwen/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://gitee.com/sean982202733/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Gitee"
+                        >
+                        <i class="sidebar-button-icon fab fa-google" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Gitee</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:panxiuwen_sean@qq.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            使用量子化学软件
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2020-06-25T00:00:00+08:00">
+	
+		    2020年 6月 25日
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>本文介绍了Materials Studio在Windows下的安装<br>在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译</p>
+<span id="more"></span>
+<hr>
+<p>Gaussian的部分参考<a href="/posts/2021/">Gaussian的使用</a></p>
+<h3 id="Materials-Studio"><a href="#Materials-Studio" class="headerlink" title="Materials Studio"></a>Materials Studio</h3><p>修改第一行的XXX为PC的设备名称</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SERVER XXX ANY 27000</span><br></pre></td></tr></table></figure>
+<p>无论安装位置在什么地方，在安装完成后复制msi2019.lic到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files (x86)\BIOVIA\LicensePack\share\data</span><br></pre></td></tr></table></figure>
+<p>使用管理员权限打开<code>License Administrator 2019</code><br>选择C:\Program Files (x86)\BIOVIA\LicensePack\share\data\msi2019.lic完成注册</p>
+<hr>
+<h3 id="Gamess-CPU编译"><a href="#Gamess-CPU编译" class="headerlink" title="Gamess CPU编译"></a>Gamess CPU编译</h3><p><a target="_blank" rel="noopener" href="https://www.msg.chem.iastate.edu/GAMESS/download/dist.source.shtml">申请源代码</a>，只需要邮箱，速度很快，建议使用IDM下载<br>PS：GAMESS+LIBCCHEM version September 30, 2022 R2 for NVIDIA GPUs源码大小是151.96MB<br>注意编译完了千万别移动文件<br>安装csh</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install csh gfortran</span><br></pre></td></tr></table></figure>
+<p>解压源代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf gamess-current.tar.gz</span><br></pre></td></tr></table></figure>
+<p>配置编译环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./config</span><br></pre></td></tr></table></figure>
+<p>回车<br>linux64<br>仨回车<br>gfortran(有大佬知道啥是armflang吗？)<br>另一个窗口打gfortran –v，我出来的是9.2.1 20191008，但是要输9.2<br>打了发现搞笑的是它居然不认……..，果然查源代码之后发现在哪选到9.1，那就自己加一个喽<br>其实树莓派应该可以安装Atlas(谁知道ArmPL是个啥东东)，感觉安装很麻烦，选了none<br>回车<br>虽然我安装了mpi，但是觉得没啥用，选sockets<br>它说选了yes需要消耗大量内存时间进行编译，我先编译出来了再说，选no<br>下一步是需要嘤伟达的GPU(树莓派哭晕)，选no<br>它说输入的信息都存储在install.info里了，请遵守readme.unix里面的内容<br>先编译ddi</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ddi</span><br><span class="line">./compddi</span><br></pre></td></tr></table></figure>
+<p>生成了data_server.x、ddikick.x、ddi_test.x、libddi.a四个文件<br>cd主目录，修改comp，搜索case 9.1: 后面加上9.2<br>接下来的操作建议在screen里操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./ compall</span><br></pre></td></tr></table></figure>
+<p>编译的贼慢，还只能用单核编译，不过倒是跳过了很多东西，睡起来再看吧<br>手动执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./lked gamess 00</span><br></pre></td></tr></table></figure>
+<p>gamess目录里建立src目录<br>rungms文件作如下修改：<br>把set TARGET&#x3D;sockets下面的三行改为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set SCR=/app/gamess/scr</span><br><span class="line">set USERSCR=/app/gamess/scr</span><br><span class="line">set GMSPATH=/app/gamess</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="Gamess-GPU编译-已弃坑"><a href="#Gamess-GPU编译-已弃坑" class="headerlink" title="Gamess GPU编译(已弃坑)"></a>Gamess GPU编译(已弃坑)</h3><p>安装csh</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install csh</span><br></pre></td></tr></table></figure>
+<p>安装nvblas</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libnvblas11</span><br></pre></td></tr></table></figure>
+<p>安装(NVIDIA HPC SDK)[<a target="_blank" rel="noopener" href="https://developer.nvidia.com/nvidia-hpc-sdk-downloads]">https://developer.nvidia.com/nvidia-hpc-sdk-downloads]</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl https://developer.download.nvidia.com/hpc-sdk/ubuntu/DEB-GPG-KEY-NVIDIA-HPC-SDK | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-hpcsdk-archive-keyring.gpg</span><br><span class="line">echo &#x27;deb [signed-by=/usr/share/keyrings/nvidia-hpcsdk-archive-keyring.gpg] https://developer.download.nvidia.com/hpc-sdk/ubuntu/amd64 /&#x27; | sudo tee /etc/apt/sources.list.d/nvhpc.list</span><br><span class="line">sudo apt-get update -y</span><br><span class="line">sudo apt-get install -y nvhpc-22-8</span><br></pre></td></tr></table></figure>
+<p>如果报错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The following signatures couldn&#x27;t be verified because the public key is not available: NO_PUBKEY F338EA0E0105AB24</span><br></pre></td></tr></table></figure>
+<p>执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gpg --keyserver https://developer.download.nvidia.cn/hpc-sdk/ubuntu/amd64 --recv-keys F338EA0E0105AB24</span><br></pre></td></tr></table></figure>
+<p>再出错可能需要梯子<br>解压源代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf gamess-current.tar.gz</span><br></pre></td></tr></table></figure>
+<p>配置编译环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./config</span><br></pre></td></tr></table></figure>
+<p>回车<br>linux64<br>仨回车<br>nvfortran<br>default<br>nvblas</p>
+<h3 id="PyQuante"><a href="#PyQuante" class="headerlink" title="PyQuante"></a>PyQuante</h3><p>解压源代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf PyQuante-1.6.5.tar.gz</span><br></pre></td></tr></table></figure>
+<p>安装Python开发包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-dev</span><br></pre></td></tr></table></figure>
+<p>编译Python源代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py bdist_wheel</span><br></pre></td></tr></table></figure>
+<p>(这个setup.py有问题，开头少了个from setuptools import setup)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Pip install PyQuante-1.6.5-cp27-cp27mu-linux_aarch64.whl</span><br></pre></td></tr></table></figure>
+<p>输入python进入交互界面<br>尝试运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from PyQuante.Molecule import Molecule</span><br></pre></td></tr></table></figure>
+<p>输入氢原子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">h2 = Molecule(&#x27;h2&#x27;,[(1,(0,0,0)),(1,(1.4,0,0))])</span><br></pre></td></tr></table></figure>
+<p>引入HF函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from PyQuante.hartree_fock import rhf</span><br><span class="line">en,orbe,orbs = rhf(h2)</span><br></pre></td></tr></table></figure>
+<p>计算水分子的能量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print &quot;HF Energy = &quot;,en</span><br></pre></td></tr></table></figure>
+<p>完美<br>附加安装openbabel</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install swig openbabel python-openbabel</span><br></pre></td></tr></table></figure>
+<p>测试python-openbabel</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import openbabel</span><br></pre></td></tr></table></figure>
+<p>还有clibint，不知道怎么安装<br>参考<a target="_blank" rel="noopener" href="http://pyquante.sourceforge.net/#download-and-installation">Pyquante项目</a></p>
+<hr>
+<h3 id="PySCF"><a href="#PySCF" class="headerlink" title="PySCF"></a>PySCF</h3><p>先下载编译libcint</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">unzip libcint-3.0.20.zip</span><br><span class="line">mkdir build; cd build</span><br><span class="line">cmake -DBUILD_SHARED_LIBS=0 ..</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>在&#x2F;usr&#x2F;local&#x2F;lib里会多出libcint两个文件两个软连接<br>配置环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PYSCF_INC_DIR=/path/to/libcint:/usr/local/lib</span><br></pre></td></tr></table></figure>
+<p>下载编译libxc<br>Cd到目录后make<br>还有Python的库，值得安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pylibxc-5.0.0-cp37-cp37m-linux_aarch64.whl</span><br></pre></td></tr></table></figure>
+<p>这个也是Octopus的最核心的库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf pyscf-v1.7.1.tar.gz</span><br><span class="line">cd pyscf</span><br><span class="line">python3 setup.py bdist_wheel</span><br><span class="line">pip3 install pyscf-1.7.1-cp37-cp37m-linux_aarch64.whl</span><br></pre></td></tr></table></figure>
+<p>运行测试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import pyscf</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="Autodock"><a href="#Autodock" class="headerlink" title="Autodock"></a>Autodock</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf autodocksuite-4.2.6-src.tar.gz</span><br></pre></td></tr></table></figure>
+<p>解压之后得到src文件夹，里面有dock和GUI<br>cd进去之后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br></pre></td></tr></table></figure>
+<p>开sreen后make，完了make check，然后make install，这样&#x2F;usr&#x2F;local&#x2F;bin会多俩文件</p>
+<hr>
+<h3 id="Gromacs"><a href="#Gromacs" class="headerlink" title="Gromacs"></a>Gromacs</h3><p>先在文档里<a target="_blank" rel="noopener" href="https://manual.gromacs.org/">下载源代码</a></p>
+<p>安装fftw</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libfftw3-single3 libfftw3-long3 libfftw3-double3 libfftw3-3 libfftw3-bin libfftw3-dev</span><br></pre></td></tr></table></figure>
+<p>生成Gromacs编译文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf gromacs-2020.2.tar.gz</span><br><span class="line">cd /app/gromacs-2020.2</span><br><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">cmake ..</span><br></pre></td></tr></table></figure>
+<p>其实包括官网的教程会在后面加一堆参数，其实不用，它会自动检查，非常方便。检查的内容包括编译器，cuda，opencl，fftw3，还能检测到ARM_NEON</p>
+<p>开始编译</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make -j4</span><br><span class="line">make check</span><br></pre></td></tr></table></figure>
+<p>安装软件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>文件就被安装在了&#x2F;usr&#x2F;local&#x2F;gromacs</p>
+<p>建议写到.bashrc里</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /usr/local/gromacs/bin/GMXRC</span><br></pre></td></tr></table></figure>
+<p>运行完了测试一下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gmx -version</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="Castep"><a href="#Castep" class="headerlink" title="Castep"></a>Castep</h3><p>1.安装gfortran</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install gfortran</span><br></pre></td></tr></table></figure>
+<p>2.安装liblapacke</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install liblapacke-dev</span><br></pre></td></tr></table></figure>
+<p>3.开始编译</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -j4</span><br></pre></td></tr></table></figure>
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Linux/" rel="tag">Linux</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/Research/" rel="tag">Research</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2000/"
+                    data-tooltip="网页传输和原理"
+                    aria-label="上一篇: 网页传输和原理"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/1002/"
+                    data-tooltip="随笔"
+                    aria-label="下一篇: 随笔"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Sean Pan. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2000/"
+                    data-tooltip="网页传输和原理"
+                    aria-label="上一篇: 网页传输和原理"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/1002/"
+                    data-tooltip="随笔"
+                    aria-label="下一篇: 随笔"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">Sean Pan</h4>
+        
+            <div id="about-card-bio"><p>不似天涯，卷起杨花似雪花</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Master in YNU</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Kunming China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

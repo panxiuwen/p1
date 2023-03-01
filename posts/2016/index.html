@@ -1,0 +1,617 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Pan&#39;s websit">
+    <title>Windows相关笔记 - Pan&#39;s websit</title>
+    <meta name="author" content="Sean Pan">
+    
+        <meta name="keywords" content="hexo,javascript">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文是笔者记录的部分Windows的零散笔记\n\n\n一、初始化关闭WindowsDenfenceWin的不需要管理员就能移动的开始菜单目录为\n\nC:\\Users\\Sean\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\\n\n\n关闭Windows防火墙控制面板-&gt;防火墙-&gt;关闭WindowsDefence防火墙\n\n禁用临时ipv6管理员运行cmd\n1netsh interface ipv6 set privacy state=disable\n重启后生效\n\n取消休眠禁用休眠回写文件\n1powercfg -h off\n\n开启远程桌面\n\n高级系统设置-允许远程连接到此计算机\n\n允许空密码登录\n\n运行“gpedit.msc”-windows设置-安全设置-本地策略-安全选项-账户，使用空密码的本地账号只允许控制台登录-已禁用\n\n\n开启WOL\n\nIntel网卡电源管理-&gt;允许此设备唤醒计算机+只允许幻数据包高级-&gt;“唤醒魔包”和“关机状态下魔包唤醒”\n\n\nRealtek网卡电源管理-&gt;允许此设备唤醒计算机+只允许幻数据包高级-&gt;“魔术封包唤醒”和“关机 网络唤醒”\n\n\n设置Office不压缩图像选项-&gt;高级-&gt;不压缩文件中的图像\n\nPS：貌似只用在Word或者PowerPoint里面设置一个就行了\n\n\n二、其他笔记修改hosts\n12C:\\Windows\\System32\\drivers\\etc\\hostsipconfig /flushdns\t//刷新host\n恢复病毒隐藏的文件\n1attrib -s -h -r /s /d\n创建软连接\n12mklink &quot;E:\\blog2\\package.json&quot; &quot;E:\\blog\\package.json&quot;\t//链接到文件mklink /d &quot;d:\\phpstudy\\www\\Y&quot; &quot;d:\\Store\\music\\Y&quot;\t\t//链接到文件夹\n运行命令行\n123regedit\t\t//注册表编辑器Control\t\t//运行控制面板gpedit.msc\t//运行策略\nLTSC安装相机将微软应用商店的链接输入到查询库里，下载Microsoft.NET.Native.Runtime.appx和Microsoft.WindowsCamera.appxbundle，使用管理员的powershell输入Add-AppxPackage就行了添加Windows 闹钟和时钟参考Win10 LTSC 安装 Windows 商店相机应用电脑无法休眠控制面板-&gt;所有控制面板项-&gt;电源选项-&gt;编辑计划设置-&gt;高级选项-&gt;睡眠-&gt;允许离开模式-&gt;全否如果没有离开模式的选项，使用管理员启动powershell，运行\n1powercfg -attributes SUB_SLEEP 25DFA149-5DD1-4736-B5AB-E8A37B5B8187 -ATTRIB_HIDE\n\n三、装机软件固定链接360浏览器阿里网盘Zerotier\n需打开网页Python微信TIM百度网盘百度网盘网易云音乐Notepad++FreefilesyncVerysync\n更新包坚果云Chrome\n\n四、其他软件问题Google chrome software_reporter_tool占用过高修改software_reporter_tool目录下的manifest.json中的\n1allow-reporter-logs&quot;: false\n使用任务管理器强制结束software_reporter_tool.exe几次\n在Office里禁用MathType将C:\\Program Files\\Microsoft Office\\root\\Office16\\STARTUP文件夹改名\nAvantage输入数值卡死输入数字的时候用英文输入法\n360浏览器密码导出360浏览器密码导出\n\n将C:\\Users\\用户名\\AppData\\Local\\360Chrome\\Chrome\\User Data\\Default\\360UIDXXXX你的账户_V8 \\Login Data复制到C:\\Users\\用户名\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Login Data\n\n打开WebBrowserPassView进行查看\n\n五、10pin系统控制面板连接排针\n\nPWR_LED+\nPWR_LED-\nPWR\nGND\nBlank\n\n\nHDD_LED+\nHDD_LED-\nGround\nHWRST#\nNC\n\n\n●系统电源指示灯连接排针(2-pin +PWR_LED- )\n这组2-pin 排针可连接到电脑主机面板上的系统电源指示灯。在您启动电脑并且使用电脑的情况下，该指示灯会持续亮着；而当指示灯闪烁时，即表示电脑正处于睡眠模式中。\n\n●存储设备动作指示灯连接排针(2-pin +HDD_LED-)您可以连接此组2-pin 排针到电脑主机面板上的存储设备动作指示灯。如此一旦存储设备有读写动作时，指示灯随即亮起。\n●电源&#x2F;软关机开关按钮( 2-pin PWR_BTN)这组2-pin 排针连接到电脑主机面板上控制电脑电源的开关。您可以根据BIOS程序或操作系统的设置，来决定当按下开关时电脑会在正常运行和睡眠模式间切换，或者是在正常运行和软关机模式间切换。\n●复位开关连接排针( 2-pin RESET )这组2-pin 排针连接到电脑主机面板上的Reset开关。按下机箱上的键重新开机。\n","dateCreated":"2018-06-17T00:00:00+08:00","dateModified":"2023-01-27T13:30:51+08:00","datePublished":"2018-06-17T00:00:00+08:00","description":"本文是笔者记录的部分Windows的零散笔记","headline":"Windows相关笔记","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2016/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2016/","keywords":"System, Windows","thumbnailUrl":"cover.jpg"}</script>
+    <meta name="description" content="本文是笔者记录的部分Windows的零散笔记">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Windows相关笔记">
+<meta property="og:url" content="https://panxiuwen.github.io/posts/2016/index.html">
+<meta property="og:site_name" content="Pan&#39;s websit">
+<meta property="og:description" content="本文是笔者记录的部分Windows的零散笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-06-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-27T05:30:51.000Z">
+<meta property="article:author" content="Sean Pan">
+<meta property="article:tag" content="System">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@982202733">
+<meta property="fb:app_id" content="[object Object]">
+    
+        <link rel="publisher" href="https://plus.google.com/982202733"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/posts/2016/cover.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2016/cover.jpg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Pan&#39;s websit
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">Sean Pan</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>不似天涯，卷起杨花似雪花</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="知乎"
+                        >
+                        <i class="sidebar-button-icon fab fa-zhihu" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">知乎</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://music.163.com/#/user/home?id=70816221"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="网易云"
+                        >
+                        <i class="sidebar-button-icon fab fa-tiktok" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">网易云</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/panxiuwen/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://gitee.com/sean982202733/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Gitee"
+                        >
+                        <i class="sidebar-button-icon fab fa-google" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Gitee</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:panxiuwen_sean@qq.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Windows相关笔记
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-06-17T00:00:00+08:00">
+	
+		    2018年 6月 17日
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/System/">System</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>本文是笔者记录的部分Windows的零散笔记</p>
+<span id="more"></span>
+<hr>
+<h4 id="一、初始化"><a href="#一、初始化" class="headerlink" title="一、初始化"></a>一、初始化</h4><p><strong>关闭WindowsDenfence</strong><br>Win的不需要管理员就能移动的开始菜单目录为</p>
+<blockquote>
+<p>C:\Users\Sean\AppData\Roaming\Microsoft\Windows\Start Menu\</p>
+</blockquote>
+<hr>
+<p><strong>关闭Windows防火墙</strong><br>控制面板-&gt;防火墙-&gt;关闭WindowsDefence防火墙</p>
+<hr>
+<p><strong>禁用临时ipv6</strong><br>管理员运行cmd</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh interface ipv6 set privacy state=disable</span><br></pre></td></tr></table></figure>
+<p>重启后生效</p>
+<hr>
+<p><strong>取消休眠禁用休眠回写文件</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powercfg -h off</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>开启远程桌面</strong></p>
+<blockquote>
+<p>高级系统设置-允许远程连接到此计算机</p>
+</blockquote>
+<p>允许空密码登录</p>
+<blockquote>
+<p>运行“gpedit.msc”-windows设置-安全设置-本地策略-安全选项-账户，使用空密码的本地账号只允许控制台登录-已禁用</p>
+</blockquote>
+<hr>
+<p><strong>开启WOL</strong></p>
+<blockquote>
+<p>Intel网卡电源管理-&gt;允许此设备唤醒计算机+只允许幻数据包<br>高级-&gt;“唤醒魔包”和“关机状态下魔包唤醒”</p>
+</blockquote>
+<blockquote>
+<p>Realtek网卡电源管理-&gt;允许此设备唤醒计算机+只允许幻数据包<br>高级-&gt;“魔术封包唤醒”和“关机 网络唤醒”</p>
+</blockquote>
+<hr>
+<p><strong>设置Office不压缩图像</strong><br>选项-&gt;高级-&gt;不压缩文件中的图像</p>
+<blockquote>
+<p>PS：貌似只用在Word或者PowerPoint里面设置一个就行了</p>
+</blockquote>
+<hr>
+<h3 id="二、其他笔记"><a href="#二、其他笔记" class="headerlink" title="二、其他笔记"></a>二、其他笔记</h3><p>修改hosts</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\Windows\System32\drivers\etc\hosts</span><br><span class="line">ipconfig /flushdns	//刷新host</span><br></pre></td></tr></table></figure>
+<p>恢复病毒隐藏的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">attrib -s -h -r /s /d</span><br></pre></td></tr></table></figure>
+<p>创建软连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mklink &quot;E:\blog2\package.json&quot; &quot;E:\blog\package.json&quot;	//链接到文件</span><br><span class="line">mklink /d &quot;d:\phpstudy\www\Y&quot; &quot;d:\Store\music\Y&quot;		//链接到文件夹</span><br></pre></td></tr></table></figure>
+<p>运行命令行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">regedit		//注册表编辑器</span><br><span class="line">Control		//运行控制面板</span><br><span class="line">gpedit.msc	//运行策略</span><br></pre></td></tr></table></figure>
+<p>LTSC安装相机<br>将<a target="_blank" rel="noopener" href="https://apps.microsoft.com/store/detail/windows-%E7%9B%B8%E6%9C%BA/9WZDNCRFJBBG?hl=zh-cn&gl=CN">微软应用商店</a>的链接输入到<a target="_blank" rel="noopener" href="https://store.rg-adguard.net/">查询库</a>里，<br>下载Microsoft.NET.Native.Runtime.appx和Microsoft.WindowsCamera.appxbundle，使用管理员的powershell输入Add-AppxPackage就行了<br>添加<a target="_blank" rel="noopener" href="https://apps.microsoft.com/store/detail/windows-%E9%97%B9%E9%92%9F%E5%92%8C%E6%97%B6%E9%92%9F/9WZDNCRFJ3PR">Windows 闹钟和时钟</a><br>参考<a target="_blank" rel="noopener" href="https://cdn.modb.pro/db/226468">Win10 LTSC 安装 Windows 商店相机应用</a><br><strong>电脑无法休眠</strong><br>控制面板-&gt;所有控制面板项-&gt;电源选项-&gt;编辑计划设置-&gt;高级选项-&gt;睡眠-&gt;允许离开模式-&gt;全否<br>如果没有离开模式的选项，使用管理员启动powershell，运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powercfg -attributes SUB_SLEEP 25DFA149-5DD1-4736-B5AB-E8A37B5B8187 -ATTRIB_HIDE</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="三、装机软件"><a href="#三、装机软件" class="headerlink" title="三、装机软件"></a>三、装机软件</h3><h4 id="固定链接"><a href="#固定链接" class="headerlink" title="固定链接"></a>固定链接</h4><p><a target="_blank" rel="noopener" href="https://down.360safe.com/cse/360csex_setup.exe">360浏览器</a><br><a target="_blank" rel="noopener" href="https://cdn.aliyundrive.net/downloads/apps/desktop/aDrive.exe">阿里网盘</a><br><a target="_blank" rel="noopener" href="https://download.zerotier.com/dist/ZeroTier%20One.msi">Zerotier</a></p>
+<h4 id="需打开网页"><a href="#需打开网页" class="headerlink" title="需打开网页"></a>需打开网页</h4><p><a target="_blank" rel="noopener" href="https://www.python.org/downloads/windows/">Python</a><br><a target="_blank" rel="noopener" href="https://pc.weixin.qq.com/">微信</a><br><a target="_blank" rel="noopener" href="https://office.qq.com/download.html">TIM</a><br><a target="_blank" rel="noopener" href="https://pan.baidu.com/download#win">百度网盘</a><br><a target="_blank" rel="noopener" href="https://shurufa.baidu.com/">百度网盘</a><br><a target="_blank" rel="noopener" href="https://music.163.com/#/download">网易云音乐</a><br><a target="_blank" rel="noopener" href="https://github.com/notepad-plus-plus/notepad-plus-plus/releases">Notepad++</a><br><a target="_blank" rel="noopener" href="https://freefilesync.org/download.php">Freefilesync</a><br><a target="_blank" rel="noopener" href="http://www.verysync.com/download.html">Verysync</a></p>
+<h4 id="更新包"><a href="#更新包" class="headerlink" title="更新包"></a>更新包</h4><p>坚果云<br>Chrome</p>
+<hr>
+<h3 id="四、其他软件问题"><a href="#四、其他软件问题" class="headerlink" title="四、其他软件问题"></a>四、其他软件问题</h3><h4 id="Google-chrome-software-reporter-tool占用过高"><a href="#Google-chrome-software-reporter-tool占用过高" class="headerlink" title="Google chrome software_reporter_tool占用过高"></a>Google chrome software_reporter_tool占用过高</h4><p>修改software_reporter_tool目录下的manifest.json中的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">allow-reporter-logs&quot;: false</span><br></pre></td></tr></table></figure>
+<p>使用任务管理器强制结束software_reporter_tool.exe几次</p>
+<h4 id="在Office里禁用MathType"><a href="#在Office里禁用MathType" class="headerlink" title="在Office里禁用MathType"></a>在Office里禁用MathType</h4><p>将<code>C:\Program Files\Microsoft Office\root\Office16\STARTUP</code>文件夹改名</p>
+<h4 id="Avantage输入数值卡死"><a href="#Avantage输入数值卡死" class="headerlink" title="Avantage输入数值卡死"></a>Avantage输入数值卡死</h4><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/CD0bjfcRZ24AgRIH8D18FQ">输入数字的时候用英文输入法</a></p>
+<h4 id="360浏览器密码导出"><a href="#360浏览器密码导出" class="headerlink" title="360浏览器密码导出"></a>360浏览器密码导出</h4><p><a target="_blank" rel="noopener" href="https://www.xmpan.com/986.html">360浏览器密码导出</a></p>
+<blockquote>
+<p>将C:\Users\用户名\AppData\Local\360Chrome\Chrome\User Data\Default\360UIDXXXX你的账户_V8 \Login Data<br>复制到C:\Users\用户名\AppData\Local\Google\Chrome\User Data\Default\Login Data</p>
+</blockquote>
+<p>打开WebBrowserPassView进行查看</p>
+<hr>
+<h3 id="五、10pin系统控制面板连接排针"><a href="#五、10pin系统控制面板连接排针" class="headerlink" title="五、10pin系统控制面板连接排针"></a>五、10pin系统控制面板连接排针</h3><table>
+<tr>
+<td>PWR_LED+</td>
+<td>PWR_LED-</td>
+<td>PWR</td>
+<td>GND</td>
+<td>Blank</td>
+</tr>
+<tr>
+<td>HDD_LED+</td>
+<td>HDD_LED-</td>
+<td>Ground</td>
+<td>HWRST#</td>
+<td>NC</td>
+</tr>
+</table>
+●系统电源指示灯连接排针(2-pin +PWR_LED- )
+这组2-pin 排针可连接到电脑主机面板上的系统电源指示灯。在您启动电脑并且使用电脑的情况下，该指示灯会持续亮着；而当指示灯闪烁时，即表示电脑正处于睡眠模式中。
+
+<p>●存储设备动作指示灯连接排针(2-pin +HDD_LED-)<br>您可以连接此组2-pin 排针到电脑主机面板上的存储设备动作指示灯。如此一旦存储设备有读写动作时，指示灯随即亮起。</p>
+<p>●电源&#x2F;软关机开关按钮( 2-pin PWR_BTN)<br>这组2-pin 排针连接到电脑主机面板上控制电脑电源的开关。您可以根据BIOS程序或操作系统的设置，来决定当按下开关时电脑会在正常运行和睡眠模式间切换，或者是在正常运行和软关机模式间切换。</p>
+<p>●复位开关连接排针( 2-pin RESET )<br>这组2-pin 排针连接到电脑主机面板上的Reset开关。按下机箱上的<RESET>键重新开机。</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/System/" rel="tag">System</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/Windows/" rel="tag">Windows</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4001/"
+                    data-tooltip="Linux配置服务"
+                    aria-label="上一篇: Linux配置服务"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2021/"
+                    data-tooltip="Gaussian的使用"
+                    aria-label="下一篇: Gaussian的使用"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Sean Pan. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4001/"
+                    data-tooltip="Linux配置服务"
+                    aria-label="上一篇: Linux配置服务"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2021/"
+                    data-tooltip="Gaussian的使用"
+                    aria-label="下一篇: Gaussian的使用"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">Sean Pan</h4>
+        
+            <div id="about-card-bio"><p>不似天涯，卷起杨花似雪花</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Master in YNU</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Kunming China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

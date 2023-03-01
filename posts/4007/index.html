@@ -1,0 +1,559 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Pan&#39;s websit">
+    <title>音频与视频格式 - Pan&#39;s websit</title>
+    <meta name="author" content="Sean Pan">
+    
+        <meta name="keywords" content="hexo,javascript">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍一些音频视频格式和转换\n\n\n视频格式AV1最有前途的开源免版权费的视频编码格式，目标是解决H265昂贵的专利费用和复杂的专利授权，体积上比HEVC更优秀，可封装为mkv和mp4\nAVC&#x2F;MPEG-4 H264成熟，兼容性强，应用最广泛，但不支持4K以上视频，\nHEVC&#x2F;H265H264的继任者，体积更小，解码难度更大，Chrome系浏览器已由于授权费问题不支持HEVC硬件解码器\nVP9由Google开发的开放格式，免费，运用不广泛，反正笔者没见过\nRMRealNetworks公司开发的格式，时代的眼泪\n\n音频格式有损格式相对于巨大的无损格式，个人认为牺牲了少部分玄学的细节而大大降低了体积有损格式更有应用意义，更便于存储和传输(本人木耳)mp3：应用最广泛的有损音频格式acc：体积和音质都比mp3更优秀ogg：\n\n无损格式PCM：CD的存储的格式，常用格式是PCM、LPCM、WAV、AIFFFLAC：开源无损压缩格式，体积比APE略大但解码速率有优势APE：对等压缩，编码器很久都没更新了\n\nPotPlayer使用开启硬解点击播放界面时间轴右边的S&#x2F;W\n老板键设置-&gt;快捷键-&gt;记得全局打勾\n超分辨率设置-&gt;视频-&gt;分辨率-&gt;立即刷机生效\n倍速播放控制窗口-&gt;播放-&gt;加快\n取消窗口顶置右键-&gt;配置&#x2F;语言&#x2F;其他-&gt;顶置方式-&gt;全屏时总在最前端\n其他设置设置-&gt;基本-&gt;多重处理方式-&gt;单个进程播放设置-&gt;基本-&gt;自动更新-&gt;不使用自动更新设置-&gt;播放-&gt;播放-&gt;播放窗口尺寸设置-&gt;播放-&gt;宽高比-&gt;缩放窗口时保持宽高比\n添加软件解码器下载LAVFilters，一路Next即可\n\nFFmpeg 使用获取软件包，建议配置环境变量提取视频里的音频\n1ffmpeg.exe -i &quot;input.mp4&quot;  -vn -codec copy &quot;out.m4a&quot;\nmp3转m4a，设定码率128k\n1ffmpeg -i &quot;input.mp3&quot; -ab 128k &quot;out.m4a&quot;\nts转mp4\n1ffmpeg -i 2.ts -acodec copy -vcodec copy -absf aac_adtstoasc output.mp4\nmkv互转mp4\n1ffmpeg -i 2.mkv -acodec copy -vcodec copy output.mp4\n\n","dateCreated":"2016-10-18T00:00:00+08:00","dateModified":"2023-03-01T18:22:37+08:00","datePublished":"2016-10-18T00:00:00+08:00","description":"本文介绍一些音频视频格式和转换","headline":"音频与视频格式","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/4007/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/4007/","keywords":"Media","thumbnailUrl":"cover.jpg"}</script>
+    <meta name="description" content="本文介绍一些音频视频格式和转换">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="音频与视频格式">
+<meta property="og:url" content="https://panxiuwen.github.io/posts/4007/index.html">
+<meta property="og:site_name" content="Pan&#39;s websit">
+<meta property="og:description" content="本文介绍一些音频视频格式和转换">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-10-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T10:22:37.821Z">
+<meta property="article:author" content="Sean Pan">
+<meta property="article:tag" content="Media">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@982202733">
+<meta property="fb:app_id" content="[object Object]">
+    
+        <link rel="publisher" href="https://plus.google.com/982202733"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/posts/4007/cover.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/4007/cover.jpg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Pan&#39;s websit
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">Sean Pan</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>不似天涯，卷起杨花似雪花</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="知乎"
+                        >
+                        <i class="sidebar-button-icon fab fa-zhihu" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">知乎</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://music.163.com/#/user/home?id=70816221"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="网易云"
+                        >
+                        <i class="sidebar-button-icon fab fa-tiktok" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">网易云</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/panxiuwen/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://gitee.com/sean982202733/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Gitee"
+                        >
+                        <i class="sidebar-button-icon fab fa-google" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Gitee</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:panxiuwen_sean@qq.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            音频与视频格式
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2016-10-18T00:00:00+08:00">
+	
+		    2016年 10月 18日
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Technology/">Technology</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>本文介绍一些音频视频格式和转换</p>
+<span id="more"></span>
+<hr>
+<h3 id="视频格式"><a href="#视频格式" class="headerlink" title="视频格式"></a>视频格式</h3><h4 id="AV1"><a href="#AV1" class="headerlink" title="AV1"></a>AV1</h4><p>最有前途的开源免版权费的视频编码格式，目标是解决H265昂贵的专利费用和复杂的专利授权，体积上比HEVC更优秀，可封装为mkv和mp4</p>
+<h4 id="AVC-x2F-MPEG-4-H264"><a href="#AVC-x2F-MPEG-4-H264" class="headerlink" title="AVC&#x2F;MPEG-4 H264"></a>AVC&#x2F;MPEG-4 H264</h4><p>成熟，兼容性强，应用最广泛，但不支持4K以上视频，</p>
+<h4 id="HEVC-x2F-H265"><a href="#HEVC-x2F-H265" class="headerlink" title="HEVC&#x2F;H265"></a>HEVC&#x2F;H265</h4><p>H264的继任者，体积更小，解码难度更大，Chrome系浏览器已由于授权费问题不支持HEVC硬件解码器</p>
+<h4 id="VP9"><a href="#VP9" class="headerlink" title="VP9"></a>VP9</h4><p>由Google开发的开放格式，免费，运用不广泛，反正笔者没见过</p>
+<h4 id="RM"><a href="#RM" class="headerlink" title="RM"></a>RM</h4><p>RealNetworks公司开发的格式，时代的眼泪</p>
+<hr>
+<h3 id="音频格式"><a href="#音频格式" class="headerlink" title="音频格式"></a>音频格式</h3><h4 id="有损格式"><a href="#有损格式" class="headerlink" title="有损格式"></a>有损格式</h4><p>相对于巨大的无损格式，个人认为牺牲了少部分玄学的细节而大大降低了体积有损格式更有应用意义，更便于存储和传输(本人木耳)<br>mp3：应用最广泛的有损音频格式<br>acc：体积和音质都比mp3更优秀<br>ogg：</p>
+<hr>
+<h4 id="无损格式"><a href="#无损格式" class="headerlink" title="无损格式"></a>无损格式</h4><p>PCM：CD的存储的格式，常用格式是PCM、LPCM、WAV、AIFF<br>FLAC：开源无损压缩格式，体积比APE略大但解码速率有优势<br>APE：对等压缩，编码器很久都没更新了</p>
+<hr>
+<h3 id="PotPlayer使用"><a href="#PotPlayer使用" class="headerlink" title="PotPlayer使用"></a>PotPlayer使用</h3><h4 id="开启硬解"><a href="#开启硬解" class="headerlink" title="开启硬解"></a>开启硬解</h4><p>点击播放界面时间轴右边的S&#x2F;W</p>
+<h4 id="老板键"><a href="#老板键" class="headerlink" title="老板键"></a>老板键</h4><p>设置-&gt;快捷键-&gt;记得全局打勾</p>
+<h4 id="超分辨率"><a href="#超分辨率" class="headerlink" title="超分辨率"></a>超分辨率</h4><p>设置-&gt;视频-&gt;分辨率-&gt;立即刷机生效</p>
+<h4 id="倍速播放"><a href="#倍速播放" class="headerlink" title="倍速播放"></a>倍速播放</h4><p>控制窗口-&gt;播放-&gt;加快</p>
+<h4 id="取消窗口顶置"><a href="#取消窗口顶置" class="headerlink" title="取消窗口顶置"></a>取消窗口顶置</h4><p>右键-&gt;配置&#x2F;语言&#x2F;其他-&gt;顶置方式-&gt;全屏时总在最前端</p>
+<h4 id="其他设置"><a href="#其他设置" class="headerlink" title="其他设置"></a>其他设置</h4><p>设置-&gt;基本-&gt;多重处理方式-&gt;单个进程播放<br>设置-&gt;基本-&gt;自动更新-&gt;不使用自动更新<br>设置-&gt;播放-&gt;播放-&gt;播放窗口尺寸<br>设置-&gt;播放-&gt;宽高比-&gt;缩放窗口时保持宽高比</p>
+<h4 id="添加软件解码器"><a href="#添加软件解码器" class="headerlink" title="添加软件解码器"></a>添加软件解码器</h4><p>下载<a target="_blank" rel="noopener" href="https://github.com/Nevcairiel/LAVFilters/releases">LAVFilters</a>，一路Next即可</p>
+<hr>
+<h3 id="FFmpeg-使用"><a href="#FFmpeg-使用" class="headerlink" title="FFmpeg 使用"></a>FFmpeg 使用</h3><p><a target="_blank" rel="noopener" href="https://github.com/FFmpeg/FFmpeg/releases">获取软件包</a>，建议配置环境变量<br>提取视频里的音频</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg.exe -i &quot;input.mp4&quot;  -vn -codec copy &quot;out.m4a&quot;</span><br></pre></td></tr></table></figure>
+<p>mp3转m4a，设定码率128k</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i &quot;input.mp3&quot; -ab 128k &quot;out.m4a&quot;</span><br></pre></td></tr></table></figure>
+<p>ts转mp4</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i 2.ts -acodec copy -vcodec copy -absf aac_adtstoasc output.mp4</span><br></pre></td></tr></table></figure>
+<p>mkv互转mp4</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i 2.mkv -acodec copy -vcodec copy output.mp4</span><br></pre></td></tr></table></figure>
+
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Media/" rel="tag">Media</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/1001/"
+                    data-tooltip="集锦"
+                    aria-label="上一篇: 集锦"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/1009/"
+                    data-tooltip="博主的乐库"
+                    aria-label="下一篇: 博主的乐库"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Sean Pan. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/1001/"
+                    data-tooltip="集锦"
+                    aria-label="上一篇: 集锦"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/1009/"
+                    data-tooltip="博主的乐库"
+                    aria-label="下一篇: 博主的乐库"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">Sean Pan</h4>
+        
+            <div id="about-card-bio"><p>不似天涯，卷起杨花似雪花</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Master in YNU</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Kunming China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

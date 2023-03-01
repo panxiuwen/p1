@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Pan&#39;s websit">
+    <title>内网穿透软件 - Pan&#39;s websit</title>
+    <meta name="author" content="Sean Pan">
+    
+        <meta name="keywords" content="hexo,javascript">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了内网穿透软件ZeroTier、花生壳和natapp的使用\n\n\n一、前言内网穿透软件一般分为两类，流量走公网穿透服务器和不走穿透服务器的软件。流量走公网穿透服务器的软件全部都会分配给用户二级域名，全部都是付费软件且价格很高，例如Natapp、花生壳等。流量不走公网服务器的软件有Zerotier、Tailscale、TeamViewer以及Hamachi，这类软件一般会分给用户192或10开头的内网ip，流量使用p2p传输并进行加密，tcp连接的稳定性一般受nat环境的影响，udp只要是打洞成功了一般都没问题。\n\n二、ZeroTierZeroTier通过其建立的虚拟局域网络，直接连接各地的设备，方便实现去中心化的管理、通讯和计算，几乎支持所有的联网设备免费子网设备是25个，隐藏设备不算，不知道是不是bug，部署完了后一段时间无法连接设备属于正常现象，等就行了\n\n1.安装Linux安装\n1apt-get install zerotier-one\n或\n1curl -s https://install.zerotier.com | sudo bash\n\nSynology安装\n在套件中心里添加矿神源\n1https://spk7.imnks.com/\n安装后打开ssh并切换root\n1sed -i &#x27;s/package/root/g&#x27; /var/packages/zerotier/conf/privilege\n手动运行Zerotier\n12cd /var/packages/zerotier/target/bin./zerotier-one -q join d5e5fb6537ebc5f5\n\n2.使用加入网络：\n1zerotier-cli join d5e5fb6537ebc5f5\n退出网络：\n1zerotier-cli leave d5e5fb6537ebc5f5\n启动服务\n1zerotier-one -d\n重启服务：\n1service zerotier-one restart\n查看状态：\n1zerotier-cli status\n卸载：\n1apt-get purge zerotier-one\n\n3.在路由器上使用的方法优点：由于zerotier的免费绑定设备只有25个，使用路由器可以节约使用个数缺点：外网设备无法自由访问内网设备，需要结合Openwrt自带的或者socat做端口转发\n\n4.连接虚拟网络后无法连接其他网络原因：在zerotier虚拟网络上加入了与本地路由器冲突的路由表查看网关\n1netstat –rn\n或者\n1route -n\n添加网关\n1route default 192.168.2.1\n删除网关\n1route del -net 192.168.192.0 netmask 255.255.255.0\n\n三、花生壳花生壳绝对是国内老牌内网映射服务提供商\n1. 安装按着官网要求来就行，Synlogy用矿神源Debian根据官网的教程，但要先安装net-tools\n12apt-get install net-tools\n然后再安装\n1wget &quot;https://down.oray.com/hsk/linux/phddns_5.2.0_amd64.deb&quot; -O phddns_5.2.0_amd64.deb\n或者下载到本地安装\n1dpkg -i phddns_5.2.0_amd64.deb\n查看服务\n1phddns status\n打开花生壳管理后绑定SN码，配置完端口映射即可\n2.资费免费通道速率1Mb&#x2F;s，月流量1GB，必须拥有壳域名学生认证速率1Mb&#x2F;s，月流量5GB，必须拥有壳域名最便宜的付费版1天1块起步，还不如买服务器\n\n四、Natapp1.安装下载,支持Win、Mac、Linux和FreeBSD这些主流平台在后台配置好映射之后使用命令运行\n1natapp -authtoken=你的authtokenl\n自启动\n1nano /usr/lib/systemd/system/natapp.service\n写入\n12345678910111213[Unit]Description=NatApp ServiceWants=network-online.targetAfter=network.target[Service]Type=simpleExecStart=/app/natapp/natapp -authtoken=xxxxxx -log=stdoutStandardOutput=syslogStandardError=null[Install]WantedBy=multi-user.target\n控制\n12345systemctl start natapp\t# 开启systemctl stop natapp\t# 关闭 systemctl enable natapp\t# 开机启动 systemctl disable natapp\t# 取消开机启动 systemctl states natapp\t#查看服务状态\n2.资费免费版速率未知，不定时更换域名或端口PS：云南大学的校园网无法使用免费版付费9元：1Mb&#x2F;s，月限流5G付费20元:1MB&#x2F;s，每月不限流\n","dateCreated":"2018-12-21T00:00:00+08:00","dateModified":"2023-02-26T17:04:24+08:00","datePublished":"2018-12-21T00:00:00+08:00","description":"本文介绍了内网穿透软件ZeroTier、花生壳和natapp的使用","headline":"内网穿透软件","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2007/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2007/","keywords":"Server","thumbnailUrl":"cover.jpg"}</script>
+    <meta name="description" content="本文介绍了内网穿透软件ZeroTier、花生壳和natapp的使用">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="内网穿透软件">
+<meta property="og:url" content="https://panxiuwen.github.io/posts/2007/index.html">
+<meta property="og:site_name" content="Pan&#39;s websit">
+<meta property="og:description" content="本文介绍了内网穿透软件ZeroTier、花生壳和natapp的使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-12-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-26T09:04:24.000Z">
+<meta property="article:author" content="Sean Pan">
+<meta property="article:tag" content="Server">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@982202733">
+<meta property="fb:app_id" content="[object Object]">
+    
+        <link rel="publisher" href="https://plus.google.com/982202733"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/posts/2007/cover.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2007/cover.jpg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Pan&#39;s websit
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">Sean Pan</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>不似天涯，卷起杨花似雪花</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="知乎"
+                        >
+                        <i class="sidebar-button-icon fab fa-zhihu" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">知乎</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://music.163.com/#/user/home?id=70816221"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="网易云"
+                        >
+                        <i class="sidebar-button-icon fab fa-tiktok" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">网易云</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/panxiuwen/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://gitee.com/sean982202733/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Gitee"
+                        >
+                        <i class="sidebar-button-icon fab fa-google" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Gitee</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:panxiuwen_sean@qq.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            内网穿透软件
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-12-21T00:00:00+08:00">
+	
+		    2018年 12月 21日
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Software/">Software</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>本文介绍了内网穿透软件ZeroTier、花生壳和natapp的使用</p>
+<span id="more"></span>
+<hr>
+<h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>内网穿透软件一般分为两类，流量走公网穿透服务器和不走穿透服务器的软件。<br>流量走公网穿透服务器的软件全部都会分配给用户二级域名，全部都是付费软件且价格很高，例如Natapp、花生壳等。<br>流量不走公网服务器的软件有<a target="_blank" rel="noopener" href="https://www.zerotier.com/">Zerotier</a>、<a target="_blank" rel="noopener" href="https://login.tailscale.com/admin/welcome">Tailscale</a>、TeamViewer以及Hamachi，这类软件一般会分给用户192或10开头的内网ip，流量使用p2p传输并进行加密，tcp连接的稳定性一般受nat环境的影响，udp只要是打洞成功了一般都没问题。</p>
+<hr>
+<h3 id="二、ZeroTier"><a href="#二、ZeroTier" class="headerlink" title="二、ZeroTier"></a>二、ZeroTier</h3><p>ZeroTier通过其建立的虚拟局域网络，直接连接各地的设备，方便实现去中心化的管理、通讯和计算，几乎支持所有的联网设备<br><strong>免费子网设备是25个，隐藏设备不算，不知道是不是bug，部署完了后一段时间无法连接设备属于正常现象，等就行了</strong></p>
+<hr>
+<h4 id="1-安装"><a href="#1-安装" class="headerlink" title="1.安装"></a>1.安装</h4><p><strong>Linux安装</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install zerotier-one</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s https://install.zerotier.com | sudo bash</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Synology安装</strong></p>
+<p>在套件中心里添加矿神源</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://spk7.imnks.com/</span><br></pre></td></tr></table></figure>
+<p>安装后打开ssh并切换root</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i &#x27;s/package/root/g&#x27; /var/packages/zerotier/conf/privilege</span><br></pre></td></tr></table></figure>
+<p>手动运行Zerotier</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /var/packages/zerotier/target/bin</span><br><span class="line">./zerotier-one -q join d5e5fb6537ebc5f5</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="2-使用"><a href="#2-使用" class="headerlink" title="2.使用"></a>2.使用</h4><p>加入网络：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zerotier-cli join d5e5fb6537ebc5f5</span><br></pre></td></tr></table></figure>
+<p>退出网络：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zerotier-cli leave d5e5fb6537ebc5f5</span><br></pre></td></tr></table></figure>
+<p>启动服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zerotier-one -d</span><br></pre></td></tr></table></figure>
+<p>重启服务：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service zerotier-one restart</span><br></pre></td></tr></table></figure>
+<p>查看状态：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zerotier-cli status</span><br></pre></td></tr></table></figure>
+<p>卸载：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get purge zerotier-one</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="3-在路由器上使用的方法"><a href="#3-在路由器上使用的方法" class="headerlink" title="3.在路由器上使用的方法"></a>3.<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/433880308">在路由器上使用的方法</a></h4><p>优点：由于zerotier的免费绑定设备只有25个，使用路由器可以节约使用个数<br>缺点：外网设备无法自由访问内网设备，需要结合Openwrt自带的或者socat做端口转发</p>
+<hr>
+<h4 id="4-连接虚拟网络后无法连接其他网络"><a href="#4-连接虚拟网络后无法连接其他网络" class="headerlink" title="4.连接虚拟网络后无法连接其他网络"></a>4.连接虚拟网络后无法连接其他网络</h4><p>原因：在zerotier虚拟网络上加入了与本地路由器冲突的路由表<br>查看网关</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat –rn</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -n</span><br></pre></td></tr></table></figure>
+<p>添加网关</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route default 192.168.2.1</span><br></pre></td></tr></table></figure>
+<p>删除网关</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route del -net 192.168.192.0 netmask 255.255.255.0</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="三、花生壳"><a href="#三、花生壳" class="headerlink" title="三、花生壳"></a>三、花生壳</h3><p>花生壳绝对是国内老牌内网映射服务提供商</p>
+<h4 id="1-安装-1"><a href="#1-安装-1" class="headerlink" title="1. 安装"></a>1. 安装</h4><p>按着官网要求来就行，Synlogy用矿神源<br>Debian根据官网的教程，但要先安装net-tools</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install net-tools</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>然后再安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget &quot;https://down.oray.com/hsk/linux/phddns_5.2.0_amd64.deb&quot; -O phddns_5.2.0_amd64.deb</span><br></pre></td></tr></table></figure>
+<p>或者下载到本地安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg -i phddns_5.2.0_amd64.deb</span><br></pre></td></tr></table></figure>
+<p>查看服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phddns status</span><br></pre></td></tr></table></figure>
+<p>打开<a target="_blank" rel="noopener" href="http://b.oray.com/">花生壳管理</a>后绑定SN码，配置完端口映射即可</p>
+<h4 id="2-资费"><a href="#2-资费" class="headerlink" title="2.资费"></a>2.资费</h4><p>免费通道速率1Mb&#x2F;s，月流量1GB，必须拥有壳域名<br>学生认证速率1Mb&#x2F;s，月流量5GB，必须拥有壳域名<br>最便宜的付费版1天1块起步，还不如买服务器</p>
+<hr>
+<h3 id="四、Natapp"><a href="#四、Natapp" class="headerlink" title="四、Natapp"></a>四、Natapp</h3><h4 id="1-安装-2"><a href="#1-安装-2" class="headerlink" title="1.安装"></a>1.安装</h4><p><a target="_blank" rel="noopener" href="https://natapp.cn/#download">下载</a>,支持Win、Mac、Linux和FreeBSD这些主流平台<br>在后台配置好映射之后使用命令运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">natapp -authtoken=你的authtokenl</span><br></pre></td></tr></table></figure>
+<p>自启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /usr/lib/systemd/system/natapp.service</span><br></pre></td></tr></table></figure>
+<p>写入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=NatApp Service</span><br><span class="line">Wants=network-online.target</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/app/natapp/natapp -authtoken=xxxxxx -log=stdout</span><br><span class="line">StandardOutput=syslog</span><br><span class="line">StandardError=null</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>控制</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl start natapp	# 开启</span><br><span class="line">systemctl stop natapp	# 关闭 </span><br><span class="line">systemctl enable natapp	# 开机启动 </span><br><span class="line">systemctl disable natapp	# 取消开机启动 </span><br><span class="line">systemctl states natapp	#查看服务状态</span><br></pre></td></tr></table></figure>
+<h4 id="2-资费-1"><a href="#2-资费-1" class="headerlink" title="2.资费"></a>2.资费</h4><p>免费版速率未知，不定时更换域名或端口<br>PS：云南大学的校园网无法使用免费版<br>付费9元：1Mb&#x2F;s，月限流5G<br>付费20元:1MB&#x2F;s，每月不限流</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Server/" rel="tag">Server</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4010/"
+                    data-tooltip="Python使用相关笔记"
+                    aria-label="上一篇: Python使用相关笔记"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2009/"
+                    data-tooltip="OpenWRT初始化"
+                    aria-label="下一篇: OpenWRT初始化"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Sean Pan. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/4010/"
+                    data-tooltip="Python使用相关笔记"
+                    aria-label="上一篇: Python使用相关笔记"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2009/"
+                    data-tooltip="OpenWRT初始化"
+                    aria-label="下一篇: OpenWRT初始化"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">Sean Pan</h4>
+        
+            <div id="about-card-bio"><p>不似天涯，卷起杨花似雪花</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Master in YNU</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Kunming China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

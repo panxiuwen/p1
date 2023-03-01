@@ -1,0 +1,590 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Pan&#39;s websit">
+    <title>Gaussian的使用 - Pan&#39;s websit</title>
+    <meta name="author" content="Sean Pan">
+    
+        <meta name="keywords" content="hexo,javascript">
+    
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了在Linux下Gaussian的安装，并使用Multiwfn和VMD组合作图\n\n\nGasussian的安装解压文件，对于tar.gz格式的和tbz不同格式的\n1234apt-get updateapt-get install bzip2tar -xzf /mnt/d/file/1.tar.gztar -xjvf /mnt/d/file/a.tbz\n建立scratch目录\n12mkdir scratchchmod 750 *\n在Gaussian目录下nano Default.Route，写入下面的内容\n12-P- 4-M- 12GB\n修改用户配置文件\n1234567891011121314151617181920nano .bashrc#g09#export g09root=/home/sean#export GAUSS_SCRDIR=/home/sean/g09/scratch#source /home/sean/g09/bsd/g09.profile#g09 end#g16#export g16root=/home/sean#export GAUSS_SCRDIR=/home/sean/g16/scratch#source /home/sean/g16/bsd/g16.profile#g16 end#gv6export GV_DIR=/home/xwpan/gvexport LIBPATH=/home/xwpan/gvexport LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/xwpan/gv/libPATH=$PATH:/home/xwpan/gvalias gv=&#x27;gview.exe&#x27;#gv6 end\n使得配置文件生效\n1source .bashrc\n\n关于GPU加速笔者试了一下，发现报错为\n1No NVIDIA/CUDA version of this construct available for the current device\n查了一下资料\n1Gaussian 16 can use NVIDIA K40, K80, P100 (Rev. B.01), V100 (Rev. C.01) and A100 (Rev. C.02) GPUs under Linux\n所以也不用想了\n自定义基组如果需要自定义基组，访问Basis Set Exchange获得，拷贝到Gaussian文件末尾，使用基组gencp\nMultiwfn和VMD的设置Multiwfn下载VMD下载修改Multiwfn目录下的settings.ini的nthreads&#x3D;4，设置使用的核心数目在VMD文件夹下的vmd.rc文件末尾添加如下代码\n1234display depthcue offcolor scale method BWRcolor Display Background whiteaxes location Off\n\n使用Multiwfn结合VMD分析和绘制分子表面静电势分布Multiwfn使用Gaussian的输入文件需要转化chk为fchk\n1formchk x.chk\n假如文件为1.fchk，复制到Multiwfn根目录，打开软件后输入\n11.fchk\n定量分子表面分析\n112\n开始计算\n10\n将分子表面极值点导出到当前目录下surfanalysis.pdb文件中\n12\n将所有分子表面顶点导出到当前目录下vtx.pdb文件中\n16\n把当前体系的坐标导出到当前目录下furan.pdb中\n15\n再输入\n1furan.pdb\n将furan.pdb、surfanalysis.pdb和vtx.pdb直接拖动到VMD Main窗口里在VMD Main窗口选Graphics-Representations(1)在Selected Molecule一栏里选择furan.pdb，Drawing Method选Licorice，Bond Radius减小到0.1。\n(2)将Selected Molecule一栏切换到surfanalysis.pdb，在控制台输入\n1mol modstyle 0 1 VDW 0.06\n然后在Selected Atoms里输入carbon并回车，然后将Coloring Method选为ColorID，并且在右边新出现的框里选Orange2。点击Create Rep按钮创建新显示方式，在Selected Atoms里输入oxygen并回车，然后将ColorID右边的框设为Cyan，此时分子表面极小点就通过青色圆球显示出来了。\n(3)在Selected Molecule一栏里选择vtx.pdb，Drawing Method选Points，Size大使分子表面上的顶点紧密相连，不留明显空隙，Coloring Method选Beta，在Trajectory标签页里将Color Scale Data Range取证并点击Set，代表色彩刻度设用默认的色彩刻度范围并且取整。现在分子表面填色图就出现了。越蓝的区域静电势越负，越红的区域越正，白色区域的静电势数值在0附近。\n之后给图上加上色彩刻度轴。选Extensions-Visualization-Color Scale Bar，Color bar width设为0.08，Display title选on并且将Color bar title里写上ESP (kcal&#x2F;mol)，Minimum和Maximum scale value分别填-22和22，Number of axis labels输入10，Color labels选Black，Label format选Decimal。然后点Draw Color Scale Bar按钮，色彩刻度就出现在画面中了，并且VMD Main窗口中多出了一个名为Color Scale Bar的一项。然后调整它的大小和位置，即双击VMD Main窗口中Color Scale Bar那一项当中的F标签使之变为红色，而双击其它项目的F标签使它们的F变为黑色。然后点击VMD的OpenGL图形窗口激活之，按t键进入平移模式，然后拖动鼠标将色彩刻度轴放置到合适位置，并且用鼠标滚轮调整它的大小。调合适之后再按r键恢复旋转视角模式，并且在VMD Main里将Color Scale Bar那一项的F重新双击成黑色，而其它三项的F重新双击为红色。\n(4)双击furan.pdb和surfanalysis.pdb对应的条目的D标签使其变红，此时窗口内就只有分子表面和色彩刻度轴显示了出来,然后按Alt+Printscreen键将窗口截图，粘贴到PS中\n\n使用Multiwfn+VMD快速绘制高质量分子轨道首先把Multiwfn文件包的examples\\scripts目录下的showorb.bat和showorb.txt都拷到Multiwfn可执行文件所在目录下。修改showorb.txt文件的第三行数字为要计算的分子轨道，比如查看的轨道为48(HOMO),49(LUMO)，就输48-49或者48,49，保存文件在Multiwfn打开cmd，运行\n1Multiwfn 1.fchk &lt; showorb.txt\n然后将生成的orb000048.cub和orb000049.cub复制到VMD根目录里把Multiwfn文件包的examples\\scripts目录下的VMD绘图脚本showorb.vmd，在VMD文件夹下的vmd.rc文件末尾添加\n1source showorb.vmd\n启动VMD，在命令行中输入\n1orb 48\n再输入下面的代码\n1234567891011121314color Name C tancolor change rgb tan 0.700000 0.560000 0.360000material change mirror Opaque 0.15material change outline Opaque 4.000000material change outlinewidth Opaque 0.5material change ambient Glossy 0.1material change diffuse Glossy 0.600000material change opacity Glossy 0.75material change shininess Glossy 1.0mol modcolor 1 top ColorID 12mol modcolor 2 top ColorID 22display distance -7.0display height 10light 3 on\n截图保存即可\n\n参考Running Gaussian Using GPUs在Gaussian 16计算中使用GPU使用Multiwfn结合VMD分析和绘制分子表面静电势分布使用Multiwfn+VMD快速绘制高质量分子轨道等值面图（含视频）用VMD绘制艺术级轨道等值面图的方法（含演示视频）\n","dateCreated":"2018-05-23T00:00:00+08:00","dateModified":"2022-10-28T23:45:29+08:00","datePublished":"2018-05-23T00:00:00+08:00","description":"本文介绍了在Linux下Gaussian的安装，并使用Multiwfn和VMD组合作图","headline":"Gaussian的使用","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2021/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2021/","keywords":"Research","thumbnailUrl":"cover.jpg"}</script>
+    <meta name="description" content="本文介绍了在Linux下Gaussian的安装，并使用Multiwfn和VMD组合作图">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Gaussian的使用">
+<meta property="og:url" content="https://panxiuwen.github.io/posts/2021/index.html">
+<meta property="og:site_name" content="Pan&#39;s websit">
+<meta property="og:description" content="本文介绍了在Linux下Gaussian的安装，并使用Multiwfn和VMD组合作图">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://panxiuwen.github.io/posts/2021/01.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/posts/2021/02.jpg">
+<meta property="article:published_time" content="2018-05-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-28T15:45:29.000Z">
+<meta property="article:author" content="Sean Pan">
+<meta property="article:tag" content="Research">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panxiuwen.github.io/posts/2021/01.jpg">
+<meta name="twitter:creator" content="@982202733">
+<meta property="fb:app_id" content="[object Object]">
+    
+        <link rel="publisher" href="https://plus.google.com/982202733"/>
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+    
+    
+        <meta property="og:image" content="https://panxiuwen.github.io/posts/2021/cover.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2021/cover.jpg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Pan&#39;s websit
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="打开链接: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="阅读有关作者的更多信息"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                </a>
+                <h4 class="sidebar-profile-name">Sean Pan</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>不似天涯，卷起杨花似雪花</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="首页"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="分类"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="标签"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="归档"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="关于"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="知乎"
+                        >
+                        <i class="sidebar-button-icon fab fa-zhihu" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">知乎</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://music.163.com/#/user/home?id=70816221"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="网易云"
+                        >
+                        <i class="sidebar-button-icon fab fa-tiktok" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">网易云</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/panxiuwen/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://gitee.com/sean982202733/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Gitee"
+                        >
+                        <i class="sidebar-button-icon fab fa-google" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Gitee</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:panxiuwen_sean@qq.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="邮箱"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Gaussian的使用
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-05-23T00:00:00+08:00">
+	
+		    2018年 5月 23日
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/Research/">Research</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>本文介绍了在Linux下Gaussian的安装，并使用Multiwfn和VMD组合作图</p>
+<span id="more"></span>
+<hr>
+<h3 id="Gasussian的安装"><a href="#Gasussian的安装" class="headerlink" title="Gasussian的安装"></a>Gasussian的安装</h3><p>解压文件，对于tar.gz格式的和tbz不同格式的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install bzip2</span><br><span class="line">tar -xzf /mnt/d/file/1.tar.gz</span><br><span class="line">tar -xjvf /mnt/d/file/a.tbz</span><br></pre></td></tr></table></figure>
+<p>建立scratch目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir scratch</span><br><span class="line">chmod 750 *</span><br></pre></td></tr></table></figure>
+<p>在Gaussian目录下nano Default.Route，写入下面的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-P- 4</span><br><span class="line">-M- 12GB</span><br></pre></td></tr></table></figure>
+<p>修改用户配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">nano .bashrc</span><br><span class="line">#g09</span><br><span class="line">#export g09root=/home/sean</span><br><span class="line">#export GAUSS_SCRDIR=/home/sean/g09/scratch</span><br><span class="line">#source /home/sean/g09/bsd/g09.profile</span><br><span class="line">#g09 end</span><br><span class="line"></span><br><span class="line">#g16</span><br><span class="line">#export g16root=/home/sean</span><br><span class="line">#export GAUSS_SCRDIR=/home/sean/g16/scratch</span><br><span class="line">#source /home/sean/g16/bsd/g16.profile</span><br><span class="line">#g16 end</span><br><span class="line"></span><br><span class="line">#gv6</span><br><span class="line">export GV_DIR=/home/xwpan/gv</span><br><span class="line">export LIBPATH=/home/xwpan/gv</span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/xwpan/gv/lib</span><br><span class="line">PATH=$PATH:/home/xwpan/gv</span><br><span class="line">alias gv=&#x27;gview.exe&#x27;</span><br><span class="line">#gv6 end</span><br></pre></td></tr></table></figure>
+<p>使得配置文件生效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source .bashrc</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="关于GPU加速"><a href="#关于GPU加速" class="headerlink" title="关于GPU加速"></a>关于GPU加速</h3><p>笔者试了一下，发现报错为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">No NVIDIA/CUDA version of this construct available for the current device</span><br></pre></td></tr></table></figure>
+<p>查了一下资料</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Gaussian 16 can use NVIDIA K40, K80, P100 (Rev. B.01), V100 (Rev. C.01) and A100 (Rev. C.02) GPUs under Linux</span><br></pre></td></tr></table></figure>
+<p>所以也不用想了</p>
+<h3 id="自定义基组"><a href="#自定义基组" class="headerlink" title="自定义基组"></a>自定义基组</h3><p>如果需要自定义基组，访问<a target="_blank" rel="noopener" href="https://www.basissetexchange.org/">Basis Set Exchange</a>获得，拷贝到Gaussian文件末尾，使用基组gencp</p>
+<h3 id="Multiwfn和VMD的设置"><a href="#Multiwfn和VMD的设置" class="headerlink" title="Multiwfn和VMD的设置"></a>Multiwfn和VMD的设置</h3><p><a target="_blank" rel="noopener" href="http://sobereva.com/multiwfn/">Multiwfn下载</a><br><a target="_blank" rel="noopener" href="https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD">VMD下载</a><br>修改Multiwfn目录下的settings.ini的nthreads&#x3D;4，设置使用的核心数目<br>在VMD文件夹下的vmd.rc文件末尾添加如下代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">display depthcue off</span><br><span class="line">color scale method BWR</span><br><span class="line">color Display Background white</span><br><span class="line">axes location Off</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="使用Multiwfn结合VMD分析和绘制分子表面静电势分布"><a href="#使用Multiwfn结合VMD分析和绘制分子表面静电势分布" class="headerlink" title="使用Multiwfn结合VMD分析和绘制分子表面静电势分布"></a>使用Multiwfn结合VMD分析和绘制分子表面静电势分布</h3><p>Multiwfn使用Gaussian的输入文件需要转化chk为fchk</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">formchk x.chk</span><br></pre></td></tr></table></figure>
+<p>假如文件为1.fchk，复制到Multiwfn根目录，打开软件后输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.fchk</span><br></pre></td></tr></table></figure>
+<p>定量分子表面分析</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">12</span><br></pre></td></tr></table></figure>
+<p>开始计算</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0</span><br></pre></td></tr></table></figure>
+<p>将分子表面极值点导出到当前目录下surfanalysis.pdb文件中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure>
+<p>将所有分子表面顶点导出到当前目录下vtx.pdb文件中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6</span><br></pre></td></tr></table></figure>
+<p>把当前体系的坐标导出到当前目录下furan.pdb中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">5</span><br></pre></td></tr></table></figure>
+<p>再输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">furan.pdb</span><br></pre></td></tr></table></figure>
+<p>将furan.pdb、surfanalysis.pdb和vtx.pdb直接拖动到VMD Main窗口里<br>在VMD Main窗口选Graphics-Representations<br>(1)在Selected Molecule一栏里选择furan.pdb，Drawing Method选Licorice，Bond Radius减小到0.1。</p>
+<p>(2)将Selected Molecule一栏切换到surfanalysis.pdb，在控制台输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mol modstyle 0 1 VDW 0.06</span><br></pre></td></tr></table></figure>
+<p>然后在Selected Atoms里输入carbon并回车，然后将Coloring Method选为ColorID，并且在右边新出现的框里选Orange2。<br>点击Create Rep按钮创建新显示方式，在Selected Atoms里输入oxygen并回车，然后将ColorID右边的框设为Cyan，此时分子表面极小点就通过青色圆球显示出来了。</p>
+<p>(3)在Selected Molecule一栏里选择vtx.pdb，Drawing Method选Points，Size大使分子表面上的顶点紧密相连，不留明显空隙，Coloring Method选Beta，在Trajectory标签页里将Color Scale Data Range取证并点击Set，代表色彩刻度设用默认的色彩刻度范围并且取整。现在分子表面填色图就出现了。越蓝的区域静电势越负，越红的区域越正，白色区域的静电势数值在0附近。</p>
+<p>之后给图上加上色彩刻度轴。选Extensions-Visualization-Color Scale Bar，Color bar width设为0.08，Display title选on并且将Color bar title里写上ESP (kcal&#x2F;mol)，Minimum和Maximum scale value分别填-22和22，Number of axis labels输入10，Color labels选Black，Label format选Decimal。然后点Draw Color Scale Bar按钮，色彩刻度就出现在画面中了，并且VMD Main窗口中多出了一个名为Color Scale Bar的一项。然后调整它的大小和位置，即双击VMD Main窗口中Color Scale Bar那一项当中的F标签使之变为红色，而双击其它项目的F标签使它们的F变为黑色。然后点击VMD的OpenGL图形窗口激活之，按t键进入平移模式，然后拖动鼠标将色彩刻度轴放置到合适位置，并且用鼠标滚轮调整它的大小。调合适之后再按r键恢复旋转视角模式，并且在VMD Main里将Color Scale Bar那一项的F重新双击成黑色，而其它三项的F重新双击为红色。</p>
+<p>(4)双击furan.pdb和surfanalysis.pdb对应的条目的D标签使其变红，此时窗口内就只有分子表面和色彩刻度轴显示了出来,然后按Alt+Printscreen键将窗口截图，粘贴到PS中</p>
+<div class="figure center" style="width:;"><a class="fancybox" href="01.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="01.jpg" alt=""></a></div>
+<h3 id="使用Multiwfn-VMD快速绘制高质量分子轨道"><a href="#使用Multiwfn-VMD快速绘制高质量分子轨道" class="headerlink" title="使用Multiwfn+VMD快速绘制高质量分子轨道"></a>使用Multiwfn+VMD快速绘制高质量分子轨道</h3><p>首先把Multiwfn文件包的examples\scripts目录下的showorb.bat和showorb.txt都拷到Multiwfn可执行文件所在目录下。<br>修改showorb.txt文件的第三行数字为要计算的分子轨道，比如查看的轨道为48(HOMO),49(LUMO)，就输48-49或者48,49，保存文件<br>在Multiwfn打开cmd，运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Multiwfn 1.fchk &lt; showorb.txt</span><br></pre></td></tr></table></figure>
+<p>然后将生成的orb000048.cub和orb000049.cub复制到VMD根目录里<br>把Multiwfn文件包的examples\scripts目录下的VMD绘图脚本showorb.vmd，在VMD文件夹下的vmd.rc文件末尾添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source showorb.vmd</span><br></pre></td></tr></table></figure>
+<p>启动VMD，在命令行中输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">orb 48</span><br></pre></td></tr></table></figure>
+<p>再输入下面的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">color Name C tan</span><br><span class="line">color change rgb tan 0.700000 0.560000 0.360000</span><br><span class="line">material change mirror Opaque 0.15</span><br><span class="line">material change outline Opaque 4.000000</span><br><span class="line">material change outlinewidth Opaque 0.5</span><br><span class="line">material change ambient Glossy 0.1</span><br><span class="line">material change diffuse Glossy 0.600000</span><br><span class="line">material change opacity Glossy 0.75</span><br><span class="line">material change shininess Glossy 1.0</span><br><span class="line">mol modcolor 1 top ColorID 12</span><br><span class="line">mol modcolor 2 top ColorID 22</span><br><span class="line">display distance -7.0</span><br><span class="line">display height 10</span><br><span class="line">light 3 on</span><br></pre></td></tr></table></figure>
+<p>截图保存即可</p>
+<div class="figure center" style="width:;"><a class="fancybox" href="02.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="02.jpg" alt=""></a></div>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="http://gaussian.com/running/?tabid=5">Running Gaussian Using GPUs</a><br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/KI3iLC7ko1Fn_ZdSKx_aeQ">在Gaussian 16计算中使用GPU</a><br><a target="_blank" rel="noopener" href="http://sobereva.com/196">使用Multiwfn结合VMD分析和绘制分子表面静电势分布</a><br><a target="_blank" rel="noopener" href="http://sobereva.com/447">使用Multiwfn+VMD快速绘制高质量分子轨道等值面图（含视频）</a><br><a target="_blank" rel="noopener" href="http://sobereva.com/449">用VMD绘制艺术级轨道等值面图的方法（含演示视频）</a></p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Research/" rel="tag">Research</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2016/"
+                    data-tooltip="Windows相关笔记"
+                    aria-label="上一篇: Windows相关笔记"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2013/"
+                    data-tooltip="Git使用"
+                    aria-label="下一篇: Git使用"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 Sean Pan. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2016/"
+                    data-tooltip="Windows相关笔记"
+                    aria-label="上一篇: Windows相关笔记"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/posts/2013/"
+                    data-tooltip="Git使用"
+                    aria-label="下一篇: Git使用"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+        
+            <h4 id="about-card-name">Sean Pan</h4>
+        
+            <div id="about-card-bio"><p>不似天涯，卷起杨花似雪花</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Master in YNU</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Kunming China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>
