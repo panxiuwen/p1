@@ -13,20 +13,20 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"搭建随机生成Waifu的前端，基于StableDiffusion\n\n\n\n一、前端部署Linux下内存4G的设备，Windows下内存8G的设备未启动成功过N卡配置GPU版的Torch，参考机器学习相关笔记有条件的话还是建议在Linux上部署，笔者测试的结果是在Linux下只吃GPU，但在win上就是CPU吃一点，GPU几乎只能吃一半不到，速度慢了不少安装Git和Python3.11，使用命令行下载Stable-diffusion-webui和相关库\n12git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.gitpip install gfpgan clip\n如果是linux系统，还需要安装GL库(装了NV的同学请忽略)\n1apt-get install primus-libs\n运行launch.py，慢慢等它下载文件，等它找不到模型后自动报错退出对于RTX显卡，在launch.py文件里修改，根据你自己的要求改ip和端口号\n1args = shlex.split(&quot;--listen --port 8080&quot;)\n如果是非RTX卡，需要禁用半精度浮点，如果小于4GB需启用低显存\n1args = shlex.split(&quot;--listen --port 8080 --lowvram --precision full --no-half&quot;)\n如果使用CPU运算，使用下面的命令\n1args = shlex.split(&quot;--listen --port 8080 --skip-torch-cuda-test --precision full --no-half&quot;)\n如果使用screen后台设置alias\n1alias sd=&quot;cd /app/stable-diffusion-webui&amp;&amp;screen -dm python3 launch.py --listen --port 2334 --skip-torch-cuda-test --precision full --no-half&quot;\n\n配置文件修改ui-config.json可以设置默认参数Prompt填\n1anime,1girl,loli,overknee socks,school uniform\nNegative prompt填\n1lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry\nSampling Steps改成30，CFG Scale改成11，据说效果最好Batch count是点一次运行的次数，随便改大，但是时间也会变长，Batch size是一次出图数，改大会爆显存分辨率必须是64的整数倍，否则会报错提示：outputs\\txt2img-images文件夹内存有之前生成过的内容\n\nNovelAI模型NovelAI流出版种子下载主模型：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;animefull-latest&#x2F;model.ckpt，改名成animefull-latest.ckpt放到&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;目录里vae权重：将animevae.pt改名成animefull-latest.vae.pt和模型同样的目录模型风格调整：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;modules&#x2F;modules&#x2F;里所有pt文件放入&#x2F;stable-diffusion-webui&#x2F;models&#x2F;hypernetworks文件夹中\nStable-diffusion模型Stable-diffusion模型：sd-v1-4.ckpt或者Waifu Diffusion模型：wd-v1-2-full-ema.ckpt后放在”&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;“文件夹里Chilloutmix：chilloutmix_.safetensors&#x2F;chilloutmix_NiPrunedFp32Fix.safetensors国风2：Gf_style2.ckpt国风Lora：GuoFeng2_Lora.safetensors完美世界：perfectWorld_perfectWorldBakedVAE.safetensors台湾人：taiwanDollLikeness_v10.safetensors韩国人：koreanDollLikeness_v10.safetensors\n\n其他模块启用GFPGAN&#x2F;GFPGANv1.3.pth：脸部修复，在Extras -&gt; BSRGAN 4x中启用realesrgan&#x2F;RealESRGAN_x4plus.pth：超分辨率，在Extras -&gt; ESRGEN 4x中启用NovelAI流出版中的hypernetworks模块在Setting -&gt; Stable Diffusion -&gt; Stable Diffusion finetune hypernetwork中启用\n\n关键词衣服：overknee socks,school uniform,in sailor suit,black_sleeves,white halter top,white swim suit,gothic,leotardwhite dress and black stockings画图：full body figure\n\nBenchMarksNovelaileak only\n\n\n\n  \n    Device\n    RAMPlatform\n    1\n    2\n    3\n    4\n    5\n    6\n    7\n    8\n    9\n    10\n  \n\n\n  \n    12100F+T600\n    16+4\n    Debian\n    2:00\n    2:07\n    2:11\n    2:13\n    2:13\n    2:12\n    2:15\n    2:13\n    2:14\n    2:13\n  \n  \n    12100F+T600\n    16+4\n    Win10\n    2:13\n    2:20\n    2:23\n    2:24\n    2:27\n    2:27\n    2:30\n    2:30\n    2:32\n    2:33\n  \n  \n    4210H+860M\n    16+1\n    Win10\n    3:23\n    3:27\n    3:29\n    3:29\n    3:29\n    3:28\n    3:29\n    3:28\n    3:28\n    3:28\n  \n  \n    3700x\n    32\n    Win11\n    5:48\n    5:49\n    5:47\n    4:52\n    4:52\n    4:56\n    4:55\n    -\n    -\n    -\n  \n  \n    N5105\n    16\n    Debian\n    23:23\n    23:38\n    23:34\n    23:35\n    23:35\n    23:36\n    23:37\n    23:33\n    23:33\n    23:30\n  \n  \n    N5105\n    8\n    Debian\n    23:55\n    23:50\n    23:50\n    23:50\n    23:48\n    23:49\n    23:51\n    23:52\n    23:52\n    23:51\n  \n\n\n\n\n\n相关链接Dskjal教程(日文)NovelAI本地完美部署使用手把手攻略教程\n","dateCreated":"2022-10-13T00:00:00+08:00","dateModified":"2023-03-01T14:50:43+08:00","datePublished":"2022-10-13T00:00:00+08:00","description":"搭建随机生成Waifu的前端，基于StableDiffusion","headline":"StableDiffusion服务器搭建","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2008/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2008/","keywords":"Media, Server, Intelligence","thumbnailUrl":"cover.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"搭建随机生成Waifu的前端，基于StableDiffusion\n\n\n\n一、前端部署Linux下内存4G的设备，Windows下内存8G的设备未启动成功过N卡配置GPU版的Torch，参考机器学习相关笔记有条件的话还是建议在Linux上部署，笔者测试的结果是在Linux下只吃GPU，但在win上就是CPU吃一点，GPU几乎只能吃一半不到，速度慢了不少安装Git和Python3.11，使用命令行下载Stable-diffusion-webui和相关库\n12git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.gitpip install gfpgan clip xformers\n如果是linux系统，还需要安装GL库(装了NV的同学请忽略)\n1apt-get install primus-libs\n1pip install -r /content/stable-diffusion-webui/requirements.txt\n运行launch.py，慢慢等它下载文件，等它找不到模型后自动报错退出对于RTX显卡，在launch.py文件里修改，根据你自己的要求改ip和端口号\n1args = shlex.split(&quot;--listen --port 8080&quot;)\n如果是非RTX卡，需要禁用半精度浮点，如果小于4GB需启用低显存\n1args = shlex.split(&quot;--listen --port 8080 --lowvram --precision full --no-half&quot;)\n如果使用CPU运算，使用下面的命令\n1args = shlex.split(&quot;--listen --port 8080 --skip-torch-cuda-test --precision full --no-half&quot;)\n如果使用screen后台设置alias\n1alias sd=&quot;cd /app/stable-diffusion-webui&amp;&amp;screen -dm python3 launch.py --listen --port 2334 --skip-torch-cuda-test --precision full --no-half&quot;\n\n\n模型的使用NovelAI模型NovelAI流出版种子下载主模型：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;animefull-latest&#x2F;model.ckpt，改名成animefull-latest.ckpt放到&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;目录里vae权重：将animevae.pt改名成animefull-latest.vae.pt和模型同样的目录模型风格调整：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;modules&#x2F;modules&#x2F;里所有pt文件放入&#x2F;stable-diffusion-webui&#x2F;models&#x2F;hypernetworks文件夹中\nStable-diffusion模型Stable-diffusion模型：sd-v1-4.ckpt或者Waifu Diffusion模型：wd-v1-2-full-ema.ckpt后放在”&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;“文件夹里Huggingface上也有许多现成的模型\nChilloutmix模型chilloutmix_.safetensors放在/models/Stable-diffusion目录中koreanDollLikeness_v10.safetensors放在/models/Lora目录中taiwanDollLikeness_v10.safetensors放在/models/Lora目录中下载下载VAE文件，丢到/models/VAE文件夹中\n国风模型国风2：Gf_style2.ckptGuoFeng3.2.safetensors放在/models/Stable-diffusion目录中GuoFeng3.2_Lora.safetensors放在/models/Lora目录中\n\n其他模块启用启用Lora的方法：点Generate下面的第三个图标(Show extra networks)，下面会新出现个框，点Lora，会自动在prompt里添加&lt;lora:koreanDollLikeness_v10:1&gt;关键词GFPGAN&#x2F;GFPGANv1.3.pth：脸部修复，在Extras -&gt; BSRGAN 4x中启用realesrgan&#x2F;RealESRGAN_x4plus.pth：超分辨率，在Extras -&gt; ESRGEN 4x中启用启用hypernetworks：跟启用Lora的方法类似，在hypernetwork中启用\n\n配置文件修改ui-config.json可以设置默认参数Sampling Steps改成30，CFG Scale改成11，据说效果最好Batch count是点一次运行的次数，随便改大，但是时间也会变长，Batch size是一次出图数，改大会爆显存分辨率必须是64的整数倍，否则会报错提示：outputs\\txt2img-images文件夹内存有之前生成过的内容\n\nNovelAI关键词也写在ui-config.json里Prompt:\n1anime,1girl,loli,overknee socks,school uniform\nNegative prompt:\n1lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry\n衣服：overknee socks,school uniform,in sailor suit,black_sleeves,white halter top,white swim suit,gothic,leotardwhite dress and black stockings画图：full body figure\nKoreanDoll关键词模型组合：sd-v1-4.ckpt+chilloutmix_NiPrunedFp32Fix.safetensors+koreanDollLikeness_v10.safetensors+GFPGANv1.4.pthchilloutmix_.safetensors+koreanDollLikeness_v10.safetensors+vae-ft-mse-840000-ema-pruned.ckptprompt: \n1masterpiece,best qultyofficial art,extremely detailed CG unity 8k wallaper,1girl, ultra high res, (photorealistic:1.4), golden hour lighting, sweater dress,(upper body), (Kpop idol), (aegyo sal:1), (platinum blonde hair:1), (puffy eyesl), looking at viewer, facing front, smiling,laughing,huge breasts,\nNegative prompt: \n1paintings, sketches, (worst quality:2), (low quality:2), (normal quality:2), lowres, normal quality, ((monochrome)), (grayscalel), skin spots, acnes, skin blemishes, age spot, glan,nsfw, lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped,\n国风关键词prompt: \n1hanfu,guofeng3.2,full body, walking pose, slow motion, female wearing full body multiple layer (black robe:1.8), (red jacket and gold long skirt with intricate pattern:1.6),(insanely detailed,ice plume:1.0), (highest quality, Alessandro Casagrande, Greg Rutkowski, Sally Mann, concept art, 4k), (analog:1.2), (high sharpness), (detailed pupils:1.1), (painting:1.1), (digital painting:1.1),(beautiful detailed face, beautiful detailed eyes), Masterpiece, best quality, (highly detailed photo:1.1), 8k, photorealistic, (dark hair color, dynamic hairstyle), (pureerosface_v1:0.1), By jeremy mann, by sandra chevrier, by maciej kuciara, sharp, (ripped body:1.1), realistic, real shadow, (ice lake background:1.2), (by Michelangelo), &lt;lora:mermerovDiffusion_LoRA300:1&gt;style of ohwx &lt;lora:(style of ohwx) masterpiece, best quality, (extremely detailed CG unity 8k wallpaper, masterpiece, best quality, ultra-detailed, best shadow), High contrast, (best illumination, an extremely delicate and beautiful), (girl:1.5), ((Not relevant.)), ((caustic)), dynamic angle, beautiful detailed glow, (portrait:0.2),dynamic angle, beautiful detailed glow, (portrait:0.2)\nNegative prompt: \n1(bad_prompt_version2:1), distant view, lip, Pregnant, maternity, pointy ears, realistic, tan, muscular, greyscale, monochrome, lineart, 2koma, 3koma, 4koma, manga, 3D, 3Dcubism, pablo picasso, disney, marvel, mutanted breasts, mutanted nipple, cropped, lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, artist name, lowres, trademark, watermark, title, text, deformed, bad anatomy, disfigured, mutated, extra limbs, ugly, missing limb, floating limbs, disconnected limbs, out of frame, mutated hands and fingers, poorly drawn hands, malformed hands, poorly drawn face, poorly drawn asymmetrical eyes, (blurry:1.4), duplicate (loli, petite, child, infant, toddlers, chibi, sd character, teen age:1.4), tsurime, helmet hair, evil smile, smug_face, naughty smile, multiple view, Reference sheet, (worst quality, low quality:1.4),naked,bare,nude chest,bosom,naked boob,naked breast\n\nBenchMarksNovelaileak only\n\n\n\n  \n    Device\n    RAM\n    Platform\n    1\n    2\n    3\n    4\n    5\n    6\n    7\n    8\n    9\n    10\n  \n\n\n  \n    12100F+T600\n    16+4\n    Debian\n    2:00\n    2:07\n    2:11\n    2:13\n    2:13\n    2:12\n    2:15\n    2:13\n    2:14\n    2:13\n  \n  \n    12100F+T600\n    16+4\n    Win10\n    2:13\n    2:20\n    2:23\n    2:24\n    2:27\n    2:27\n    2:30\n    2:30\n    2:32\n    2:33\n  \n  \n    4210H+860M\n    16+1\n    Win10\n    3:23\n    3:27\n    3:29\n    3:29\n    3:29\n    3:28\n    3:29\n    3:28\n    3:28\n    3:28\n  \n  \n    3700x\n    32\n    Win11\n    5:48\n    5:49\n    5:47\n    4:52\n    4:52\n    4:56\n    4:55\n    -\n    -\n    -\n  \n  \n    N5105\n    16\n    Debian\n    23:23\n    23:38\n    23:34\n    23:35\n    23:35\n    23:36\n    23:37\n    23:33\n    23:33\n    23:30\n  \n  \n    N5105\n    8\n    Debian\n    23:55\n    23:50\n    23:50\n    23:50\n    23:48\n    23:49\n    23:51\n    23:52\n    23:52\n    23:51\n  \n\n\n\n\n\n相关链接Dskjal教程(日文)NovelAI本地完美部署使用手把手攻略教程\n","dateCreated":"2022-10-13T00:00:00+08:00","dateModified":"2023-03-05T17:09:19+08:00","datePublished":"2022-10-13T00:00:00+08:00","description":"搭建随机生成Waifu的前端，基于StableDiffusion","headline":"StableDiffusion服务器搭建","image":["../10000/StableDiffusion.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/p1/posts/2008/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/p1/posts/2008/","keywords":"Intelligence, Media, Server","thumbnailUrl":"../10000/StableDiffusion.jpg"}</script>
     <meta name="description" content="搭建随机生成Waifu的前端，基于StableDiffusion">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="StableDiffusion服务器搭建">
-<meta property="og:url" content="https://panxiuwen.github.io/posts/2008/index.html">
+<meta property="og:url" content="https://panxiuwen.github.io/p1/posts/2008/index.html">
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="搭建随机生成Waifu的前端，基于StableDiffusion">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-10-12T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-03-01T06:50:43.220Z">
+<meta property="article:modified_time" content="2023-03-05T09:09:19.023Z">
 <meta property="article:author" content="Sean Pan">
+<meta property="article:tag" content="Intelligence">
 <meta property="article:tag" content="Media">
 <meta property="article:tag" content="Server">
-<meta property="article:tag" content="Intelligence">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@982202733">
 <meta property="fb:app_id" content="[object Object]">
@@ -37,17 +37,17 @@
         
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/assets/images/mitu.jpg"/>
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/posts/2008/cover.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2008/cover.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2008/../10000/StableDiffusion.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/p1/posts/2008/../10000/StableDiffusion.jpg"/>
     
     
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+<link rel="stylesheet" href="/p1/assets/css/style-wbr5kv5vzqjhy7aesutes9sidvzcl3bbhitvxngx54odvre1xyxgiljm5cou.min.css">
 
     <!--STYLES END-->
     
@@ -75,7 +75,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/"
+            href="/p1/"
             aria-label=""
         >
             Pan&#39;s websit
@@ -86,11 +86,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="打开链接: /#about"
+                aria-label="打开链接: /p1/#about"
             >
         
         
-            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img class="header-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
         </a>
     
@@ -108,10 +108,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/#about"
+                    href="/p1/#about"
                     aria-label="阅读有关作者的更多信息"
                 >
-                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                    <img class="sidebar-profile-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
                 </a>
                 <h4 class="sidebar-profile-name">Sean Pan</h4>
                 
@@ -127,7 +127,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/"
+                            href="/p1/"
                             
                             rel="noopener"
                             title="首页"
@@ -141,7 +141,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-categories"
+                            href="/p1/all-categories"
                             
                             rel="noopener"
                             title="分类"
@@ -155,7 +155,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-tags"
+                            href="/p1/all-tags"
                             
                             rel="noopener"
                             title="标签"
@@ -169,7 +169,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-archives"
+                            href="/p1/all-archives"
                             
                             rel="noopener"
                             title="归档"
@@ -307,7 +307,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/Intelligence/">Intelligence</a>
+    <a class="category-link" href="/p1/categories/Intelligence/">Intelligence</a>
 
 
     
@@ -324,9 +324,10 @@
 
 <hr>
 <h3 id="一、前端部署"><a href="#一、前端部署" class="headerlink" title="一、前端部署"></a>一、前端部署</h3><p>Linux下内存4G的设备，Windows下内存8G的设备未启动成功过<br>N卡配置GPU版的Torch，参考<a href="/posts/4012/">机器学习相关笔记</a><br>有条件的话还是建议在Linux上部署，笔者测试的结果是在Linux下只吃GPU，但在win上就是CPU吃一点，GPU几乎只能吃一半不到，速度慢了不少<br>安装Git和Python3.11，使用命令行下载Stable-diffusion-webui和相关库</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</span><br><span class="line">pip install gfpgan clip</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</span><br><span class="line">pip install gfpgan clip xformers</span><br></pre></td></tr></table></figure>
 <p>如果是linux系统，还需要安装GL库(装了NV的同学请忽略)</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install primus-libs</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r /content/stable-diffusion-webui/requirements.txt</span><br></pre></td></tr></table></figure>
 <p>运行launch.py，慢慢等它下载文件，等它找不到模型后自动报错退出<br>对于RTX显卡，在launch.py文件里修改，根据你自己的要求改ip和端口号</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">args = shlex.split(&quot;--listen --port 8080&quot;)</span><br></pre></td></tr></table></figure>
 <p>如果是非RTX卡，需要禁用半精度浮点，如果小于4GB需启用低显存</p>
@@ -335,129 +336,141 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">args = shlex.split(&quot;--listen --port 8080 --skip-torch-cuda-test --precision full --no-half&quot;)</span><br></pre></td></tr></table></figure>
 <p>如果使用screen后台设置alias</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias sd=&quot;cd /app/stable-diffusion-webui&amp;&amp;screen -dm python3 launch.py --listen --port 2334 --skip-torch-cuda-test --precision full --no-half&quot;</span><br></pre></td></tr></table></figure>
+
 <hr>
-<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>修改ui-config.json可以设置默认参数<br>Prompt填</p>
+<h3 id="模型的使用"><a href="#模型的使用" class="headerlink" title="模型的使用"></a>模型的使用</h3><h4 id="NovelAI模型"><a href="#NovelAI模型" class="headerlink" title="NovelAI模型"></a>NovelAI模型</h4><p><a href="magnet:?xt=urn:btih:5bde442da86265b670a3e5ea3163afad2c6f8ecc">NovelAI流出版种子下载</a><br>主模型：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;animefull-latest&#x2F;model.ckpt，改名成animefull-latest.ckpt放到&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;目录里<br>vae权重：将animevae.pt改名成animefull-latest.vae.pt和模型同样的目录<br>模型风格调整：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;modules&#x2F;modules&#x2F;里所有pt文件放入&#x2F;stable-diffusion-webui&#x2F;models&#x2F;hypernetworks文件夹中</p>
+<h3 id="Stable-diffusion模型"><a href="#Stable-diffusion模型" class="headerlink" title="Stable-diffusion模型"></a>Stable-diffusion模型</h3><p><a target="_blank" rel="noopener" href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Dependencies">Stable-diffusion模型</a>：sd-v1-4.ckpt或者<a target="_blank" rel="noopener" href="https://github.com/harubaru/waifu-diffusion/tree/main/docs/en/weights">Waifu Diffusion模型</a>：wd-v1-2-full-ema.ckpt后放在”&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;“文件夹里<br><a target="_blank" rel="noopener" href="https://huggingface.co/balapapapa/chilloutmix">Huggingface</a>上也有许多现成的模型</p>
+<h4 id="Chilloutmix模型"><a href="#Chilloutmix模型" class="headerlink" title="Chilloutmix模型"></a>Chilloutmix模型</h4><p>chilloutmix_.safetensors放在<code>/models/Stable-diffusion</code>目录中<br>koreanDollLikeness_v10.safetensors放在<code>/models/Lora</code>目录中<br>taiwanDollLikeness_v10.safetensors放在<code>/models/Lora</code>目录中<br>下载<a target="_blank" rel="noopener" href="https://huggingface.co/stabilityai/sd-vae-ft-mse-original/blob/main/vae-ft-mse-840000-ema-pruned.ckpt">下载VAE文件</a>，丢到<code>/models/VAE</code>文件夹中</p>
+<h4 id="国风模型"><a href="#国风模型" class="headerlink" title="国风模型"></a>国风模型</h4><p>国风2：Gf_style2.ckpt<br>GuoFeng3.2.safetensors放在<code>/models/Stable-diffusion</code>目录中<br>GuoFeng3.2_Lora.safetensors放在<code>/models/Lora</code>目录中</p>
+<hr>
+<h3 id="其他模块启用"><a href="#其他模块启用" class="headerlink" title="其他模块启用"></a>其他模块启用</h3><p>启用Lora的方法：点Generate下面的第三个图标(Show extra networks)，下面会新出现个框，点Lora，会自动在prompt里添加<code>&lt;lora:koreanDollLikeness_v10:1&gt;</code>关键词<br>GFPGAN&#x2F;GFPGANv1.3.pth：脸部修复，在Extras -&gt; BSRGAN 4x中启用<br>realesrgan&#x2F;RealESRGAN_x4plus.pth：超分辨率，在Extras -&gt; ESRGEN 4x中启用<br>启用hypernetworks：跟启用Lora的方法类似，在hypernetwork中启用</p>
+<hr>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>修改ui-config.json可以设置默认参数<br>Sampling Steps改成30，CFG Scale改成11，据说效果最好<br>Batch count是点一次运行的次数，随便改大，但是时间也会变长，Batch size是一次出图数，改大会爆显存<br>分辨率必须是64的整数倍，否则会报错<br>提示：outputs\txt2img-images文件夹内存有之前生成过的内容</p>
+<hr>
+<h3 id="NovelAI关键词"><a href="#NovelAI关键词" class="headerlink" title="NovelAI关键词"></a>NovelAI关键词</h3><p>也写在ui-config.json里<br>Prompt:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">anime,1girl,loli,overknee socks,school uniform</span><br></pre></td></tr></table></figure>
-<p>Negative prompt填</p>
+<p>Negative prompt:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry</span><br></pre></td></tr></table></figure>
-<p>Sampling Steps改成30，CFG Scale改成11，据说效果最好<br>Batch count是点一次运行的次数，随便改大，但是时间也会变长，Batch size是一次出图数，改大会爆显存<br>分辨率必须是64的整数倍，否则会报错<br>提示：outputs\txt2img-images文件夹内存有之前生成过的内容</p>
-<hr>
-<h3 id="NovelAI模型"><a href="#NovelAI模型" class="headerlink" title="NovelAI模型"></a>NovelAI模型</h3><p><a href="magnet:?xt=urn:btih:5bde442da86265b670a3e5ea3163afad2c6f8ecc">NovelAI流出版种子下载</a><br>主模型：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;animefull-latest&#x2F;model.ckpt，改名成animefull-latest.ckpt放到&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;目录里<br>vae权重：将animevae.pt改名成animefull-latest.vae.pt和模型同样的目录<br>模型风格调整：将&#x2F;novelaileak&#x2F;stableckpt&#x2F;modules&#x2F;modules&#x2F;里所有pt文件放入&#x2F;stable-diffusion-webui&#x2F;models&#x2F;hypernetworks文件夹中</p>
-<h3 id="Stable-diffusion模型"><a href="#Stable-diffusion模型" class="headerlink" title="Stable-diffusion模型"></a>Stable-diffusion模型</h3><p><a target="_blank" rel="noopener" href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Dependencies">Stable-diffusion模型</a>：sd-v1-4.ckpt或者<a target="_blank" rel="noopener" href="https://github.com/harubaru/waifu-diffusion/tree/main/docs/en/weights">Waifu Diffusion模型</a>：wd-v1-2-full-ema.ckpt后放在”&#x2F;stable-diffusion-webui&#x2F;models&#x2F;Stable-diffusion&#x2F;“文件夹里<br>Chilloutmix：chilloutmix_.safetensors&#x2F;chilloutmix_NiPrunedFp32Fix.safetensors<br>国风2：Gf_style2.ckpt<br>国风Lora：GuoFeng2_Lora.safetensors<br>完美世界：perfectWorld_perfectWorldBakedVAE.safetensors<br>台湾人：taiwanDollLikeness_v10.safetensors<br>韩国人：koreanDollLikeness_v10.safetensors</p>
-<hr>
-<h3 id="其他模块启用"><a href="#其他模块启用" class="headerlink" title="其他模块启用"></a>其他模块启用</h3><p>GFPGAN&#x2F;GFPGANv1.3.pth：脸部修复，在Extras -&gt; BSRGAN 4x中启用<br>realesrgan&#x2F;RealESRGAN_x4plus.pth：超分辨率，在Extras -&gt; ESRGEN 4x中启用<br>NovelAI流出版中的hypernetworks模块在Setting -&gt; Stable Diffusion -&gt; Stable Diffusion finetune hypernetwork中启用</p>
-<hr>
-<h3 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h3><p>衣服：overknee socks,school uniform,in sailor suit,black_sleeves,white halter top,white swim suit,gothic,leotard<br>white dress and black stockings<br>画图：full body figure</p>
+<p>衣服：overknee socks,school uniform,in sailor suit,black_sleeves,white halter top,white swim suit,gothic,leotard<br>white dress and black stockings<br>画图：full body figure</p>
+<h3 id="KoreanDoll关键词"><a href="#KoreanDoll关键词" class="headerlink" title="KoreanDoll关键词"></a>KoreanDoll关键词</h3><p>模型组合：<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/609079652">sd-v1-4.ckpt+chilloutmix_NiPrunedFp32Fix.safetensors+koreanDollLikeness_v10.safetensors+GFPGANv1.4.pth</a><br><a target="_blank" rel="noopener" href="https://www.mooogu.cn/kejiqianyan/693222.html">chilloutmix_.safetensors+koreanDollLikeness_v10.safetensors+vae-ft-mse-840000-ema-pruned.ckpt</a><br>prompt: </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">masterpiece,best qultyofficial art,extremely detailed CG unity 8k wallaper,1girl, ultra high res, (photorealistic:1.4), golden hour lighting, sweater dress,(upper body), (Kpop idol), (aegyo sal:1), (platinum blonde hair:1), (puffy eyesl), looking at viewer, facing front, smiling,laughing,huge breasts,</span><br></pre></td></tr></table></figure>
+<p>Negative prompt: </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">paintings, sketches, (worst quality:2), (low quality:2), (normal quality:2), lowres, normal quality, ((monochrome)), (grayscalel), skin spots, acnes, skin blemishes, age spot, glan,nsfw, lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped,</span><br></pre></td></tr></table></figure>
+<h3 id="国风关键词"><a href="#国风关键词" class="headerlink" title="国风关键词"></a>国风关键词</h3><p>prompt: </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hanfu,guofeng3.2,full body, walking pose, slow motion, female wearing full body multiple layer (black robe:1.8), (red jacket and gold long skirt with intricate pattern:1.6),(insanely detailed,ice plume:1.0), (highest quality, Alessandro Casagrande, Greg Rutkowski, Sally Mann, concept art, 4k), (analog:1.2), (high sharpness), (detailed pupils:1.1), (painting:1.1), (digital painting:1.1),(beautiful detailed face, beautiful detailed eyes), Masterpiece, best quality, (highly detailed photo:1.1), 8k, photorealistic, (dark hair color, dynamic hairstyle), (pureerosface_v1:0.1), By jeremy mann, by sandra chevrier, by maciej kuciara, sharp, (ripped body:1.1), realistic, real shadow, (ice lake background:1.2), (by Michelangelo), &lt;lora:mermerovDiffusion_LoRA300:1&gt;style of ohwx &lt;lora:(style of ohwx) masterpiece, best quality, (extremely detailed CG unity 8k wallpaper, masterpiece, best quality, ultra-detailed, best shadow), High contrast, (best illumination, an extremely delicate and beautiful), (girl:1.5), ((Not relevant.)), ((caustic)), dynamic angle, beautiful detailed glow, (portrait:0.2),dynamic angle, beautiful detailed glow, (portrait:0.2)</span><br></pre></td></tr></table></figure>
+<p>Negative prompt: </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(bad_prompt_version2:1), distant view, lip, Pregnant, maternity, pointy ears, realistic, tan, muscular, greyscale, monochrome, lineart, 2koma, 3koma, 4koma, manga, 3D, 3Dcubism, pablo picasso, disney, marvel, mutanted breasts, mutanted nipple, cropped, lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, artist name, lowres, trademark, watermark, title, text, deformed, bad anatomy, disfigured, mutated, extra limbs, ugly, missing limb, floating limbs, disconnected limbs, out of frame, mutated hands and fingers, poorly drawn hands, malformed hands, poorly drawn face, poorly drawn asymmetrical eyes, (blurry:1.4), duplicate (loli, petite, child, infant, toddlers, chibi, sd character, teen age:1.4), tsurime, helmet hair, evil smile, smug_face, naughty smile, multiple view, Reference sheet, (worst quality, low quality:1.4),naked,bare,nude chest,bosom,naked boob,naked breast</span><br></pre></td></tr></table></figure>
 <hr>
 <h3 id="BenchMarks"><a href="#BenchMarks" class="headerlink" title="BenchMarks"></a>BenchMarks</h3><p>Novelaileak only</p>
 <div style="overflow-x:auto;white-space:nowrap;">
-<table>
+<table style="text-align:center;">
 <thead>
   <tr>
-    <th align="center" >Device</th>
-    <th align="center" >RAMPlatform</th>
-    <th align="center" >1</th>
-    <th align="center" >2</th>
-    <th align="center" >3</th>
-    <th align="center" >4</th>
-    <th align="center" >5</th>
-    <th align="center" >6</th>
-    <th align="center" >7</th>
-    <th align="center" >8</th>
-    <th align="center" >9</th>
-    <th align="center" >10</th>
+    <th>Device</th>
+    <th>RAM</th>
+    <th>Platform</th>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>6</th>
+    <th>7</th>
+    <th>8</th>
+    <th>9</th>
+    <th>10</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td align="center" >12100F+T600</td>
-    <td align="center" >16+4</td>
-    <td align="center" >Debian</td>
-    <td align="center" >2:00</td>
-    <td align="center" >2:07</td>
-    <td align="center" >2:11</td>
-    <td align="center" >2:13</td>
-    <td align="center" >2:13</td>
-    <td align="center" >2:12</td>
-    <td align="center" >2:15</td>
-    <td align="center" >2:13</td>
-    <td align="center" >2:14</td>
-    <td align="center" >2:13</td>
+    <td>12100F+T600</td>
+    <td>16+4</td>
+    <td>Debian</td>
+    <td>2:00</td>
+    <td>2:07</td>
+    <td>2:11</td>
+    <td>2:13</td>
+    <td>2:13</td>
+    <td>2:12</td>
+    <td>2:15</td>
+    <td>2:13</td>
+    <td>2:14</td>
+    <td>2:13</td>
   </tr>
   <tr>
-    <td align="center" >12100F+T600</td>
-    <td align="center" >16+4</td>
-    <td align="center" >Win10</td>
-    <td align="center" >2:13</td>
-    <td align="center" >2:20</td>
-    <td align="center" >2:23</td>
-    <td align="center" >2:24</td>
-    <td align="center" >2:27</td>
-    <td align="center" >2:27</td>
-    <td align="center" >2:30</td>
-    <td align="center" >2:30</td>
-    <td align="center" >2:32</td>
-    <td align="center" >2:33</td>
+    <td>12100F+T600</td>
+    <td>16+4</td>
+    <td>Win10</td>
+    <td>2:13</td>
+    <td>2:20</td>
+    <td>2:23</td>
+    <td>2:24</td>
+    <td>2:27</td>
+    <td>2:27</td>
+    <td>2:30</td>
+    <td>2:30</td>
+    <td>2:32</td>
+    <td>2:33</td>
   </tr>
   <tr>
-    <td align="center" >4210H+860M</td>
-    <td align="center" >16+1</td>
-    <td align="center" >Win10</td>
-    <td align="center" >3:23</td>
-    <td align="center" >3:27</td>
-    <td align="center" >3:29</td>
-    <td align="center" >3:29</td>
-    <td align="center" >3:29</td>
-    <td align="center" >3:28</td>
-    <td align="center" >3:29</td>
-    <td align="center" >3:28</td>
-    <td align="center" >3:28</td>
-    <td align="center" >3:28</td>
+    <td>4210H+860M</td>
+    <td>16+1</td>
+    <td>Win10</td>
+    <td>3:23</td>
+    <td>3:27</td>
+    <td>3:29</td>
+    <td>3:29</td>
+    <td>3:29</td>
+    <td>3:28</td>
+    <td>3:29</td>
+    <td>3:28</td>
+    <td>3:28</td>
+    <td>3:28</td>
   </tr>
   <tr>
-    <td align="center" >3700x</td>
-    <td align="center" >32</td>
-    <td align="center" >Win11</td>
-    <td align="center" >5:48</td>
-    <td align="center" >5:49</td>
-    <td align="center" >5:47</td>
-    <td align="center" >4:52</td>
-    <td align="center" >4:52</td>
-    <td align="center" >4:56</td>
-    <td align="center" >4:55</td>
-    <td align="center" >-</td>
-    <td align="center" >-</td>
-    <td align="center" >-</td>
+    <td>3700x</td>
+    <td>32</td>
+    <td>Win11</td>
+    <td>5:48</td>
+    <td>5:49</td>
+    <td>5:47</td>
+    <td>4:52</td>
+    <td>4:52</td>
+    <td>4:56</td>
+    <td>4:55</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
-    <td align="center" >N5105</td>
-    <td align="center" >16</td>
-    <td align="center" >Debian</td>
-    <td align="center" >23:23</td>
-    <td align="center" >23:38</td>
-    <td align="center" >23:34</td>
-    <td align="center" >23:35</td>
-    <td align="center" >23:35</td>
-    <td align="center" >23:36</td>
-    <td align="center" >23:37</td>
-    <td align="center" >23:33</td>
-    <td align="center" >23:33</td>
-    <td align="center" >23:30</td>
+    <td>N5105</td>
+    <td>16</td>
+    <td>Debian</td>
+    <td>23:23</td>
+    <td>23:38</td>
+    <td>23:34</td>
+    <td>23:35</td>
+    <td>23:35</td>
+    <td>23:36</td>
+    <td>23:37</td>
+    <td>23:33</td>
+    <td>23:33</td>
+    <td>23:30</td>
   </tr>
   <tr>
-    <td align="center" >N5105</td>
-    <td align="center" >8</td>
-    <td align="center" >Debian</td>
-    <td align="center" >23:55</td>
-    <td align="center" >23:50</td>
-    <td align="center" >23:50</td>
-    <td align="center" >23:50</td>
-    <td align="center" >23:48</td>
-    <td align="center" >23:49</td>
-    <td align="center" >23:51</td>
-    <td align="center" >23:52</td>
-    <td align="center" >23:52</td>
-    <td align="center" >23:51</td>
+    <td>N5105</td>
+    <td>8</td>
+    <td>Debian</td>
+    <td>23:55</td>
+    <td>23:50</td>
+    <td>23:50</td>
+    <td>23:50</td>
+    <td>23:48</td>
+    <td>23:49</td>
+    <td>23:51</td>
+    <td>23:52</td>
+    <td>23:52</td>
+    <td>23:51</td>
   </tr>
 </tbody>
 </table>
@@ -476,7 +489,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Intelligence/" rel="tag">Intelligence</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/Media/" rel="tag">Media</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/Server/" rel="tag">Server</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Intelligence/" rel="tag">Intelligence</a> <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Media/" rel="tag">Media</a> <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Server/" rel="tag">Server</a>
 
             </div>
         
@@ -489,7 +502,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2011/"
+                    href="/p1/posts/2011/"
                     data-tooltip="Waifu2x服务器搭建"
                     aria-label="上一篇: Waifu2x服务器搭建"
                 >
@@ -503,7 +516,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2025/"
+                    href="/p1/posts/2025/"
                     data-tooltip="论文相关笔记"
                     aria-label="下一篇: 论文相关笔记"
                 >
@@ -519,7 +532,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -530,7 +543,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -565,7 +578,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2011/"
+                    href="/p1/posts/2011/"
                     data-tooltip="Waifu2x服务器搭建"
                     aria-label="上一篇: Waifu2x服务器搭建"
                 >
@@ -579,7 +592,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2025/"
+                    href="/p1/posts/2025/"
                     data-tooltip="论文相关笔记"
                     aria-label="下一篇: 论文相关笔记"
                 >
@@ -595,7 +608,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -606,7 +619,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -633,7 +646,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img id="about-card-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
             <h4 id="about-card-name">Sean Pan</h4>
         
@@ -660,10 +673,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/p1/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+<script src="/p1/assets/js/script-l5h9qen9be4vrigrbevlkouofvxbojlpmu3agrf6vyrdfuvaamibpmcdf7kz.min.js"></script>
 
 <!--SCRIPTS END-->
 

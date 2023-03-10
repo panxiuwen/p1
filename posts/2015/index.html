@@ -13,16 +13,16 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文讲述了如何在OpenWRT、Linux、Windows和Android系统下搭建代理服务器、实现流量转发以及让特定程序的流量走代理\n\n\n一、搭建代理服务器\nOpenWRT123opkg updateopkg install tinyproxy luci-app-tinyproxyvi /etc/config/tinyproxy\n启动\n1/etc/init.d/tinyproxy restart\n\nLinux1234apt-get install squidnano /etc/squid/squid.confhttp_access deny all 改为 http_access allow allservice squid restart\n\nWindows下载squid启动，右下角-Start Squid Service，端口号为3128PS：我不确定不把http_access deny all 改为 http_access allow all有什么问题\n\nAndroid下载EveryProxy\n\n二、使用代理服务器\n测试12curl http://www.baidu.com --proxy 192.168.1.102:3128curl http://www.baidu.com -x 192.168.1.100:3128\n\nWindows可以使用SocksCap64启动指定程序，我的仓库有下载\n\nLinux使用全局代理12export http_proxy=http://192.168.1.100:3128export https_proxy=http://192.168.1.100:3128\n\nGit设置http代理\n12git config --global http.proxy http://192.168.1.100:3128git config --global https.proxy http://192.168.1.100:3128\n取消代理\n12git config --global --unset http.proxygit config --global --unset https.proxy\n\npip1python3 -m pip install paramiko  --proxy=192.168.1.5:2333\n\njava使用代理启动jar包1java -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=1081 -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=1081 -jar BuildTools.jar\n三、流量转发\nOpenWRT安装socat：\n1opkg install socat\n从0.0.0.0:10000转发到192.168.2.100:8000\n1socat TCP4-LISTEN:10000,reuseaddr,fork TCP4:192.168.2.100:8000 &amp;\n\nLinux安装rinetd\n12安装apt-get install rinetd\n卸载\n1apt-get purge rinetd\n配置文件\n1nano /etc/rinetd.conf\n启动\n1rinetd -c /etc/rinetd.conf\n关闭\n1pkill rinetd\n\nWindows使用自带的netsh，从192.168.192.204:2222转发到10.1.1.1:22\n1netsh interface portproxy add v4tov4 listenaddress=192.168.192.204 listenport=2222 connectaddress=10.1.1.1 connectport=22\n删除流量转发\n1netsh interface portproxy delete v4tov4 listenaddress=192.168.192.204 listenport=2222\n查看映射列表\n1netsh interface portproxy show v4tov4\n也可以使用Porttunnel，可以注册开机服务\n\n四、参考OpenWRT中的Tinyproxy文档\n","dateCreated":"2020-02-04T00:00:00+08:00","dateModified":"2023-01-22T16:10:22+08:00","datePublished":"2020-02-04T00:00:00+08:00","description":"本文讲述了如何在OpenWRT、Linux、Windows和Android系统下搭建代理服务器、实现流量转发以及让特定程序的流量走代理","headline":"搭建代理服务器","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2015/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2015/","keywords":"Server","thumbnailUrl":"cover.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文讲述了如何在OpenWRT、Linux、Windows和Android系统下搭建代理服务器、实现流量转发以及让特定程序的流量走代理\n\n\n\n\n搭建代理服务器\nOpenWRT123opkg updateopkg install tinyproxy luci-app-tinyproxyvi /etc/config/tinyproxy\n启动\n1/etc/init.d/tinyproxy restart\n\nLinux1234apt-get install squidnano /etc/squid/squid.confhttp_access deny all 改为 http_access allow allservice squid restart\n\nWindows下载squid启动，右下角-Start Squid Service，端口号为3128PS：我不确定不把http_access deny all 改为 http_access allow all有什么问题\n\nAndroid下载EveryProxy\n\n使用代理服务器\n测试12curl http://www.baidu.com --proxy 192.168.1.102:3128curl http://www.baidu.com -x 192.168.1.100:3128\n\nWindows可以使用SocksCap64启动指定程序，我的仓库有下载\n\nLinux使用全局代理12export http_proxy=http://192.168.1.100:3128export https_proxy=http://192.168.1.100:3128\n\nGit设置http代理\n12git config --global http.proxy http://192.168.1.100:3128git config --global https.proxy http://192.168.1.100:3128\n取消代理\n12git config --global --unset http.proxygit config --global --unset https.proxy\n\npip1python3 -m pip install paramiko  --proxy=192.168.1.5:2333\n\njava使用代理启动jar包1java -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=1081 -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=1081 -jar BuildTools.jar\n流量转发\nOpenWRT安装socat：\n1opkg install socat\n从0.0.0.0:10000转发到192.168.2.100:8000\n1socat TCP4-LISTEN:10000,reuseaddr,fork TCP4:192.168.2.100:8000 &amp;\n\nLinux安装rinetd\n12安装apt-get install rinetd\n卸载\n1apt-get purge rinetd\n配置文件\n1nano /etc/rinetd.conf\n启动\n1rinetd -c /etc/rinetd.conf\n关闭\n1pkill rinetd\n\nWindows使用自带的netsh，从192.168.192.204:2222转发到10.1.1.1:22\n1netsh interface portproxy add v4tov4 listenaddress=192.168.192.204 listenport=2222 connectaddress=10.1.1.1 connectport=22\n删除流量转发\n1netsh interface portproxy delete v4tov4 listenaddress=192.168.192.204 listenport=2222\n查看映射列表\n1netsh interface portproxy show v4tov4\n也可以使用Porttunnel，可以注册开机服务\n\n参考OpenWRT中的Tinyproxy文档\n","dateCreated":"2020-02-04T00:00:00+08:00","dateModified":"2023-03-10T08:47:01+08:00","datePublished":"2020-02-04T00:00:00+08:00","description":"本文讲述了如何在OpenWRT、Linux、Windows和Android系统下搭建代理服务器、实现流量转发以及让特定程序的流量走代理","headline":"搭建代理服务器","image":["../10000/Proxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/p1/posts/2015/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/p1/posts/2015/","keywords":"Server","thumbnailUrl":"../10000/Proxy.jpg"}</script>
     <meta name="description" content="本文讲述了如何在OpenWRT、Linux、Windows和Android系统下搭建代理服务器、实现流量转发以及让特定程序的流量走代理">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="搭建代理服务器">
-<meta property="og:url" content="https://panxiuwen.github.io/posts/2015/index.html">
+<meta property="og:url" content="https://panxiuwen.github.io/p1/posts/2015/index.html">
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文讲述了如何在OpenWRT、Linux、Windows和Android系统下搭建代理服务器、实现流量转发以及让特定程序的流量走代理">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-02-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-01-22T08:10:22.000Z">
+<meta property="article:modified_time" content="2023-03-10T00:47:01.464Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Server">
 <meta name="twitter:card" content="summary">
@@ -35,17 +35,17 @@
         
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/assets/images/mitu.jpg"/>
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/posts/2015/cover.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2015/cover.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2015/../10000/Proxy.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/p1/posts/2015/../10000/Proxy.jpg"/>
     
     
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+<link rel="stylesheet" href="/p1/assets/css/style-wbr5kv5vzqjhy7aesutes9sidvzcl3bbhitvxngx54odvre1xyxgiljm5cou.min.css">
 
     <!--STYLES END-->
     
@@ -73,7 +73,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/"
+            href="/p1/"
             aria-label=""
         >
             Pan&#39;s websit
@@ -84,11 +84,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="打开链接: /#about"
+                aria-label="打开链接: /p1/#about"
             >
         
         
-            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img class="header-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
         </a>
     
@@ -106,10 +106,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/#about"
+                    href="/p1/#about"
                     aria-label="阅读有关作者的更多信息"
                 >
-                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                    <img class="sidebar-profile-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
                 </a>
                 <h4 class="sidebar-profile-name">Sean Pan</h4>
                 
@@ -125,7 +125,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/"
+                            href="/p1/"
                             
                             rel="noopener"
                             title="首页"
@@ -139,7 +139,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-categories"
+                            href="/p1/all-categories"
                             
                             rel="noopener"
                             title="分类"
@@ -153,7 +153,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-tags"
+                            href="/p1/all-tags"
                             
                             rel="noopener"
                             title="标签"
@@ -167,7 +167,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-archives"
+                            href="/p1/all-archives"
                             
                             rel="noopener"
                             title="归档"
@@ -305,7 +305,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/Server/">Server</a>
+    <a class="category-link" href="/p1/categories/Server/">Server</a>
 
 
     
@@ -320,7 +320,9 @@
             <p>本文讲述了如何在OpenWRT、Linux、Windows和Android系统下搭建代理服务器、实现流量转发以及让特定程序的流量走代理</p>
 <span id="more"></span>
 <hr>
-<h3 id="一、搭建代理服务器"><a href="#一、搭建代理服务器" class="headerlink" title="一、搭建代理服务器"></a>一、搭建代理服务器</h3><hr>
+<h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">搭建代理服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenWRT"><span class="toc-text">OpenWRT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux"><span class="toc-text">Linux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Windows"><span class="toc-text">Windows</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Android"><span class="toc-text">Android</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">使用代理服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Windows-1"><span class="toc-text">Windows</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux%E4%BD%BF%E7%94%A8%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86"><span class="toc-text">Linux使用全局代理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Git"><span class="toc-text">Git</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pip"><span class="toc-text">pip</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#java%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E5%90%AF%E5%8A%A8jar%E5%8C%85"><span class="toc-text">java使用代理启动jar包</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E9%87%8F%E8%BD%AC%E5%8F%91"><span class="toc-text">流量转发</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OpenWRT-1"><span class="toc-text">OpenWRT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Linux-1"><span class="toc-text">Linux</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Windows-2"><span class="toc-text">Windows</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol>
+<hr>
+<h3 id="搭建代理服务器"><a href="#搭建代理服务器" class="headerlink" title="搭建代理服务器"></a>搭建代理服务器</h3><hr>
 <h4 id="OpenWRT"><a href="#OpenWRT" class="headerlink" title="OpenWRT"></a>OpenWRT</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">opkg update</span><br><span class="line">opkg install tinyproxy luci-app-tinyproxy</span><br><span class="line">vi /etc/config/tinyproxy</span><br></pre></td></tr></table></figure>
 <p>启动</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/tinyproxy restart</span><br></pre></td></tr></table></figure>
@@ -331,7 +333,7 @@
 <hr>
 <h4 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h4><p><a target="_blank" rel="noopener" href="https://apkpure.com/cn/every-proxy/com.gorillasoftware.everyproxy">下载EveryProxy</a></p>
 <hr>
-<h3 id="二、使用代理服务器"><a href="#二、使用代理服务器" class="headerlink" title="二、使用代理服务器"></a>二、使用代理服务器</h3><hr>
+<h3 id="使用代理服务器"><a href="#使用代理服务器" class="headerlink" title="使用代理服务器"></a>使用代理服务器</h3><hr>
 <h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl http://www.baidu.com --proxy 192.168.1.102:3128</span><br><span class="line">curl http://www.baidu.com -x 192.168.1.100:3128</span><br></pre></td></tr></table></figure>
 <hr>
 <h4 id="Windows-1"><a href="#Windows-1" class="headerlink" title="Windows"></a>Windows</h4><p>可以使用SocksCap64启动指定程序，<a target="_blank" rel="noopener" href="http://982202733.ysepan.com/">我的仓库</a>有下载</p>
@@ -346,7 +348,7 @@
 <h4 id="pip"><a href="#pip" class="headerlink" title="pip"></a>pip</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install paramiko  --proxy=192.168.1.5:2333</span><br></pre></td></tr></table></figure>
 <hr>
 <h4 id="java使用代理启动jar包"><a href="#java使用代理启动jar包" class="headerlink" title="java使用代理启动jar包"></a>java使用代理启动jar包</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=1081 -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=1081 -jar BuildTools.jar</span><br></pre></td></tr></table></figure>
-<h3 id="三、流量转发"><a href="#三、流量转发" class="headerlink" title="三、流量转发"></a>三、流量转发</h3><hr>
+<h3 id="流量转发"><a href="#流量转发" class="headerlink" title="流量转发"></a>流量转发</h3><hr>
 <h4 id="OpenWRT-1"><a href="#OpenWRT-1" class="headerlink" title="OpenWRT"></a>OpenWRT</h4><p>安装socat：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">opkg install socat</span><br></pre></td></tr></table></figure>
 <p>从0.0.0.0:10000转发到192.168.2.100:8000</p>
@@ -371,7 +373,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh interface portproxy show v4tov4</span><br></pre></td></tr></table></figure>
 <p>也可以使用Porttunnel，可以注册开机服务</p>
 <hr>
-<h3 id="四、参考"><a href="#四、参考" class="headerlink" title="四、参考"></a>四、参考</h3><p><a target="_blank" rel="noopener" href="https://openwrt.org/docs/guide-user/services/proxy/tinyproxy">OpenWRT中的Tinyproxy文档</a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://openwrt.org/docs/guide-user/services/proxy/tinyproxy">OpenWRT中的Tinyproxy文档</a></p>
 
             
 
@@ -383,7 +385,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Server/" rel="tag">Server</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Server/" rel="tag">Server</a>
 
             </div>
         
@@ -396,7 +398,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/4006/"
+                    href="/p1/posts/4006/"
                     data-tooltip="跨平台下载器的使用"
                     aria-label="上一篇: 跨平台下载器的使用"
                 >
@@ -410,7 +412,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2012/"
+                    href="/p1/posts/2012/"
                     data-tooltip="常见离子的颜色与性质"
                     aria-label="下一篇: 常见离子的颜色与性质"
                 >
@@ -426,7 +428,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -437,7 +439,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -472,7 +474,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/4006/"
+                    href="/p1/posts/4006/"
                     data-tooltip="跨平台下载器的使用"
                     aria-label="上一篇: 跨平台下载器的使用"
                 >
@@ -486,7 +488,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2012/"
+                    href="/p1/posts/2012/"
                     data-tooltip="常见离子的颜色与性质"
                     aria-label="下一篇: 常见离子的颜色与性质"
                 >
@@ -502,7 +504,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -513,7 +515,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -540,7 +542,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img id="about-card-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
             <h4 id="about-card-name">Sean Pan</h4>
         
@@ -567,10 +569,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/p1/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+<script src="/p1/assets/js/script-l5h9qen9be4vrigrbevlkouofvxbojlpmu3agrf6vyrdfuvaamibpmcdf7kz.min.js"></script>
 
 <!--SCRIPTS END-->
 

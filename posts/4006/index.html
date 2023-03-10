@@ -13,16 +13,16 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了一些开源跨平台的下载器\n\n\nTransmission安装\n1apt-get install transmission-daemon\n停止服务\n1service transmission-daemon stop\n编辑配置文件\n1nano /var/lib/transmission-daemon/info/settings.json\n修改download-dir、incomplete-dir、rpc-username、rpc-password、rpc-whitelist-enabled启动\n1service transmission-daemon restart\n\n\nAria2安装与配置Linux安装\n1apt-get install aria2\n\nWindows下载写配置文件和aria2.session\n1234mkdir -p ~/.aria2/\t\t\t//其实这个文件夹aria2会自己创建nano  ~/.aria2/aria2.conf\t\t//创建aria2的配置文件touch ~/.aria2/aria2.session\t\t//创建aria2的session文件chmod 777 ~/.aria2/aria2.session\t\t//赋予aria2写session文件的权限\n配置文件内容\n1234567891011121314151617181920212223# 下载相关disk-cache=256M\t\t\t\t//下载占用的最大内存dir=/app/scihub/store/\t\t\t//下载目录auto-file-renaming=false\t\t\t//允许文件重命名continue=true\t\t\t\t//断点续传split=4\t\t\t\t\t//单个任务最大线程数max-concurrent-downloads=2\t\t//同时下载任务的个数# 进度保存相关input-file=/root/.aria2/aria2.session\t//session目录save-session=/root/.aria2/aria2.session\t//session目录save-session-interval=30\t\t\t//session保存间隔# RPC相关enable-rpc=true\t\t\t\t//开启RPCrpc-listen-all=true\t\t\t//监听所有端口rpc-allow-origin-all=true\t\t//允许所有iprpc-secret=123\t\t\t\t//RPC密码\t\t\t# 百度网盘限速相关#split=1#max-connection-per-server=1#max-overall-download-limit=100k\n启动命令行\n1aria2c --conf-path=&quot;/root/.aria2/aria2.conf&quot; -D force-save=true\n配置web管理页面下载AriaNg后解压丢到web服务器里就行\n\n设置自启动在init.d目录下创建启动文件\n1sudo nano /etc/init.d/aria2c \n配置文件内容\n1234567891011121314151617181920212223242526272829#!/bin/sh### BEGIN INIT INFO# Provides: aria2# Required-Start: $remote_fs $network# Required-Stop: $remote_fs $network# Default-Start: 2 3 4 5# Default-Stop: 0 1 6# Short-Description: aria2 downloader### END INIT INFOcase &quot;$1&quot; instart) echo -n &quot;已开启Aria2c&quot; sudo aria2c --conf-path=&quot;/root/.aria2/aria2.conf&quot; -D;;stop) echo -n &quot;已关闭Aria2c&quot; killall aria2c;;restart) killall aria2c sudo aria2c --conf-path=&quot;/root/.aria2/aria2.conf&quot; -D;;esacexit\n控制服务\n1234567chmod 755 /etc/init.d/aria2c\t//修改启动脚本文件权限update-rc.d aria2c defaults\t//添加aria2c服务到开机服务systemctl enable aria2c\t//服务自启/lib/systemd/systemd-sysv-install enable aria2cservice aria2c start\t\t//启动服务service aria2c stop\t\t//停止服务service aria2c restart\t\t//重启服务\n进程查找\n1pstree -aup | grep aria2\n可执行文件位置查找\n1whereis aria2c\n设置下载完毕运行脚本\n1on-download-complete=/home/public/Download/1.sh\n在脚本中修改下载后的文件拥有者\n1chown -R nobody /home/public/Download\n\nBitTorrent下载没速度的解决方法1.添加trackerslist2.下载DHT.dat文件\n","dateCreated":"2020-03-28T00:00:00+08:00","dateModified":"2023-02-27T18:39:33+08:00","datePublished":"2020-03-28T00:00:00+08:00","description":"本文介绍了一些开源跨平台的下载器","headline":"跨平台下载器的使用","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/4006/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/4006/","keywords":"Network","thumbnailUrl":"cover.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了一些开源跨平台的下载器\n\n\nTransmission安装\n1apt-get install transmission-daemon\n停止服务\n1service transmission-daemon stop\n编辑配置文件\n1nano /var/lib/transmission-daemon/info/settings.json\n修改download-dir、incomplete-dir、rpc-username、rpc-password、rpc-whitelist-enabled启动\n1service transmission-daemon restart\n\n\nAria2安装与配置Linux安装\n1apt-get install aria2\n\nWindows下载写配置文件和aria2.session\n1234mkdir -p ~/.aria2/\t\t\t//其实这个文件夹aria2会自己创建nano  ~/.aria2/aria2.conf\t\t//创建aria2的配置文件touch ~/.aria2/aria2.session\t\t//创建aria2的session文件chmod 777 ~/.aria2/aria2.session\t\t//赋予aria2写session文件的权限\n配置文件内容\n1234567891011121314151617181920212223# 下载相关disk-cache=256M\t\t\t\t//下载占用的最大内存dir=/app/scihub/store/\t\t\t//下载目录auto-file-renaming=false\t\t\t//允许文件重命名continue=true\t\t\t\t//断点续传split=4\t\t\t\t\t//单个任务最大线程数max-concurrent-downloads=2\t\t//同时下载任务的个数# 进度保存相关input-file=/root/.aria2/aria2.session\t//session目录save-session=/root/.aria2/aria2.session\t//session目录save-session-interval=30\t\t\t//session保存间隔# RPC相关enable-rpc=true\t\t\t\t//开启RPCrpc-listen-all=true\t\t\t//监听所有端口rpc-allow-origin-all=true\t\t//允许所有iprpc-secret=123\t\t\t\t//RPC密码\t\t\t# 百度网盘限速相关#split=1#max-connection-per-server=1#max-overall-download-limit=100k\n启动命令行\n1aria2c --conf-path=&quot;/root/.aria2/aria2.conf&quot; -D force-save=true\n配置web管理页面下载AriaNg后解压丢到web服务器里就行\n\n设置自启动在init.d目录下创建启动文件\n1sudo nano /etc/init.d/aria2c \n配置文件内容\n1234567891011121314151617181920212223242526272829#!/bin/sh### BEGIN INIT INFO# Provides: aria2# Required-Start: $remote_fs $network# Required-Stop: $remote_fs $network# Default-Start: 2 3 4 5# Default-Stop: 0 1 6# Short-Description: aria2 downloader### END INIT INFOcase &quot;$1&quot; instart) echo -n &quot;已开启Aria2c&quot; sudo aria2c --conf-path=&quot;/root/.aria2/aria2.conf&quot; -D;;stop) echo -n &quot;已关闭Aria2c&quot; killall aria2c;;restart) killall aria2c sudo aria2c --conf-path=&quot;/root/.aria2/aria2.conf&quot; -D;;esacexit\n控制服务\n1234567chmod 755 /etc/init.d/aria2c\t//修改启动脚本文件权限update-rc.d aria2c defaults\t//添加aria2c服务到开机服务systemctl enable aria2c\t//服务自启/lib/systemd/systemd-sysv-install enable aria2cservice aria2c start\t\t//启动服务service aria2c stop\t\t//停止服务service aria2c restart\t\t//重启服务\n进程查找\n1pstree -aup | grep aria2\n可执行文件位置查找\n1whereis aria2c\n设置下载完毕运行脚本\n1on-download-complete=/home/public/Download/1.sh\n在脚本中修改下载后的文件拥有者\n1chown -R nobody /home/public/Download\n\nBitTorrent下载没速度的解决方法1.添加trackerslist2.下载DHT.dat文件\n","dateCreated":"2020-03-28T00:00:00+08:00","dateModified":"2023-03-04T10:51:38+08:00","datePublished":"2020-03-28T00:00:00+08:00","description":"本文介绍了一些开源跨平台的下载器","headline":"跨平台下载器的使用","image":["../10000/Aria2.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/p1/posts/4006/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/p1/posts/4006/","keywords":"Network","thumbnailUrl":"../10000/Aria2.jpg"}</script>
     <meta name="description" content="本文介绍了一些开源跨平台的下载器">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="跨平台下载器的使用">
-<meta property="og:url" content="https://panxiuwen.github.io/posts/4006/index.html">
+<meta property="og:url" content="https://panxiuwen.github.io/p1/posts/4006/index.html">
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文介绍了一些开源跨平台的下载器">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-02-27T10:39:33.756Z">
+<meta property="article:modified_time" content="2023-03-04T02:51:38.048Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Network">
 <meta name="twitter:card" content="summary">
@@ -35,17 +35,17 @@
         
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/assets/images/mitu.jpg"/>
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/posts/4006/cover.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/4006/cover.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4006/../10000/Aria2.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/p1/posts/4006/../10000/Aria2.jpg"/>
     
     
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+<link rel="stylesheet" href="/p1/assets/css/style-wbr5kv5vzqjhy7aesutes9sidvzcl3bbhitvxngx54odvre1xyxgiljm5cou.min.css">
 
     <!--STYLES END-->
     
@@ -73,7 +73,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/"
+            href="/p1/"
             aria-label=""
         >
             Pan&#39;s websit
@@ -84,11 +84,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="打开链接: /#about"
+                aria-label="打开链接: /p1/#about"
             >
         
         
-            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img class="header-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
         </a>
     
@@ -106,10 +106,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/#about"
+                    href="/p1/#about"
                     aria-label="阅读有关作者的更多信息"
                 >
-                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                    <img class="sidebar-profile-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
                 </a>
                 <h4 class="sidebar-profile-name">Sean Pan</h4>
                 
@@ -125,7 +125,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/"
+                            href="/p1/"
                             
                             rel="noopener"
                             title="首页"
@@ -139,7 +139,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-categories"
+                            href="/p1/all-categories"
                             
                             rel="noopener"
                             title="分类"
@@ -153,7 +153,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-tags"
+                            href="/p1/all-tags"
                             
                             rel="noopener"
                             title="标签"
@@ -167,7 +167,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-archives"
+                            href="/p1/all-archives"
                             
                             rel="noopener"
                             title="归档"
@@ -305,7 +305,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/Software/">Software</a>
+    <a class="category-link" href="/p1/categories/Software/">Software</a>
 
 
     
@@ -368,7 +368,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Network/" rel="tag">Network</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Network/" rel="tag">Network</a>
 
             </div>
         
@@ -381,7 +381,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/1002/"
+                    href="/p1/posts/1002/"
                     data-tooltip="随笔"
                     aria-label="上一篇: 随笔"
                 >
@@ -395,7 +395,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2015/"
+                    href="/p1/posts/2015/"
                     data-tooltip="搭建代理服务器"
                     aria-label="下一篇: 搭建代理服务器"
                 >
@@ -411,7 +411,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -422,7 +422,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -457,7 +457,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/1002/"
+                    href="/p1/posts/1002/"
                     data-tooltip="随笔"
                     aria-label="上一篇: 随笔"
                 >
@@ -471,7 +471,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2015/"
+                    href="/p1/posts/2015/"
                     data-tooltip="搭建代理服务器"
                     aria-label="下一篇: 搭建代理服务器"
                 >
@@ -487,7 +487,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -498,7 +498,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -525,7 +525,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img id="about-card-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
             <h4 id="about-card-name">Sean Pan</h4>
         
@@ -552,10 +552,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/p1/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+<script src="/p1/assets/js/script-l5h9qen9be4vrigrbevlkouofvxbojlpmu3agrf6vyrdfuvaamibpmcdf7kz.min.js"></script>
 
 <!--SCRIPTS END-->
 

@@ -13,16 +13,16 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍一些音频视频格式和转换\n\n\n视频格式AV1最有前途的开源免版权费的视频编码格式，目标是解决H265昂贵的专利费用和复杂的专利授权，体积上比HEVC更优秀，可封装为mkv和mp4\nAVC&#x2F;MPEG-4 H264成熟，兼容性强，应用最广泛，但不支持4K以上视频，\nHEVC&#x2F;H265H264的继任者，体积更小，解码难度更大，Chrome系浏览器已由于授权费问题不支持HEVC硬件解码器\nVP9由Google开发的开放格式，免费，运用不广泛，反正笔者没见过\nRMRealNetworks公司开发的格式，时代的眼泪\n\n音频格式有损格式相对于巨大的无损格式，个人认为牺牲了少部分玄学的细节而大大降低了体积有损格式更有应用意义，更便于存储和传输(本人木耳)mp3：应用最广泛的有损音频格式acc：体积和音质都比mp3更优秀ogg：\n\n无损格式PCM：CD的存储的格式，常用格式是PCM、LPCM、WAV、AIFFFLAC：开源无损压缩格式，体积比APE略大但解码速率有优势APE：对等压缩，编码器很久都没更新了\n\nPotPlayer使用开启硬解点击播放界面时间轴右边的S&#x2F;W\n老板键设置-&gt;快捷键-&gt;记得全局打勾\n超分辨率设置-&gt;视频-&gt;分辨率-&gt;立即刷机生效\n倍速播放控制窗口-&gt;播放-&gt;加快\n取消窗口顶置右键-&gt;配置&#x2F;语言&#x2F;其他-&gt;顶置方式-&gt;全屏时总在最前端\n其他设置设置-&gt;基本-&gt;多重处理方式-&gt;单个进程播放设置-&gt;基本-&gt;自动更新-&gt;不使用自动更新设置-&gt;播放-&gt;播放-&gt;播放窗口尺寸设置-&gt;播放-&gt;宽高比-&gt;缩放窗口时保持宽高比\n添加软件解码器下载LAVFilters，一路Next即可\n\nFFmpeg 使用获取软件包，建议配置环境变量提取视频里的音频\n1ffmpeg.exe -i &quot;input.mp4&quot;  -vn -codec copy &quot;out.m4a&quot;\nmp3转m4a，设定码率128k\n1ffmpeg -i &quot;input.mp3&quot; -ab 128k &quot;out.m4a&quot;\nts转mp4\n1ffmpeg -i 2.ts -acodec copy -vcodec copy -absf aac_adtstoasc output.mp4\nmkv互转mp4\n1ffmpeg -i 2.mkv -acodec copy -vcodec copy output.mp4\n\n","dateCreated":"2016-10-18T00:00:00+08:00","dateModified":"2023-03-01T18:22:37+08:00","datePublished":"2016-10-18T00:00:00+08:00","description":"本文介绍一些音频视频格式和转换","headline":"音频与视频格式","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/4007/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/4007/","keywords":"Media","thumbnailUrl":"cover.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍一些音频视频格式和转换\n\n\n视频格式AV1最有前途的开源免版权费的视频编码格式，目标是解决H265昂贵的专利费用和复杂的专利授权，体积上比HEVC更优秀，可封装为mkv和mp4\nAVC&#x2F;MPEG-4 H264成熟，兼容性强，应用最广泛，但不支持4K以上视频，\nHEVC&#x2F;H265H264的继任者，体积更小，解码难度更大，Chrome系浏览器已由于授权费问题不支持HEVC硬件解码器\nVP9由Google开发的开放格式，免费，运用不广泛，反正笔者没见过\nRMRealNetworks公司开发的格式，时代的眼泪\n\n音频格式有损格式相对于巨大的无损格式，个人认为牺牲了少部分玄学的细节而大大降低了体积有损格式更有应用意义，更便于存储和传输(本人木耳)mp3：应用最广泛的有损音频格式acc：体积和音质都比mp3更优秀ogg：\n\n无损格式PCM：CD的存储的格式，常用格式是PCM、LPCM、WAV、AIFFFLAC：开源无损压缩格式，体积比APE略大但解码速率有优势APE：对等压缩，编码器很久都没更新了\n\nPotPlayer使用开启硬解点击播放界面时间轴右边的S&#x2F;W\n老板键设置-&gt;快捷键-&gt;记得全局打勾\n超分辨率设置-&gt;视频-&gt;分辨率-&gt;立即刷机生效\n倍速播放控制窗口-&gt;播放-&gt;加快\n取消窗口顶置右键-&gt;配置&#x2F;语言&#x2F;其他-&gt;顶置方式-&gt;全屏时总在最前端\n其他设置设置-&gt;基本-&gt;多重处理方式-&gt;单个进程播放设置-&gt;基本-&gt;自动更新-&gt;不使用自动更新设置-&gt;播放-&gt;播放-&gt;播放窗口尺寸设置-&gt;播放-&gt;宽高比-&gt;缩放窗口时保持宽高比\n添加软件解码器下载LAVFilters，一路Next即可\n\nFFmpeg 使用获取软件包，建议配置环境变量提取视频里的音频\n1ffmpeg.exe -i &quot;input.mp4&quot;  -vn -codec copy &quot;out.m4a&quot;\nmp3转m4a，设定码率128k\n1ffmpeg -i &quot;input.mp3&quot; -ab 128k &quot;out.m4a&quot;\nts转mp4\n1ffmpeg -i 2.ts -acodec copy -vcodec copy -absf aac_adtstoasc output.mp4\nmkv互转mp4\n1ffmpeg -i 2.mkv -acodec copy -vcodec copy output.mp4\n\n","dateCreated":"2016-10-18T00:00:00+08:00","dateModified":"2023-03-04T10:58:26+08:00","datePublished":"2016-10-18T00:00:00+08:00","description":"本文介绍一些音频视频格式和转换","headline":"音频与视频格式","image":["../10000/Media.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/p1/posts/4007/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/p1/posts/4007/","keywords":"Media","thumbnailUrl":"../10000/Media.jpg"}</script>
     <meta name="description" content="本文介绍一些音频视频格式和转换">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="音频与视频格式">
-<meta property="og:url" content="https://panxiuwen.github.io/posts/4007/index.html">
+<meta property="og:url" content="https://panxiuwen.github.io/p1/posts/4007/index.html">
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文介绍一些音频视频格式和转换">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2016-10-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-03-01T10:22:37.821Z">
+<meta property="article:modified_time" content="2023-03-04T02:58:26.434Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Media">
 <meta name="twitter:card" content="summary">
@@ -35,17 +35,17 @@
         
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/assets/images/mitu.jpg"/>
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/posts/4007/cover.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/4007/cover.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4007/../10000/Media.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/p1/posts/4007/../10000/Media.jpg"/>
     
     
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+<link rel="stylesheet" href="/p1/assets/css/style-wbr5kv5vzqjhy7aesutes9sidvzcl3bbhitvxngx54odvre1xyxgiljm5cou.min.css">
 
     <!--STYLES END-->
     
@@ -73,7 +73,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/"
+            href="/p1/"
             aria-label=""
         >
             Pan&#39;s websit
@@ -84,11 +84,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="打开链接: /#about"
+                aria-label="打开链接: /p1/#about"
             >
         
         
-            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img class="header-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
         </a>
     
@@ -106,10 +106,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/#about"
+                    href="/p1/#about"
                     aria-label="阅读有关作者的更多信息"
                 >
-                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                    <img class="sidebar-profile-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
                 </a>
                 <h4 class="sidebar-profile-name">Sean Pan</h4>
                 
@@ -125,7 +125,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/"
+                            href="/p1/"
                             
                             rel="noopener"
                             title="首页"
@@ -139,7 +139,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-categories"
+                            href="/p1/all-categories"
                             
                             rel="noopener"
                             title="分类"
@@ -153,7 +153,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-tags"
+                            href="/p1/all-tags"
                             
                             rel="noopener"
                             title="标签"
@@ -167,7 +167,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-archives"
+                            href="/p1/all-archives"
                             
                             rel="noopener"
                             title="归档"
@@ -305,7 +305,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/Technology/">Technology</a>
+    <a class="category-link" href="/p1/categories/Technology/">Technology</a>
 
 
     
@@ -358,7 +358,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Media/" rel="tag">Media</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Media/" rel="tag">Media</a>
 
             </div>
         
@@ -371,7 +371,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/1001/"
+                    href="/p1/posts/1001/"
                     data-tooltip="集锦"
                     aria-label="上一篇: 集锦"
                 >
@@ -385,9 +385,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/1009/"
-                    data-tooltip="博主的乐库"
-                    aria-label="下一篇: 博主的乐库"
+                    href="/p1/posts/10000/"
+                    data-tooltip="封面文件夹"
+                    aria-label="下一篇: 封面文件夹"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -401,7 +401,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -412,7 +412,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -447,7 +447,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/1001/"
+                    href="/p1/posts/1001/"
                     data-tooltip="集锦"
                     aria-label="上一篇: 集锦"
                 >
@@ -461,9 +461,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/1009/"
-                    data-tooltip="博主的乐库"
-                    aria-label="下一篇: 博主的乐库"
+                    href="/p1/posts/10000/"
+                    data-tooltip="封面文件夹"
+                    aria-label="下一篇: 封面文件夹"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
@@ -477,7 +477,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -488,7 +488,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -515,7 +515,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img id="about-card-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
             <h4 id="about-card-name">Sean Pan</h4>
         
@@ -542,10 +542,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/p1/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+<script src="/p1/assets/js/script-l5h9qen9be4vrigrbevlkouofvxbojlpmu3agrf6vyrdfuvaamibpmcdf7kz.min.js"></script>
 
 <!--SCRIPTS END-->
 

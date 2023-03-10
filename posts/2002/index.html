@@ -13,16 +13,16 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了Materials Studio在Windows下的安装在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译\n\n\nGaussian的部分参考Gaussian的使用\nMaterials Studio修改第一行的XXX为PC的设备名称\n1SERVER XXX ANY 27000\n无论安装位置在什么地方，在安装完成后复制msi2019.lic到\n1C:\\Program Files (x86)\\BIOVIA\\LicensePack\\share\\data\n使用管理员权限打开License Administrator 2019选择C:\\Program Files (x86)\\BIOVIA\\LicensePack\\share\\data\\msi2019.lic完成注册\n\nGamess CPU编译申请源代码，只需要邮箱，速度很快，建议使用IDM下载PS：GAMESS+LIBCCHEM version September 30, 2022 R2 for NVIDIA GPUs源码大小是151.96MB注意编译完了千万别移动文件安装csh\n1sudo apt-get install csh gfortran\n解压源代码\n1tar -zxvf gamess-current.tar.gz\n配置编译环境\n1./config\n回车linux64仨回车gfortran(有大佬知道啥是armflang吗？)另一个窗口打gfortran –v，我出来的是9.2.1 20191008，但是要输9.2打了发现搞笑的是它居然不认……..，果然查源代码之后发现在哪选到9.1，那就自己加一个喽其实树莓派应该可以安装Atlas(谁知道ArmPL是个啥东东)，感觉安装很麻烦，选了none回车虽然我安装了mpi，但是觉得没啥用，选sockets它说选了yes需要消耗大量内存时间进行编译，我先编译出来了再说，选no下一步是需要嘤伟达的GPU(树莓派哭晕)，选no它说输入的信息都存储在install.info里了，请遵守readme.unix里面的内容先编译ddi\n12cd ddi./compddi\n生成了data_server.x、ddikick.x、ddi_test.x、libddi.a四个文件cd主目录，修改comp，搜索case 9.1: 后面加上9.2接下来的操作建议在screen里操作\n1./ compall\n编译的贼慢，还只能用单核编译，不过倒是跳过了很多东西，睡起来再看吧手动执行\n1./lked gamess 00\ngamess目录里建立src目录rungms文件作如下修改：把set TARGET&#x3D;sockets下面的三行改为\n123set SCR=/app/gamess/scrset USERSCR=/app/gamess/scrset GMSPATH=/app/gamess\n\nGamess GPU编译(已弃坑)安装csh\n1sudo apt-get install csh\n安装nvblas\n1apt-get install libnvblas11\n安装(NVIDIA HPC SDK)[https://developer.nvidia.com/nvidia-hpc-sdk-downloads]\n1234curl https://developer.download.nvidia.com/hpc-sdk/ubuntu/DEB-GPG-KEY-NVIDIA-HPC-SDK | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-hpcsdk-archive-keyring.gpgecho &#x27;deb [signed-by=/usr/share/keyrings/nvidia-hpcsdk-archive-keyring.gpg] https://developer.download.nvidia.com/hpc-sdk/ubuntu/amd64 /&#x27; | sudo tee /etc/apt/sources.list.d/nvhpc.listsudo apt-get update -ysudo apt-get install -y nvhpc-22-8\n如果报错\n1The following signatures couldn&#x27;t be verified because the public key is not available: NO_PUBKEY F338EA0E0105AB24\n执行\n1sudo gpg --keyserver https://developer.download.nvidia.cn/hpc-sdk/ubuntu/amd64 --recv-keys F338EA0E0105AB24\n再出错可能需要梯子解压源代码\n1tar -zxvf gamess-current.tar.gz\n配置编译环境\n1./config\n回车linux64仨回车nvfortrandefaultnvblas\nPyQuante解压源代码\n1tar -zxvf PyQuante-1.6.5.tar.gz\n安装Python开发包\n1apt-get install python-dev\n编译Python源代码\n1python setup.py bdist_wheel\n(这个setup.py有问题，开头少了个from setuptools import setup)\n1Pip install PyQuante-1.6.5-cp27-cp27mu-linux_aarch64.whl\n输入python进入交互界面尝试运行\n1from PyQuante.Molecule import Molecule\n输入氢原子\n1h2 = Molecule(&#x27;h2&#x27;,[(1,(0,0,0)),(1,(1.4,0,0))])\n引入HF函数\n12from PyQuante.hartree_fock import rhfen,orbe,orbs = rhf(h2)\n计算水分子的能量\n1print &quot;HF Energy = &quot;,en\n完美附加安装openbabel\n1apt-get install swig openbabel python-openbabel\n测试python-openbabel\n1import openbabel\n还有clibint，不知道怎么安装参考Pyquante项目\n\nPySCF先下载编译libcint\n1234unzip libcint-3.0.20.zipmkdir build; cd buildcmake -DBUILD_SHARED_LIBS=0 ..make install\n在&#x2F;usr&#x2F;local&#x2F;lib里会多出libcint两个文件两个软连接配置环境变量\n1export PYSCF_INC_DIR=/path/to/libcint:/usr/local/lib\n下载编译libxcCd到目录后make还有Python的库，值得安装\n1pylibxc-5.0.0-cp37-cp37m-linux_aarch64.whl\n这个也是Octopus的最核心的库\n1234tar -zxvf pyscf-v1.7.1.tar.gzcd pyscfpython3 setup.py bdist_wheelpip3 install pyscf-1.7.1-cp37-cp37m-linux_aarch64.whl\n运行测试\n1import pyscf\n\nAutodock1tar -zxvf autodocksuite-4.2.6-src.tar.gz\n解压之后得到src文件夹，里面有dock和GUIcd进去之后\n1./configure\n开sreen后make，完了make check，然后make install，这样&#x2F;usr&#x2F;local&#x2F;bin会多俩文件\n\nGromacs先在文档里下载源代码\n安装fftw\n1apt-get install libfftw3-single3 libfftw3-long3 libfftw3-double3 libfftw3-3 libfftw3-bin libfftw3-dev\n生成Gromacs编译文件\n12345tar -zxvf gromacs-2020.2.tar.gzcd /app/gromacs-2020.2mkdir buildcd buildcmake ..\n其实包括官网的教程会在后面加一堆参数，其实不用，它会自动检查，非常方便。检查的内容包括编译器，cuda，opencl，fftw3，还能检测到ARM_NEON\n开始编译\n12make -j4make check\n安装软件\n1make install\n文件就被安装在了&#x2F;usr&#x2F;local&#x2F;gromacs\n建议写到.bashrc里\n1source /usr/local/gromacs/bin/GMXRC\n运行完了测试一下\n1gmx -version\n\nCastep1.安装gfortran\n1apt-get install gfortran\n2.安装liblapacke\n1apt-get install liblapacke-dev\n3.开始编译\n1make -j4","dateCreated":"2020-06-25T00:00:00+08:00","dateModified":"2022-10-29T09:52:07+08:00","datePublished":"2020-06-25T00:00:00+08:00","description":"本文介绍了Materials Studio在Windows下的安装在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译","headline":"使用量子化学软件","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2002/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2002/","keywords":"Linux, Research","thumbnailUrl":"cover.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了Materials Studio在Windows下的安装在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译\n\n\n\n\nGaussian的部分参考Gaussian的使用\nMaterials Studio修改第一行的XXX为PC的设备名称\n1SERVER XXX ANY 27000\n无论安装位置在什么地方，在安装完成后复制msi2019.lic到\n1C:\\Program Files (x86)\\BIOVIA\\LicensePack\\share\\data\n使用管理员权限打开License Administrator 2019选择C:\\Program Files (x86)\\BIOVIA\\LicensePack\\share\\data\\msi2019.lic完成注册\n\nGamess CPU编译申请源代码，只需要邮箱，速度很快，建议使用IDM下载PS：GAMESS+LIBCCHEM version September 30, 2022 R2 for NVIDIA GPUs源码大小是151.96MB注意编译完了千万别移动文件安装csh\n1sudo apt-get install csh gfortran\n解压源代码\n1tar -zxvf gamess-current.tar.gz\n配置编译环境\n1./config\n回车linux64仨回车gfortran(有大佬知道啥是armflang吗？)另一个窗口打gfortran –v，我出来的是9.2.1 20191008，但是要输9.2打了发现搞笑的是它居然不认……..，果然查源代码之后发现在哪选到9.1，那就自己加一个喽其实树莓派应该可以安装Atlas(谁知道ArmPL是个啥东东)，感觉安装很麻烦，选了none回车虽然我安装了mpi，但是觉得没啥用，选sockets它说选了yes需要消耗大量内存时间进行编译，我先编译出来了再说，选no下一步是需要嘤伟达的GPU(树莓派哭晕)，选no它说输入的信息都存储在install.info里了，请遵守readme.unix里面的内容先编译ddi\n12cd ddi./compddi\n生成了data_server.x、ddikick.x、ddi_test.x、libddi.a四个文件cd主目录，修改comp，搜索case 9.1: 后面加上9.2接下来的操作建议在screen里操作\n1./ compall\n编译的贼慢，还只能用单核编译，不过倒是跳过了很多东西，睡起来再看吧手动执行\n1./lked gamess 00\ngamess目录里建立src目录rungms文件作如下修改：把set TARGET&#x3D;sockets下面的三行改为\n123set SCR=/app/gamess/scrset USERSCR=/app/gamess/scrset GMSPATH=/app/gamess\n\nGamess GPU编译(已弃坑)安装csh\n1sudo apt-get install csh\n安装nvblas\n1apt-get install libnvblas11\n安装(NVIDIA HPC SDK)[https://developer.nvidia.com/nvidia-hpc-sdk-downloads]\n1234curl https://developer.download.nvidia.com/hpc-sdk/ubuntu/DEB-GPG-KEY-NVIDIA-HPC-SDK | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-hpcsdk-archive-keyring.gpgecho &#x27;deb [signed-by=/usr/share/keyrings/nvidia-hpcsdk-archive-keyring.gpg] https://developer.download.nvidia.com/hpc-sdk/ubuntu/amd64 /&#x27; | sudo tee /etc/apt/sources.list.d/nvhpc.listsudo apt-get update -ysudo apt-get install -y nvhpc-22-8\n如果报错\n1The following signatures couldn&#x27;t be verified because the public key is not available: NO_PUBKEY F338EA0E0105AB24\n执行\n1sudo gpg --keyserver https://developer.download.nvidia.cn/hpc-sdk/ubuntu/amd64 --recv-keys F338EA0E0105AB24\n再出错可能需要梯子解压源代码\n1tar -zxvf gamess-current.tar.gz\n配置编译环境\n1./config\n回车linux64仨回车nvfortrandefaultnvblas\nPyQuante解压源代码\n1tar -zxvf PyQuante-1.6.5.tar.gz\n安装Python开发包\n1apt-get install python-dev\n编译Python源代码\n1python setup.py bdist_wheel\n(这个setup.py有问题，开头少了个from setuptools import setup)\n1Pip install PyQuante-1.6.5-cp27-cp27mu-linux_aarch64.whl\n输入python进入交互界面尝试运行\n1from PyQuante.Molecule import Molecule\n输入氢原子\n1h2 = Molecule(&#x27;h2&#x27;,[(1,(0,0,0)),(1,(1.4,0,0))])\n引入HF函数\n12from PyQuante.hartree_fock import rhfen,orbe,orbs = rhf(h2)\n计算水分子的能量\n1print &quot;HF Energy = &quot;,en\n完美附加安装openbabel\n1apt-get install swig openbabel python-openbabel\n测试python-openbabel\n1import openbabel\n还有clibint，不知道怎么安装参考Pyquante项目\n\nPySCF先下载编译libcint\n1234unzip libcint-3.0.20.zipmkdir build; cd buildcmake -DBUILD_SHARED_LIBS=0 ..make install\n在&#x2F;usr&#x2F;local&#x2F;lib里会多出libcint两个文件两个软连接配置环境变量\n1export PYSCF_INC_DIR=/path/to/libcint:/usr/local/lib\n下载编译libxcCd到目录后make还有Python的库，值得安装\n1pylibxc-5.0.0-cp37-cp37m-linux_aarch64.whl\n这个也是Octopus的最核心的库\n1234tar -zxvf pyscf-v1.7.1.tar.gzcd pyscfpython3 setup.py bdist_wheelpip3 install pyscf-1.7.1-cp37-cp37m-linux_aarch64.whl\n运行测试\n1import pyscf\n\nAutodock1tar -zxvf autodocksuite-4.2.6-src.tar.gz\n解压之后得到src文件夹，里面有dock和GUIcd进去之后\n1./configure\n开sreen后make，完了make check，然后make install，这样&#x2F;usr&#x2F;local&#x2F;bin会多俩文件\n\nGromacs先在文档里下载源代码\n安装fftw\n1apt-get install libfftw3-single3 libfftw3-long3 libfftw3-double3 libfftw3-3 libfftw3-bin libfftw3-dev\n生成Gromacs编译文件\n12345tar -zxvf gromacs-2020.2.tar.gzcd /app/gromacs-2020.2mkdir buildcd buildcmake ..\n其实包括官网的教程会在后面加一堆参数，其实不用，它会自动检查，非常方便。检查的内容包括编译器，cuda，opencl，fftw3，还能检测到ARM_NEON\n开始编译\n12make -j4make check\n安装软件\n1make install\n文件就被安装在了&#x2F;usr&#x2F;local&#x2F;gromacs\n建议写到.bashrc里\n1source /usr/local/gromacs/bin/GMXRC\n运行完了测试一下\n1gmx -version\n\nCastep1.安装gfortran\n1apt-get install gfortran\n2.安装liblapacke\n1apt-get install liblapacke-dev\n3.开始编译\n1make -j4","dateCreated":"2020-06-25T00:00:00+08:00","dateModified":"2023-03-10T08:42:50+08:00","datePublished":"2020-06-25T00:00:00+08:00","description":"本文介绍了Materials Studio在Windows下的安装在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译","headline":"使用量子化学软件","image":["../10000/QuantumChemistry.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/p1/posts/2002/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/p1/posts/2002/","keywords":"Linux, Research","thumbnailUrl":"../10000/QuantumChemistry.jpg"}</script>
     <meta name="description" content="本文介绍了Materials Studio在Windows下的安装在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="使用量子化学软件">
-<meta property="og:url" content="https://panxiuwen.github.io/posts/2002/index.html">
+<meta property="og:url" content="https://panxiuwen.github.io/p1/posts/2002/index.html">
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文介绍了Materials Studio在Windows下的安装在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-10-29T01:52:07.000Z">
+<meta property="article:modified_time" content="2023-03-10T00:42:50.558Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Research">
@@ -36,17 +36,17 @@
         
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/assets/images/mitu.jpg"/>
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/posts/2002/cover.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2002/cover.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2002/../10000/QuantumChemistry.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/p1/posts/2002/../10000/QuantumChemistry.jpg"/>
     
     
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+<link rel="stylesheet" href="/p1/assets/css/style-wbr5kv5vzqjhy7aesutes9sidvzcl3bbhitvxngx54odvre1xyxgiljm5cou.min.css">
 
     <!--STYLES END-->
     
@@ -74,7 +74,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/"
+            href="/p1/"
             aria-label=""
         >
             Pan&#39;s websit
@@ -85,11 +85,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="打开链接: /#about"
+                aria-label="打开链接: /p1/#about"
             >
         
         
-            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img class="header-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
         </a>
     
@@ -107,10 +107,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/#about"
+                    href="/p1/#about"
                     aria-label="阅读有关作者的更多信息"
                 >
-                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                    <img class="sidebar-profile-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
                 </a>
                 <h4 class="sidebar-profile-name">Sean Pan</h4>
                 
@@ -126,7 +126,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/"
+                            href="/p1/"
                             
                             rel="noopener"
                             title="首页"
@@ -140,7 +140,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-categories"
+                            href="/p1/all-categories"
                             
                             rel="noopener"
                             title="分类"
@@ -154,7 +154,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-tags"
+                            href="/p1/all-tags"
                             
                             rel="noopener"
                             title="标签"
@@ -168,7 +168,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-archives"
+                            href="/p1/all-archives"
                             
                             rel="noopener"
                             title="归档"
@@ -306,7 +306,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/Research/">Research</a>
+    <a class="category-link" href="/p1/categories/Research/">Research</a>
 
 
     
@@ -320,6 +320,8 @@
         <div class="main-content-wrap">
             <p>本文介绍了Materials Studio在Windows下的安装<br>在Linux下Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译</p>
 <span id="more"></span>
+<hr>
+<h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Materials-Studio"><span class="toc-text">Materials Studio</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gamess-CPU%E7%BC%96%E8%AF%91"><span class="toc-text">Gamess CPU编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gamess-GPU%E7%BC%96%E8%AF%91-%E5%B7%B2%E5%BC%83%E5%9D%91"><span class="toc-text">Gamess GPU编译(已弃坑)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PyQuante"><span class="toc-text">PyQuante</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PySCF"><span class="toc-text">PySCF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Autodock"><span class="toc-text">Autodock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gromacs"><span class="toc-text">Gromacs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Castep"><span class="toc-text">Castep</span></a></li></ol>
 <hr>
 <p>Gaussian的部分参考<a href="/posts/2021/">Gaussian的使用</a></p>
 <h3 id="Materials-Studio"><a href="#Materials-Studio" class="headerlink" title="Materials Studio"></a>Materials Studio</h3><p>修改第一行的XXX为PC的设备名称</p>
@@ -428,7 +430,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Linux/" rel="tag">Linux</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/Research/" rel="tag">Research</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Linux/" rel="tag">Linux</a> <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Research/" rel="tag">Research</a>
 
             </div>
         
@@ -441,7 +443,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2000/"
+                    href="/p1/posts/2000/"
                     data-tooltip="网页传输和原理"
                     aria-label="上一篇: 网页传输和原理"
                 >
@@ -455,7 +457,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/1002/"
+                    href="/p1/posts/1002/"
                     data-tooltip="随笔"
                     aria-label="下一篇: 随笔"
                 >
@@ -471,7 +473,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -482,7 +484,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -517,7 +519,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2000/"
+                    href="/p1/posts/2000/"
                     data-tooltip="网页传输和原理"
                     aria-label="上一篇: 网页传输和原理"
                 >
@@ -531,7 +533,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/1002/"
+                    href="/p1/posts/1002/"
                     data-tooltip="随笔"
                     aria-label="下一篇: 随笔"
                 >
@@ -547,7 +549,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -558,7 +560,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -585,7 +587,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img id="about-card-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
             <h4 id="about-card-name">Sean Pan</h4>
         
@@ -612,10 +614,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/p1/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+<script src="/p1/assets/js/script-l5h9qen9be4vrigrbevlkouofvxbojlpmu3agrf6vyrdfuvaamibpmcdf7kz.min.js"></script>
 
 <!--SCRIPTS END-->
 

@@ -13,16 +13,16 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了TensorFlow等机器学习相关的笔记\n\n\nWin下CUDA驱动的安装先弄清楚机器学习框架所需求的cuda，cudnn的版本，查找CUDA和GPU驱动的对应关系，别下错了先安装CUDA，安装完了下载对应版本的cuDNN，解压后覆盖到”C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.6”\n\nDebian下CUDA驱动安装禁用Nouveau\n1nano /etc/modprobe.d/blacklist-nouveau.conf\n添加内容\n12blacklist nouveauoptions nouveau modeset=0\n生效\n12sudo update-initramfs -ureboot\n安装依赖\n1apt-get install software-properties-common\n安装cuda\n12345sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/3bf863cc.pubsudo add-apt-repository &quot;deb https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/ /&quot;sudo add-apt-repository contribsudo apt-get updatesudo apt-get -y install cuda-11-6\nPS：安装完cuda驱动就不用再安装GPU驱动了\n\nPytorch相关一般安装在Pytorch官方复制命令行下载，因为torch也有其他组件需要GPU版，很显然命令行安装更方便\n1pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116\n旧版本安装参考INSTALLING PREVIOUS VERSIONS OF PYTORCH\n12pip install torch==1.8.1+cu101 torchvision==0.9.1+cu101 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.htmlpip install pytorch_lightning==1.6.0\nN卡测试12345import torchprint(torch.cuda.is_available())print(torch.cuda.get_device_name())print(torch.backends.cudnn.is_available())print(torch.backends.cudnn.version())\n\nTensorFlow下载GPU版whl时注意指令集、cuda、cudnn、Python版本，一个都不能错安装CUDA驱动、2.解压Cudnn驱动后覆盖到CUDA目录arm64注意指令级arch64和Python版本Tensorflow源码下载官方编译方法安装\n1pip install tensorflow-gpu==1.14.0\n测试\n1import tensorflow\n卸载\n1pip uninstall tensorflow\n\nCaptcha-trainer1.网站gitee 、github2.下载captcha-trainer仓库，运行app.py，调参数训练出现tensorflow\\python\\framework\\dtypes.py:516: FutureWarning这种情况需要降级\n1pip install numpy==1.16.0\n使用tensorboard\n1tensorboard --logdir=./C:\\Users\\Sean\\Desktop\\TF\\logs\n浏览器打开内置web服务器\n1http://desktop-nmdgpti:6006/\nkeras&#x3D;&#x3D;2.2.5\n","dateCreated":"2019-04-01T00:00:00+08:00","dateModified":"2023-02-16T09:21:54+08:00","datePublished":"2019-04-01T00:00:00+08:00","description":"本文介绍了TensorFlow等机器学习相关的笔记","headline":"机器学习相关笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/4012/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/4012/","keywords":"Intelligence"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了TensorFlow等机器学习相关的笔记\n\n\n\n\nWin下CUDA驱动的安装先弄清楚机器学习框架所需求的cuda，cudnn的版本，查找CUDA和GPU驱动的对应关系，别下错了先安装CUDA，安装完了下载对应版本的cuDNN，解压后覆盖到”C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.6”\n\nDebian下CUDA驱动安装禁用Nouveau\n1nano /etc/modprobe.d/blacklist-nouveau.conf\n添加内容\n12blacklist nouveauoptions nouveau modeset=0\n生效\n12sudo update-initramfs -ureboot\n安装依赖\n1apt-get install software-properties-common\n安装cuda\n12345sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/3bf863cc.pubsudo add-apt-repository &quot;deb https://developer.download.nvidia.com/compute/cuda/repos/debian11/x86_64/ /&quot;sudo add-apt-repository contribsudo apt-get updatesudo apt-get -y install cuda-11-6\nPS：安装完cuda驱动就不用再安装GPU驱动了\n\nPytorch相关一般安装在Pytorch官方复制命令行下载，因为torch也有其他组件需要GPU版，很显然命令行安装更方便\n1pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116\n旧版本安装参考INSTALLING PREVIOUS VERSIONS OF PYTORCH\n12pip install torch==1.8.1+cu101 torchvision==0.9.1+cu101 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.htmlpip install pytorch_lightning==1.6.0\nN卡测试12345import torchprint(torch.cuda.is_available())print(torch.cuda.get_device_name())print(torch.backends.cudnn.is_available())print(torch.backends.cudnn.version())\n\nTensorFlow下载GPU版whl时注意指令集、cuda、cudnn、Python版本，一个都不能错安装CUDA驱动、2.解压Cudnn驱动后覆盖到CUDA目录arm64注意指令级arch64和Python版本Tensorflow源码下载官方编译方法安装\n1pip install tensorflow-gpu==1.14.0\n测试\n1import tensorflow\n卸载\n1pip uninstall tensorflow\n\nCaptcha-trainer1.网站gitee 、github2.下载captcha-trainer仓库，运行app.py，调参数训练出现tensorflow\\python\\framework\\dtypes.py:516: FutureWarning这种情况需要降级\n1pip install numpy==1.16.0\n使用tensorboard\n1tensorboard --logdir=./C:\\Users\\Sean\\Desktop\\TF\\logs\n浏览器打开内置web服务器\n1http://desktop-nmdgpti:6006/\nkeras&#x3D;&#x3D;2.2.5\n","dateCreated":"2019-04-01T00:00:00+08:00","dateModified":"2023-03-10T08:45:51+08:00","datePublished":"2019-04-01T00:00:00+08:00","description":"本文介绍了TensorFlow等机器学习相关的笔记","headline":"机器学习相关笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/p1/posts/4012/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/p1/posts/4012/","keywords":"Intelligence"}</script>
     <meta name="description" content="本文介绍了TensorFlow等机器学习相关的笔记">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="机器学习相关笔记">
-<meta property="og:url" content="https://panxiuwen.github.io/posts/4012/index.html">
+<meta property="og:url" content="https://panxiuwen.github.io/p1/posts/4012/index.html">
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文介绍了TensorFlow等机器学习相关的笔记">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-03-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-02-16T01:21:54.000Z">
+<meta property="article:modified_time" content="2023-03-10T00:45:51.738Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Intelligence">
 <meta name="twitter:card" content="summary">
@@ -35,14 +35,14 @@
         
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/assets/images/mitu.jpg"/>
     
     
     
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+<link rel="stylesheet" href="/p1/assets/css/style-wbr5kv5vzqjhy7aesutes9sidvzcl3bbhitvxngx54odvre1xyxgiljm5cou.min.css">
 
     <!--STYLES END-->
     
@@ -70,7 +70,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/"
+            href="/p1/"
             aria-label=""
         >
             Pan&#39;s websit
@@ -81,11 +81,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="打开链接: /#about"
+                aria-label="打开链接: /p1/#about"
             >
         
         
-            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img class="header-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
         </a>
     
@@ -103,10 +103,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/#about"
+                    href="/p1/#about"
                     aria-label="阅读有关作者的更多信息"
                 >
-                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                    <img class="sidebar-profile-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
                 </a>
                 <h4 class="sidebar-profile-name">Sean Pan</h4>
                 
@@ -122,7 +122,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/"
+                            href="/p1/"
                             
                             rel="noopener"
                             title="首页"
@@ -136,7 +136,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-categories"
+                            href="/p1/all-categories"
                             
                             rel="noopener"
                             title="分类"
@@ -150,7 +150,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-tags"
+                            href="/p1/all-tags"
                             
                             rel="noopener"
                             title="标签"
@@ -164,7 +164,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-archives"
+                            href="/p1/all-archives"
                             
                             rel="noopener"
                             title="归档"
@@ -302,7 +302,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/Intelligence/">Intelligence</a>
+    <a class="category-link" href="/p1/categories/Intelligence/">Intelligence</a>
 
 
     
@@ -316,6 +316,8 @@
         <div class="main-content-wrap">
             <p>本文介绍了TensorFlow等机器学习相关的笔记</p>
 <span id="more"></span>
+<hr>
+<h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Win%E4%B8%8BCUDA%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">Win下CUDA驱动的安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Debian%E4%B8%8BCUDA%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85"><span class="toc-text">Debian下CUDA驱动安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pytorch%E7%9B%B8%E5%85%B3"><span class="toc-text">Pytorch相关</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E8%88%AC%E5%AE%89%E8%A3%85"><span class="toc-text">一般安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A7%E7%89%88%E6%9C%AC%E5%AE%89%E8%A3%85"><span class="toc-text">旧版本安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#N%E5%8D%A1%E6%B5%8B%E8%AF%95"><span class="toc-text">N卡测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TensorFlow"><span class="toc-text">TensorFlow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Captcha-trainer"><span class="toc-text">Captcha-trainer</span></a></li></ol>
 <hr>
 <h3 id="Win下CUDA驱动的安装"><a href="#Win下CUDA驱动的安装" class="headerlink" title="Win下CUDA驱动的安装"></a>Win下CUDA驱动的安装</h3><p>先弄清楚机器学习框架所需求的cuda，cudnn的版本，查找<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html">CUDA和GPU驱动的对应关系</a>，别下错了<br>先安装<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA</a>，安装完了下载对应版本的<a target="_blank" rel="noopener" href="https://developer.nvidia.com/rdp/cudnn-archive">cuDNN</a>，解压后覆盖到”C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.6”</p>
 <hr>
@@ -362,7 +364,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Intelligence/" rel="tag">Intelligence</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Intelligence/" rel="tag">Intelligence</a>
 
             </div>
         
@@ -375,7 +377,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/3005/"
+                    href="/p1/posts/3005/"
                     data-tooltip="想象中的论文答辩和真实的论文答辩，哈哈哈哈哈哈……"
                     aria-label="上一篇: 想象中的论文答辩和真实的论文答辩，哈哈哈哈哈哈……"
                 >
@@ -389,7 +391,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/1008/"
+                    href="/p1/posts/1008/"
                     data-tooltip="常备软件"
                     aria-label="下一篇: 常备软件"
                 >
@@ -405,7 +407,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -416,7 +418,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -451,7 +453,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/3005/"
+                    href="/p1/posts/3005/"
                     data-tooltip="想象中的论文答辩和真实的论文答辩，哈哈哈哈哈哈……"
                     aria-label="上一篇: 想象中的论文答辩和真实的论文答辩，哈哈哈哈哈哈……"
                 >
@@ -465,7 +467,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/1008/"
+                    href="/p1/posts/1008/"
                     data-tooltip="常备软件"
                     aria-label="下一篇: 常备软件"
                 >
@@ -481,7 +483,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -492,7 +494,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -519,7 +521,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img id="about-card-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
             <h4 id="about-card-name">Sean Pan</h4>
         
@@ -546,10 +548,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/p1/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+<script src="/p1/assets/js/script-l5h9qen9be4vrigrbevlkouofvxbojlpmu3agrf6vyrdfuvaamibpmcdf7kz.min.js"></script>
 
 <!--SCRIPTS END-->
 

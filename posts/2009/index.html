@@ -13,16 +13,16 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"OpenWrt是基于Linux的路由器固件，允许用户安装和运行应用程序来满足用户的需求。本文介绍了路由器刷入OpenWRT后的一些初始化操作\n\n初始化改拨号\n12删除原有WAN_6,否则无ipv6地址直接改DHCP为PPPoE\n改主题：\n1opkg install luci-theme-material\n改语言：\n1opkg install luci-i18n-base-zh-cn\nupnp支持：\n1opkg install luci-app-upnp\nWOL支持，注意关闭快速启动：\n1opkg install luci-app-wol etherwake\n在Firewall - Port Forwards 里设置端口映射或者端口转发\nzerotier支持安装：\n12opkg install zerotiernano /etc/config/zerotier\n改配置\n12option enabled &#x27;1&#x27;list join &#x27;d5e5fb6537ebc5f5&#x27;\n运行命令完成配置\n12/etc/init.d/zerotier enable/etc/init.d/zerotier start\n下面的文件服务器和Python脚本不建议mips使用,tinyproxy不建议小内存使用luci显示挂载点：\n1opkg install block-mount\n\n查看文件夹大小\n1du -h -d 1\n寻找进程：\n1pgrep -f aria2\n查看端口占用：\n1netstat -lnp|awk &#x27;BEGIN&#123;prt=&quot;:2222$&quot;&#125;&#123;if ($4 ~ prt) print $0&#125;&#x27;\n寻找aria2c\n1find ./ -name aria2c\n设置uhttpd\n123456nano /etc/config/uhttpdconfig uhttpd &#x27;webset&#x27;        list listen_http &#x27;0.0.0.0:80&#x27;        option home &#x27;mnt/sda4/www/sean&#x27;        option rfc1918_filter 1/etc/init.d/uhttpd restart\n管理界面：\t 192.168.1.1:8888AriaNg：\t\t192.168.1.1:8887pi-dash：\t192.168.1.1:8889Webset：\t\t0.0.0.0:80\n挂载USB，首先将U盘使用Diskgen格式化为EXT4\n123456789101112opkg updateopkg install kmod-usb-storagels -l /dev/sd*block info | grep &quot;/dev/sd&quot; \\\\回显/dev/sda1: UUID=&quot;2eb39413-83a4-4bae-b148-34fb03a94e89&quot; VERSION=&quot;1.0&quot; TYPE=&quot;ext4&quot;就成功了opkg install e2fsprogsopkg install kmod-fs-ext4mkfs.ext4 /dev/sda1block detect &gt; /etc/config/fstabuci set fstab.@mount[0].enabled=&#x27;1&#x27;uci commit\n开启ftp\n1opkg install vsftpd\n安装到U盘\n12nano /etc/opkg.conf 添加dest usb /mnt/sda4opkg install XXX -d usb\n安装Python3\n12345678910opkg install python3-base -d usbopkg install python3-pip -d usbopkg install python3 -d usbopkg install gcc make -d usbopkg install screennano /etc/profileexport PATH=/mnt/sda4/usr/binexport C_INCLUDE_PATH=&quot;/mnt/sda4/usr/include&quot;export LD_LIBRARY_PATH=&quot;/mnt/sda4/usr/lib&quot;python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple  --upgrade pip\n配制aira2\n12345aria2c --conf-path=/mnt/sda4/etc/config/aria2.conf -Dconfig uhttpd &#x27;AriaNg&#x27;        list listen_http &#x27;192.168.1.1:8889&#x27;        option home &#x27;mnt/sda4/www/AriaNg&#x27;        option index_page index.php 改为0\npyngrok代理\n1/mnt/sda4/app/pyngrok/demo/sunny.py 153941140150\n\n库相关USB打印机\n1234567opkg install luci-app-p910ndConfiguring p910nd.Configuring luci-compat.Configuring luci-app-p910nd.opkg install kmod-usb-printerConfiguring kmod-usb-printer.\nWOL\n12345678opkg install luci-app-wol etherwakeInstalling luci-app-wol (git-21.163.62608-7d7df07) to root...Downloading https://downloads.openwrt.org/releases/21.02.1/packages/mipsel_24kc/luci/luci-app-wol_git-21.163.62608-7d7df07_all.ipkInstalling etherwake (1.09-5) to root...Downloading https://downloads.openwrt.org/releases/21.02.1/packages/mipsel_24kc/packages/etherwake_1.09-5_mipsel_24kc.ipkPackage etherwake (1.09-5) installed in root is up to date.Configuring etherwake.Configuring luci-app-wol.\n相关链接Table of Hardware：OpenWRT官方支持硬件列表小婉儿数码：有小米系的OpenWRT固件\n","dateCreated":"2018-12-13T00:00:00+08:00","dateModified":"2022-09-24T13:00:29+08:00","datePublished":"2018-12-13T00:00:00+08:00","description":"OpenWrt是基于Linux的路由器固件，允许用户安装和运行应用程序来满足用户的需求。本文介绍了路由器刷入OpenWRT后的一些初始化操作","headline":"OpenWRT初始化","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2009/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2009/","keywords":"System, Router","thumbnailUrl":"cover.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"OpenWrt是基于Linux的路由器固件，允许用户安装和运行应用程序来满足用户的需求。本文介绍了路由器刷入OpenWRT后的一些初始化操作\n\n初始化改拨号\n12删除原有WAN_6,否则无ipv6地址直接改DHCP为PPPoE\n改主题：\n1opkg install luci-theme-material\n改语言：\n1opkg install luci-i18n-base-zh-cn\nupnp支持：\n1opkg install luci-app-upnp\nWOL支持，注意关闭快速启动：\n1opkg install luci-app-wol etherwake\n在Firewall - Port Forwards 里设置端口映射或者端口转发\nzerotier支持安装：\n12opkg install zerotiernano /etc/config/zerotier\n改配置\n12option enabled &#x27;1&#x27;list join &#x27;d5e5fb6537ebc5f5&#x27;\n运行命令完成配置\n12/etc/init.d/zerotier enable/etc/init.d/zerotier start\n下面的文件服务器和Python脚本不建议mips使用,tinyproxy不建议小内存使用luci显示挂载点：\n1opkg install block-mount\n\n查看文件夹大小\n1du -h -d 1\n寻找进程：\n1pgrep -f aria2\n查看端口占用：\n1netstat -lnp|awk &#x27;BEGIN&#123;prt=&quot;:2222$&quot;&#125;&#123;if ($4 ~ prt) print $0&#125;&#x27;\n寻找aria2c\n1find ./ -name aria2c\n设置uhttpd\n123456nano /etc/config/uhttpdconfig uhttpd &#x27;webset&#x27;        list listen_http &#x27;0.0.0.0:80&#x27;        option home &#x27;mnt/sda4/www/sean&#x27;        option rfc1918_filter 1/etc/init.d/uhttpd restart\n管理界面：\t 192.168.1.1:8888AriaNg：\t\t192.168.1.1:8887pi-dash：\t192.168.1.1:8889Webset：\t\t0.0.0.0:80\n挂载USB，首先将U盘使用Diskgen格式化为EXT4\n123456789101112opkg updateopkg install kmod-usb-storagels -l /dev/sd*block info | grep &quot;/dev/sd&quot; \\\\回显/dev/sda1: UUID=&quot;2eb39413-83a4-4bae-b148-34fb03a94e89&quot; VERSION=&quot;1.0&quot; TYPE=&quot;ext4&quot;就成功了opkg install e2fsprogsopkg install kmod-fs-ext4mkfs.ext4 /dev/sda1block detect &gt; /etc/config/fstabuci set fstab.@mount[0].enabled=&#x27;1&#x27;uci commit\n开启ftp\n1opkg install vsftpd\n安装到U盘\n12nano /etc/opkg.conf 添加dest usb /mnt/sda4opkg install XXX -d usb\n安装Python3\n12345678910opkg install python3-base -d usbopkg install python3-pip -d usbopkg install python3 -d usbopkg install gcc make -d usbopkg install screennano /etc/profileexport PATH=/mnt/sda4/usr/binexport C_INCLUDE_PATH=&quot;/mnt/sda4/usr/include&quot;export LD_LIBRARY_PATH=&quot;/mnt/sda4/usr/lib&quot;python3 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple  --upgrade pip\n配制aira2\n12345aria2c --conf-path=/mnt/sda4/etc/config/aria2.conf -Dconfig uhttpd &#x27;AriaNg&#x27;        list listen_http &#x27;192.168.1.1:8889&#x27;        option home &#x27;mnt/sda4/www/AriaNg&#x27;        option index_page index.php 改为0\npyngrok代理\n1/mnt/sda4/app/pyngrok/demo/sunny.py 153941140150\n\n库相关USB打印机\n1234567opkg install luci-app-p910ndConfiguring p910nd.Configuring luci-compat.Configuring luci-app-p910nd.opkg install kmod-usb-printerConfiguring kmod-usb-printer.\nWOL\n12345678opkg install luci-app-wol etherwakeInstalling luci-app-wol (git-21.163.62608-7d7df07) to root...Downloading https://downloads.openwrt.org/releases/21.02.1/packages/mipsel_24kc/luci/luci-app-wol_git-21.163.62608-7d7df07_all.ipkInstalling etherwake (1.09-5) to root...Downloading https://downloads.openwrt.org/releases/21.02.1/packages/mipsel_24kc/packages/etherwake_1.09-5_mipsel_24kc.ipkPackage etherwake (1.09-5) installed in root is up to date.Configuring etherwake.Configuring luci-app-wol.\n相关链接Table of Hardware：OpenWRT官方支持硬件列表小婉儿数码：有小米系的OpenWRT固件\n","dateCreated":"2018-12-13T00:00:00+08:00","dateModified":"2023-03-04T11:00:04+08:00","datePublished":"2018-12-13T00:00:00+08:00","description":"OpenWrt是基于Linux的路由器固件，允许用户安装和运行应用程序来满足用户的需求。本文介绍了路由器刷入OpenWRT后的一些初始化操作","headline":"OpenWRT初始化","image":["../10000/OpenWRT.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/p1/posts/2009/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/p1/posts/2009/","keywords":"System, Router","thumbnailUrl":"../10000/OpenWRT.jpg"}</script>
     <meta name="description" content="OpenWrt是基于Linux的路由器固件，允许用户安装和运行应用程序来满足用户的需求。本文介绍了路由器刷入OpenWRT后的一些初始化操作">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="OpenWRT初始化">
-<meta property="og:url" content="https://panxiuwen.github.io/posts/2009/index.html">
+<meta property="og:url" content="https://panxiuwen.github.io/p1/posts/2009/index.html">
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="OpenWrt是基于Linux的路由器固件，允许用户安装和运行应用程序来满足用户的需求。本文介绍了路由器刷入OpenWRT后的一些初始化操作">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-12-12T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-24T05:00:29.000Z">
+<meta property="article:modified_time" content="2023-03-04T03:00:04.212Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="System">
 <meta property="article:tag" content="Router">
@@ -36,17 +36,17 @@
         
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/assets/images/mitu.jpg"/>
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/posts/2009/cover.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2009/cover.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2009/../10000/OpenWRT.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/p1/posts/2009/../10000/OpenWRT.jpg"/>
     
     
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+<link rel="stylesheet" href="/p1/assets/css/style-wbr5kv5vzqjhy7aesutes9sidvzcl3bbhitvxngx54odvre1xyxgiljm5cou.min.css">
 
     <!--STYLES END-->
     
@@ -74,7 +74,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/"
+            href="/p1/"
             aria-label=""
         >
             Pan&#39;s websit
@@ -85,11 +85,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="打开链接: /#about"
+                aria-label="打开链接: /p1/#about"
             >
         
         
-            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img class="header-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
         </a>
     
@@ -107,10 +107,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/#about"
+                    href="/p1/#about"
                     aria-label="阅读有关作者的更多信息"
                 >
-                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                    <img class="sidebar-profile-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
                 </a>
                 <h4 class="sidebar-profile-name">Sean Pan</h4>
                 
@@ -126,7 +126,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/"
+                            href="/p1/"
                             
                             rel="noopener"
                             title="首页"
@@ -140,7 +140,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-categories"
+                            href="/p1/all-categories"
                             
                             rel="noopener"
                             title="分类"
@@ -154,7 +154,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-tags"
+                            href="/p1/all-tags"
                             
                             rel="noopener"
                             title="标签"
@@ -168,7 +168,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-archives"
+                            href="/p1/all-archives"
                             
                             rel="noopener"
                             title="归档"
@@ -306,7 +306,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/System/">System</a>
+    <a class="category-link" href="/p1/categories/System/">System</a>
 
 
     
@@ -380,7 +380,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Router/" rel="tag">Router</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/System/" rel="tag">System</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Router/" rel="tag">Router</a> <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/System/" rel="tag">System</a>
 
             </div>
         
@@ -393,7 +393,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2007/"
+                    href="/p1/posts/2007/"
                     data-tooltip="内网穿透软件"
                     aria-label="上一篇: 内网穿透软件"
                 >
@@ -407,7 +407,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/4005/"
+                    href="/p1/posts/4005/"
                     data-tooltip="定制WePE"
                     aria-label="下一篇: 定制WePE"
                 >
@@ -423,7 +423,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -434,7 +434,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -469,7 +469,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2007/"
+                    href="/p1/posts/2007/"
                     data-tooltip="内网穿透软件"
                     aria-label="上一篇: 内网穿透软件"
                 >
@@ -483,7 +483,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/4005/"
+                    href="/p1/posts/4005/"
                     data-tooltip="定制WePE"
                     aria-label="下一篇: 定制WePE"
                 >
@@ -499,7 +499,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -510,7 +510,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -537,7 +537,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img id="about-card-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
             <h4 id="about-card-name">Sean Pan</h4>
         
@@ -564,10 +564,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/p1/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+<script src="/p1/assets/js/script-l5h9qen9be4vrigrbevlkouofvxbojlpmu3agrf6vyrdfuvaamibpmcdf7kz.min.js"></script>
 
 <!--SCRIPTS END-->
 

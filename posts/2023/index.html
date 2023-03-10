@@ -13,22 +13,22 @@
     
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了各种各样的网络传输协议\n\n\n一、无线传输协议1.无线传输协议IEEE 802.11，1997年，原始标准，2Mbit&#x2F;s，播在2.4GHzIEEE 802.11a，1999年，物理层补充，54Mbit&#x2F;s，播在5GHzIEEE 802.11b，1999年，物理层补充，11Mbit&#x2F;s，播在2.4GHzIEEE 802.11g，2003年，物理层补充，54Mbit&#x2F;s，播在2.4GHzIEEE 802.11n，2009年，支持MIMO，20Mhz基础速率提升到72.2Mbit&#x2F;s，可以使用双倍带宽40MHz，此时单通道速率为150Mbit&#x2F;s，播在2.4GHz和5GHz，最大空间流可达4×4。IEEE 802.11ac，也叫wifi5，2012年，可以使用更高的无线带宽，Wave1的默认信道宽为80MHz，基础速率提升到433Mbit&#x2F;s，Wave2单通道为160MHz，速率可达867Mbit&#x2F;s，播在5GHz，最大空间流可达8×8。IEEE 802.11ax，也叫wifi6，在2.4G频段时单通道速率为287Mbit&#x2F;s，在5G频段时，单通道频宽在80MHz的速率为600Mbit&#x2F;s，在160MHz时，单通道速率为1201Mbit&#x2F;s，最大空间流同样可达8×8。Wifi6E在中国未开放，为6G频段，单通道最大速率为1500Mbit&#x2F;s。强制使用WPA3进行加密。\n2.无线漫游协议802.11k:无线局域网频谱资源测量协议，由AP扫描周围邻居AP信息，配合终端扫描潜在漫游目标信息，解决何时漫游问题802.11v:无线网络管理协议，终端请求漫游目标(非必要)，AP建议终端漫游目标，解决漫游到何处问题802.11r:快速BSS转换协议，消除无线重关联过程中的握手开销，极大减少漫游时间，解决如何关重关联问题有关无线mesh漫游的机器，请查看无线路由器支持漫游协议k、v、r查询库\n3.无线其他协议OFDMA：更好的子载波进行数据传输MU-MIMO：一个基站同时与多个用户同时进行通信，详见史上最全面的MU-MIMO实测\n\n二、有线以太网协议1.有线以太网传输协议IEEE 802.3u，1995年，具有100 Mbit&#x2F;s（12.5 MB&#x2F;s）的100BASE-TX，100BASE-T4,100BASE-FX快速以太网，具有自动协商功能IEEE 802.3z，1998年，1000BASE-XGbit&#x2F;s光纤以太网，速率为1Gbit&#x2F;s（125MB&#x2F;s）IEEE 802.3ab，1999年，1000BASE-TGbit&#x2F;s以太网双绞线，速率为1Gbit&#x2F;s（125MB&#x2F;s）IEEE 802.3ae，2002年，光纤上的万兆以太网，10GBASE-SR，10GBASE-LR，10GBASE-ER，10GBASE-SW，10GBASE-LW，10GBASE-EWIEEE 802.3an，2006年，通过非屏蔽双绞线（UTP）的10GBASE-T10 Gbit&#x2F;s（1,250MB&#x2F;s）以太网IEEE 802.3ba，2015年，用于光纤的100G&#x2F;40G以太网IEEE 802.3by，2016年，光纤，双轴和背板25千兆以太网IEEE 802.3bz，2016年，2.5GBASE-T和5GBASE-T- 通过Cat-5&#x2F;Cat-6双绞线的2.5千兆和5千兆以太网\n2.有线以太网功能IEEE 802.3af，2003，以太网供电（15.4 W）IEEE 802.3at标准，2009，以太网供电增强功能（25.5 W）IEEE 802.3az，2010，节能以太网802.3bt，2018，采用全部4对平衡双绞线（4PPoE）的第三代以太网供电，功率高达100 W，包括10GBASE-T，更低的待机功率和特定的增强功能，以支持物联网应用（如照明，传感器，楼宇自动化）。\n\n三、TCP&#x2F;IP协议分别介绍TCP&#x2F;IP协议中的四个层次。应用层：应用层是TCP&#x2F;IP协议的第一层，是直接为应用进程提供服务的。（1）对不同种类的应用程序它们会根据自己的需要来使用应用层的不同协议，邮件传输应用使用了SMTP协议、万维网应用使用了HTTP协议、远程登录服务应用使用了有TELNET协议。（2）应用层还能加密、解密、格式化数据。（3）应用层可以建立或解除与其他节点的联系，这样可以充分节省网络资源。运输层：作为TCP&#x2F;IP协议的第二层，运输层在整个TCP&#x2F;IP协议中起到了中流砥柱的作用。且在运输层中，TCP和UDP也同样起到了中流砥柱的作用。网络层：网络层在TCP&#x2F;IP协议中的位于第三层。在TCP&#x2F;IP协议中网络层可以进行网络连接的建立和终止以及IP地址的寻找等功能。网络接口层：在TCP&#x2F;IP协议中，网络接口层位于第四层。由于网络接口层兼并了物理层和数据链路层所以，网络接口层既是传输数据的物理媒介，也可以为网络层提供一条准确无误的线路。 \nWOL协议采用UDP传输网络传输标准\n\n\n\nName\nStandard\nSpeed (Mib&#x2F;s)\nBandwidth (MHz)\nCable req.per 100m\n\n\n\n10BASE-T\n802.3i 1990\n10\n10\nCat3\n\n\n100BASE-TX\n802.3u 1995\n100\n31.25\nCat4\n\n\n1000BASE-T\n802.3ab 1990\n1000\n62.5\nCat5\n\n\n2.5GBASE-T\n802.3bz 2016\n2500\n100\nCat5e\n\n\n5GBASE-T\n802.3bz 2016\n5000\n200\nCat6\n\n\n10GBASE-T\n802.3an 2006\n10000\n400\nCat6\n\n\n25GBASE-T\n802.3bq 2016\n25000\n1000\nCat8\n\n\n40GBASE-T\n802.3bq 2016\n40000\n1600\nCat8\n\n\n\n四、网络传输速度测试访问Speedtest的仓库并下载解压，丢到带php的web服务器里至于怎么搭建服务器，请参考搭建Web服务器访问http:&#x2F;&#x2F;你的ip&#x2F;speedtest&#x2F;example-singleServer-full.html，点击Start开始测速，测试完毕就能得到传输数据的实际带宽了\n\n五、参考百度百科.802.11百度百科.802.3百度百科.TCP&#x2F;IP协议\n","dateCreated":"2020-08-14T00:00:00+08:00","dateModified":"2023-02-06T13:47:55+08:00","datePublished":"2020-08-14T00:00:00+08:00","description":"本文介绍了各种各样的网络传输协议","headline":"各种网络传输协议","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/posts/2023/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/posts/2023/","keywords":"Network, Server","thumbnailUrl":"cover.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文介绍了各种各样的网络传输协议\n\n\n\n\n无线传输协议1.无线传输协议IEEE 802.11，1997年，原始标准，2Mbit&#x2F;s，播在2.4GHzIEEE 802.11a，1999年，物理层补充，54Mbit&#x2F;s，播在5GHzIEEE 802.11b，1999年，物理层补充，11Mbit&#x2F;s，播在2.4GHzIEEE 802.11g，2003年，物理层补充，54Mbit&#x2F;s，播在2.4GHzIEEE 802.11n，2009年，支持MIMO，20Mhz基础速率提升到72.2Mbit&#x2F;s，可以使用双倍带宽40MHz，此时单通道速率为150Mbit&#x2F;s，播在2.4GHz和5GHz，最大空间流可达4×4。IEEE 802.11ac，也叫wifi5，2012年，可以使用更高的无线带宽，Wave1的默认信道宽为80MHz，基础速率提升到433Mbit&#x2F;s，Wave2单通道为160MHz，速率可达867Mbit&#x2F;s，播在5GHz，最大空间流可达8×8。IEEE 802.11ax，也叫wifi6，在2.4G频段时单通道速率为287Mbit&#x2F;s，在5G频段时，单通道频宽在80MHz的速率为600Mbit&#x2F;s，在160MHz时，单通道速率为1201Mbit&#x2F;s，最大空间流同样可达8×8。Wifi6E在中国未开放，为6G频段，单通道最大速率为1500Mbit&#x2F;s。强制使用WPA3进行加密。\n无线漫游协议802.11k:无线局域网频谱资源测量协议，由AP扫描周围邻居AP信息，配合终端扫描潜在漫游目标信息，解决何时漫游问题802.11v:无线网络管理协议，终端请求漫游目标(非必要)，AP建议终端漫游目标，解决漫游到何处问题802.11r:快速BSS转换协议，消除无线重关联过程中的握手开销，极大减少漫游时间，解决如何关重关联问题有关无线mesh漫游的机器，请查看无线路由器支持漫游协议k、v、r查询库\n无线其他协议OFDMA：更好的子载波进行数据传输MU-MIMO：一个基站同时与多个用户同时进行通信，详见史上最全面的MU-MIMO实测\n\n有线以太网协议1.有线以太网传输协议IEEE 802.3u，1995年，具有100 Mbit&#x2F;s（12.5 MB&#x2F;s）的100BASE-TX，100BASE-T4,100BASE-FX快速以太网，具有自动协商功能IEEE 802.3z，1998年，1000BASE-XGbit&#x2F;s光纤以太网，速率为1Gbit&#x2F;s（125MB&#x2F;s）IEEE 802.3ab，1999年，1000BASE-TGbit&#x2F;s以太网双绞线，速率为1Gbit&#x2F;s（125MB&#x2F;s）IEEE 802.3ae，2002年，光纤上的万兆以太网，10GBASE-SR，10GBASE-LR，10GBASE-ER，10GBASE-SW，10GBASE-LW，10GBASE-EWIEEE 802.3an，2006年，通过非屏蔽双绞线（UTP）的10GBASE-T10 Gbit&#x2F;s（1,250MB&#x2F;s）以太网IEEE 802.3ba，2015年，用于光纤的100G&#x2F;40G以太网IEEE 802.3by，2016年，光纤，双轴和背板25千兆以太网IEEE 802.3bz，2016年，2.5GBASE-T和5GBASE-T- 通过Cat-5&#x2F;Cat-6双绞线的2.5千兆和5千兆以太网\n有线以太网功能IEEE 802.3af，2003，以太网供电（15.4 W）IEEE 802.3at标准，2009，以太网供电增强功能（25.5 W）IEEE 802.3az，2010，节能以太网802.3bt，2018，采用全部4对平衡双绞线（4PPoE）的第三代以太网供电，功率高达100 W，包括10GBASE-T，更低的待机功率和特定的增强功能，以支持物联网应用（如照明，传感器，楼宇自动化）。\n\nTCP&#x2F;IP协议分别介绍TCP&#x2F;IP协议中的四个层次。应用层：应用层是TCP&#x2F;IP协议的第一层，是直接为应用进程提供服务的。（1）对不同种类的应用程序它们会根据自己的需要来使用应用层的不同协议，邮件传输应用使用了SMTP协议、万维网应用使用了HTTP协议、远程登录服务应用使用了有TELNET协议。（2）应用层还能加密、解密、格式化数据。（3）应用层可以建立或解除与其他节点的联系，这样可以充分节省网络资源。运输层：作为TCP&#x2F;IP协议的第二层，运输层在整个TCP&#x2F;IP协议中起到了中流砥柱的作用。且在运输层中，TCP和UDP也同样起到了中流砥柱的作用。网络层：网络层在TCP&#x2F;IP协议中的位于第三层。在TCP&#x2F;IP协议中网络层可以进行网络连接的建立和终止以及IP地址的寻找等功能。网络接口层：在TCP&#x2F;IP协议中，网络接口层位于第四层。由于网络接口层兼并了物理层和数据链路层所以，网络接口层既是传输数据的物理媒介，也可以为网络层提供一条准确无误的线路。 \nWOL协议采用UDP传输网络传输标准\n\n\n\n  \n    Name \n    Standard\n    Speed (Mib/s)\n    Bandwidth (MHz)\n    Cable req.per 100m\n  \n\n\n  \n    10BASE-T\n    802.3i 1990\n    10\n    10\n    Cat3\n  \n  \n    100BASE-TX\n    802.3u 1995\n    100\n    31.25\n    Cat4\n  \n  \n    1000BASE-T\n    802.3ab 1990\n    1000\n    62.5\n    Cat5\n  \n  \n    2.5GBASE-T\n    802.3bz 2016\n    2500\n    100\n    Cat5e\n  \n  \n    5GBASE-T\n    802.3bz 2016\n    5000\n    200\n    Cat6\n  \n  \n    10GBASE-T\n    802.3an 2006\n    10000\n    400\n    Cat6\n  \n  \n    25GBASE-T\n    802.3bq 2016\n    25000\n    1000\n    Cat8\n  \n  \n    40GBASE-T\n    802.3bq 2016\n    40000\n    1600\n    Cat8\n  \n\n\n\n\n\n网络传输速度测试访问Speedtest的仓库并下载解压，丢到带php的web服务器里至于怎么搭建服务器，请参考搭建Web服务器访问http:&#x2F;&#x2F;你的ip&#x2F;speedtest&#x2F;example-singleServer-full.html，点击Start开始测速，测试完毕就能得到传输数据的实际带宽了\n\n参考百度百科.802.11百度百科.802.3百度百科.TCP&#x2F;IP协议\n","dateCreated":"2020-08-14T00:00:00+08:00","dateModified":"2023-03-10T08:20:52+08:00","datePublished":"2020-08-14T00:00:00+08:00","description":"本文介绍了各种各样的网络传输协议","headline":"各种网络传输协议","image":["cover.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/p1/posts/2023/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://gitee.com/sean982202733/","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/p1/posts/2023/","keywords":"Network, Server","thumbnailUrl":"cover.jpg"}</script>
     <meta name="description" content="本文介绍了各种各样的网络传输协议">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="各种网络传输协议">
-<meta property="og:url" content="https://panxiuwen.github.io/posts/2023/index.html">
+<meta property="og:url" content="https://panxiuwen.github.io/p1/posts/2023/index.html">
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文介绍了各种各样的网络传输协议">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://panxiuwen.github.io/posts/2023/01.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2023/01.jpg">
 <meta property="article:published_time" content="2020-08-13T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-02-06T05:47:55.000Z">
+<meta property="article:modified_time" content="2023-03-10T00:20:52.962Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Network">
 <meta property="article:tag" content="Server">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://panxiuwen.github.io/posts/2023/01.jpg">
+<meta name="twitter:image" content="https://panxiuwen.github.io/p1/posts/2023/01.jpg">
 <meta name="twitter:creator" content="@982202733">
 <meta property="fb:app_id" content="[object Object]">
     
@@ -38,17 +38,17 @@
         
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/assets/images/mitu.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/assets/images/mitu.jpg"/>
     
     
-        <meta property="og:image" content="https://panxiuwen.github.io/posts/2023/cover.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/posts/2023/cover.jpg"/>
+        <meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2023/cover.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://panxiuwen.github.io/p1/posts/2023/cover.jpg"/>
     
     
     
     <!--STYLES-->
     
-<link rel="stylesheet" href="/assets/css/style-xyibylpr8juakrvyylsnldr4nxvhigyqx1seqb7og1jnttido378a9bgks5t.min.css">
+<link rel="stylesheet" href="/p1/assets/css/style-wbr5kv5vzqjhy7aesutes9sidvzcl3bbhitvxngx54odvre1xyxgiljm5cou.min.css">
 
     <!--STYLES END-->
     
@@ -76,7 +76,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/"
+            href="/p1/"
             aria-label=""
         >
             Pan&#39;s websit
@@ -87,11 +87,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="打开链接: /#about"
+                aria-label="打开链接: /p1/#about"
             >
         
         
-            <img class="header-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img class="header-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
         </a>
     
@@ -109,10 +109,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/#about"
+                    href="/p1/#about"
                     aria-label="阅读有关作者的更多信息"
                 >
-                    <img class="sidebar-profile-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+                    <img class="sidebar-profile-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
                 </a>
                 <h4 class="sidebar-profile-name">Sean Pan</h4>
                 
@@ -128,7 +128,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/"
+                            href="/p1/"
                             
                             rel="noopener"
                             title="首页"
@@ -142,7 +142,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-categories"
+                            href="/p1/all-categories"
                             
                             rel="noopener"
                             title="分类"
@@ -156,7 +156,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-tags"
+                            href="/p1/all-tags"
                             
                             rel="noopener"
                             title="标签"
@@ -170,7 +170,7 @@
                     
                         <a
                             class="sidebar-button-link "
-                            href="/all-archives"
+                            href="/p1/all-archives"
                             
                             rel="noopener"
                             title="归档"
@@ -308,7 +308,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/Technology/">Technology</a>
+    <a class="category-link" href="/p1/categories/Technology/">Technology</a>
 
 
     
@@ -323,86 +323,93 @@
             <p>本文介绍了各种各样的网络传输协议</p>
 <span id="more"></span>
 <hr>
-<h3 id="一、无线传输协议"><a href="#一、无线传输协议" class="headerlink" title="一、无线传输协议"></a>一、无线传输协议</h3><h4 id="1-无线传输协议"><a href="#1-无线传输协议" class="headerlink" title="1.无线传输协议"></a>1.无线传输协议</h4><p>IEEE 802.11，1997年，原始标准，2Mbit&#x2F;s，播在2.4GHz<br>IEEE 802.11a，1999年，物理层补充，54Mbit&#x2F;s，播在5GHz<br>IEEE 802.11b，1999年，物理层补充，11Mbit&#x2F;s，播在2.4GHz<br>IEEE 802.11g，2003年，物理层补充，54Mbit&#x2F;s，播在2.4GHz<br>IEEE 802.11n，2009年，支持MIMO，20Mhz基础速率提升到72.2Mbit&#x2F;s，可以使用双倍带宽40MHz，此时单通道速率为150Mbit&#x2F;s，播在2.4GHz和5GHz，最大空间流可达4×4。<br>IEEE 802.11ac，也叫wifi5，2012年，可以使用更高的无线带宽，Wave1的默认信道宽为80MHz，基础速率提升到433Mbit&#x2F;s，Wave2单通道为160MHz，速率可达867Mbit&#x2F;s，播在5GHz，最大空间流可达8×8。<br>IEEE 802.11ax，也叫wifi6，在2.4G频段时单通道速率为287Mbit&#x2F;s，在5G频段时，单通道频宽在80MHz的速率为600Mbit&#x2F;s，在160MHz时，单通道速率为1201Mbit&#x2F;s，最大空间流同样可达8×8。Wifi6E在中国未开放，为6G频段，单通道最大速率为1500Mbit&#x2F;s。强制使用WPA3进行加密。</p>
-<h4 id="2-无线漫游协议"><a href="#2-无线漫游协议" class="headerlink" title="2.无线漫游协议"></a>2.无线漫游协议</h4><p>802.11k:无线局域网频谱资源测量协议，由AP扫描周围邻居AP信息，配合终端扫描潜在漫游目标信息，解决何时漫游问题<br>802.11v:无线网络管理协议，终端请求漫游目标(非必要)，AP建议终端漫游目标，解决漫游到何处问题<br>802.11r:快速BSS转换协议，消除无线重关联过程中的握手开销，极大减少漫游时间，解决如何关重关联问题<br>有关无线mesh漫游的机器，请查看<a target="_blank" rel="noopener" href="https://www.acwifi.net/9909.html">无线路由器支持漫游协议k、v、r查询库</a></p>
-<h4 id="3-无线其他协议"><a href="#3-无线其他协议" class="headerlink" title="3.无线其他协议"></a>3.无线其他协议</h4><p>OFDMA：更好的子载波进行数据传输<br>MU-MIMO：一个基站同时与多个用户同时进行通信，详见<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/drgpSZK3UNbwP8s30yp8LQ">史上最全面的MU-MIMO实测</a></p>
+<h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E7%BA%BF%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE"><span class="toc-text">无线传输协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%97%A0%E7%BA%BF%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE"><span class="toc-text">1.无线传输协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E7%BA%BF%E6%BC%AB%E6%B8%B8%E5%8D%8F%E8%AE%AE"><span class="toc-text">无线漫游协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E7%BA%BF%E5%85%B6%E4%BB%96%E5%8D%8F%E8%AE%AE"><span class="toc-text">无线其他协议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E7%BA%BF%E4%BB%A5%E5%A4%AA%E7%BD%91%E5%8D%8F%E8%AE%AE"><span class="toc-text">有线以太网协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%9C%89%E7%BA%BF%E4%BB%A5%E5%A4%AA%E7%BD%91%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE"><span class="toc-text">1.有线以太网传输协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%89%E7%BA%BF%E4%BB%A5%E5%A4%AA%E7%BD%91%E5%8A%9F%E8%83%BD"><span class="toc-text">有线以太网功能</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCP-x2F-IP%E5%8D%8F%E8%AE%AE"><span class="toc-text">TCP&#x2F;IP协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E9%80%9F%E5%BA%A6%E6%B5%8B%E8%AF%95"><span class="toc-text">网络传输速度测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol>
 <hr>
-<h3 id="二、有线以太网协议"><a href="#二、有线以太网协议" class="headerlink" title="二、有线以太网协议"></a>二、有线以太网协议</h3><h4 id="1-有线以太网传输协议"><a href="#1-有线以太网传输协议" class="headerlink" title="1.有线以太网传输协议"></a>1.有线以太网传输协议</h4><p>IEEE 802.3u，1995年，具有100 Mbit&#x2F;s（12.5 MB&#x2F;s）的100BASE-TX，100BASE-T4,100BASE-FX快速以太网，具有自动协商功能<br>IEEE 802.3z，1998年，1000BASE-XGbit&#x2F;s光纤以太网，速率为1Gbit&#x2F;s（125MB&#x2F;s）<br>IEEE 802.3ab，1999年，1000BASE-TGbit&#x2F;s以太网双绞线，速率为1Gbit&#x2F;s（125MB&#x2F;s）<br>IEEE 802.3ae，2002年，光纤上的万兆以太网，10GBASE-SR，10GBASE-LR，10GBASE-ER，10GBASE-SW，10GBASE-LW，10GBASE-EW<br>IEEE 802.3an，2006年，通过非屏蔽双绞线（UTP）的10GBASE-T10 Gbit&#x2F;s（1,250MB&#x2F;s）以太网<br>IEEE 802.3ba，2015年，用于光纤的100G&#x2F;40G以太网<br>IEEE 802.3by，2016年，光纤，双轴和背板25千兆以太网<br>IEEE 802.3bz，2016年，2.5GBASE-T和5GBASE-T- 通过Cat-5&#x2F;Cat-6双绞线的2.5千兆和5千兆以太网</p>
-<h4 id="2-有线以太网功能"><a href="#2-有线以太网功能" class="headerlink" title="2.有线以太网功能"></a>2.有线以太网功能</h4><p>IEEE 802.3af，2003，以太网供电（15.4 W）<br>IEEE 802.3at标准，2009，以太网供电增强功能（25.5 W）<br>IEEE 802.3az，2010，节能以太网<br>802.3bt，2018，采用全部4对平衡双绞线（4PPoE）的第三代以太网供电，功率高达100 W，包括10GBASE-T，更低的待机功率和特定的增强功能，以支持物联网应用（如照明，传感器，楼宇自动化）。</p>
+<h3 id="无线传输协议"><a href="#无线传输协议" class="headerlink" title="无线传输协议"></a>无线传输协议</h3><h4 id="1-无线传输协议"><a href="#1-无线传输协议" class="headerlink" title="1.无线传输协议"></a>1.无线传输协议</h4><p>IEEE 802.11，1997年，原始标准，2Mbit&#x2F;s，播在2.4GHz<br>IEEE 802.11a，1999年，物理层补充，54Mbit&#x2F;s，播在5GHz<br>IEEE 802.11b，1999年，物理层补充，11Mbit&#x2F;s，播在2.4GHz<br>IEEE 802.11g，2003年，物理层补充，54Mbit&#x2F;s，播在2.4GHz<br>IEEE 802.11n，2009年，支持MIMO，20Mhz基础速率提升到72.2Mbit&#x2F;s，可以使用双倍带宽40MHz，此时单通道速率为150Mbit&#x2F;s，播在2.4GHz和5GHz，最大空间流可达4×4。<br>IEEE 802.11ac，也叫wifi5，2012年，可以使用更高的无线带宽，Wave1的默认信道宽为80MHz，基础速率提升到433Mbit&#x2F;s，Wave2单通道为160MHz，速率可达867Mbit&#x2F;s，播在5GHz，最大空间流可达8×8。<br>IEEE 802.11ax，也叫wifi6，在2.4G频段时单通道速率为287Mbit&#x2F;s，在5G频段时，单通道频宽在80MHz的速率为600Mbit&#x2F;s，在160MHz时，单通道速率为1201Mbit&#x2F;s，最大空间流同样可达8×8。Wifi6E在中国未开放，为6G频段，单通道最大速率为1500Mbit&#x2F;s。强制使用WPA3进行加密。</p>
+<h4 id="无线漫游协议"><a href="#无线漫游协议" class="headerlink" title="无线漫游协议"></a>无线漫游协议</h4><p>802.11k:无线局域网频谱资源测量协议，由AP扫描周围邻居AP信息，配合终端扫描潜在漫游目标信息，解决何时漫游问题<br>802.11v:无线网络管理协议，终端请求漫游目标(非必要)，AP建议终端漫游目标，解决漫游到何处问题<br>802.11r:快速BSS转换协议，消除无线重关联过程中的握手开销，极大减少漫游时间，解决如何关重关联问题<br>有关无线mesh漫游的机器，请查看<a target="_blank" rel="noopener" href="https://www.acwifi.net/9909.html">无线路由器支持漫游协议k、v、r查询库</a></p>
+<h4 id="无线其他协议"><a href="#无线其他协议" class="headerlink" title="无线其他协议"></a>无线其他协议</h4><p>OFDMA：更好的子载波进行数据传输<br>MU-MIMO：一个基站同时与多个用户同时进行通信，详见<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/drgpSZK3UNbwP8s30yp8LQ">史上最全面的MU-MIMO实测</a></p>
 <hr>
-<h3 id="三、TCP-x2F-IP协议"><a href="#三、TCP-x2F-IP协议" class="headerlink" title="三、TCP&#x2F;IP协议"></a>三、TCP&#x2F;IP协议</h3><p>分别介绍TCP&#x2F;IP协议中的四个层次。<br>应用层：应用层是TCP&#x2F;IP协议的第一层，是直接为应用进程提供服务的。<br>（1）对不同种类的应用程序它们会根据自己的需要来使用应用层的不同协议，邮件传输应用使用了SMTP协议、万维网应用使用了HTTP协议、远程登录服务应用使用了有TELNET协议。<br>（2）应用层还能加密、解密、格式化数据。<br>（3）应用层可以建立或解除与其他节点的联系，这样可以充分节省网络资源。<br>运输层：作为TCP&#x2F;IP协议的第二层，运输层在整个TCP&#x2F;IP协议中起到了中流砥柱的作用。且在运输层中，TCP和UDP也同样起到了中流砥柱的作用。<br>网络层：网络层在TCP&#x2F;IP协议中的位于第三层。在TCP&#x2F;IP协议中网络层可以进行网络连接的建立和终止以及IP地址的寻找等功能。<br>网络接口层：在TCP&#x2F;IP协议中，网络接口层位于第四层。由于网络接口层兼并了物理层和数据链路层所以，网络接口层既是传输数据的物理媒介，也可以为网络层提供一条准确无误的线路。 </p>
+<h3 id="有线以太网协议"><a href="#有线以太网协议" class="headerlink" title="有线以太网协议"></a>有线以太网协议</h3><h4 id="1-有线以太网传输协议"><a href="#1-有线以太网传输协议" class="headerlink" title="1.有线以太网传输协议"></a>1.有线以太网传输协议</h4><p>IEEE 802.3u，1995年，具有100 Mbit&#x2F;s（12.5 MB&#x2F;s）的100BASE-TX，100BASE-T4,100BASE-FX快速以太网，具有自动协商功能<br>IEEE 802.3z，1998年，1000BASE-XGbit&#x2F;s光纤以太网，速率为1Gbit&#x2F;s（125MB&#x2F;s）<br>IEEE 802.3ab，1999年，1000BASE-TGbit&#x2F;s以太网双绞线，速率为1Gbit&#x2F;s（125MB&#x2F;s）<br>IEEE 802.3ae，2002年，光纤上的万兆以太网，10GBASE-SR，10GBASE-LR，10GBASE-ER，10GBASE-SW，10GBASE-LW，10GBASE-EW<br>IEEE 802.3an，2006年，通过非屏蔽双绞线（UTP）的10GBASE-T10 Gbit&#x2F;s（1,250MB&#x2F;s）以太网<br>IEEE 802.3ba，2015年，用于光纤的100G&#x2F;40G以太网<br>IEEE 802.3by，2016年，光纤，双轴和背板25千兆以太网<br>IEEE 802.3bz，2016年，2.5GBASE-T和5GBASE-T- 通过Cat-5&#x2F;Cat-6双绞线的2.5千兆和5千兆以太网</p>
+<h4 id="有线以太网功能"><a href="#有线以太网功能" class="headerlink" title="有线以太网功能"></a>有线以太网功能</h4><p>IEEE 802.3af，2003，以太网供电（15.4 W）<br>IEEE 802.3at标准，2009，以太网供电增强功能（25.5 W）<br>IEEE 802.3az，2010，节能以太网<br>802.3bt，2018，采用全部4对平衡双绞线（4PPoE）的第三代以太网供电，功率高达100 W，包括10GBASE-T，更低的待机功率和特定的增强功能，以支持物联网应用（如照明，传感器，楼宇自动化）。</p>
+<hr>
+<h3 id="TCP-x2F-IP协议"><a href="#TCP-x2F-IP协议" class="headerlink" title="TCP&#x2F;IP协议"></a>TCP&#x2F;IP协议</h3><p>分别介绍TCP&#x2F;IP协议中的四个层次。<br>应用层：应用层是TCP&#x2F;IP协议的第一层，是直接为应用进程提供服务的。<br>（1）对不同种类的应用程序它们会根据自己的需要来使用应用层的不同协议，邮件传输应用使用了SMTP协议、万维网应用使用了HTTP协议、远程登录服务应用使用了有TELNET协议。<br>（2）应用层还能加密、解密、格式化数据。<br>（3）应用层可以建立或解除与其他节点的联系，这样可以充分节省网络资源。<br>运输层：作为TCP&#x2F;IP协议的第二层，运输层在整个TCP&#x2F;IP协议中起到了中流砥柱的作用。且在运输层中，TCP和UDP也同样起到了中流砥柱的作用。<br>网络层：网络层在TCP&#x2F;IP协议中的位于第三层。在TCP&#x2F;IP协议中网络层可以进行网络连接的建立和终止以及IP地址的寻找等功能。<br>网络接口层：在TCP&#x2F;IP协议中，网络接口层位于第四层。由于网络接口层兼并了物理层和数据链路层所以，网络接口层既是传输数据的物理媒介，也可以为网络层提供一条准确无误的线路。 </p>
 <p>WOL协议采用UDP传输<br>网络传输标准</p>
-<table>
+<div style="overflow-x:auto;white-space:nowrap;">
+<table style="text-align:center;">
 <thead>
-<tr>
-<th align="center">Name</th>
-<th align="center">Standard</th>
-<th align="center">Speed (Mib&#x2F;s)</th>
-<th align="center">Bandwidth (MHz)</th>
-<th align="center">Cable req.per 100m</th>
-</tr>
+  <tr>
+    <th>Name </th>
+    <th>Standard</th>
+    <th>Speed (Mib/s)</th>
+    <th>Bandwidth (MHz)</th>
+    <th>Cable req.per 100m</th>
+  </tr>
 </thead>
-<tbody><tr>
-<td align="center">10BASE-T</td>
-<td align="center">802.3i 1990</td>
-<td align="center">10</td>
-<td align="center">10</td>
-<td align="center">Cat3</td>
-</tr>
-<tr>
-<td align="center">100BASE-TX</td>
-<td align="center">802.3u 1995</td>
-<td align="center">100</td>
-<td align="center">31.25</td>
-<td align="center">Cat4</td>
-</tr>
-<tr>
-<td align="center">1000BASE-T</td>
-<td align="center">802.3ab 1990</td>
-<td align="center">1000</td>
-<td align="center">62.5</td>
-<td align="center">Cat5</td>
-</tr>
-<tr>
-<td align="center">2.5GBASE-T</td>
-<td align="center">802.3bz 2016</td>
-<td align="center">2500</td>
-<td align="center">100</td>
-<td align="center">Cat5e</td>
-</tr>
-<tr>
-<td align="center">5GBASE-T</td>
-<td align="center">802.3bz 2016</td>
-<td align="center">5000</td>
-<td align="center">200</td>
-<td align="center">Cat6</td>
-</tr>
-<tr>
-<td align="center">10GBASE-T</td>
-<td align="center">802.3an 2006</td>
-<td align="center">10000</td>
-<td align="center">400</td>
-<td align="center">Cat6</td>
-</tr>
-<tr>
-<td align="center">25GBASE-T</td>
-<td align="center">802.3bq 2016</td>
-<td align="center">25000</td>
-<td align="center">1000</td>
-<td align="center">Cat8</td>
-</tr>
-<tr>
-<td align="center">40GBASE-T</td>
-<td align="center">802.3bq 2016</td>
-<td align="center">40000</td>
-<td align="center">1600</td>
-<td align="center">Cat8</td>
-</tr>
-</tbody></table>
+<tbody>
+  <tr>
+    <td>10BASE-T</td>
+    <td>802.3i 1990</td>
+    <td>10</td>
+    <td>10</td>
+    <td>Cat3</td>
+  </tr>
+  <tr>
+    <td>100BASE-TX</td>
+    <td>802.3u 1995</td>
+    <td>100</td>
+    <td>31.25</td>
+    <td>Cat4</td>
+  </tr>
+  <tr>
+    <td>1000BASE-T</td>
+    <td>802.3ab 1990</td>
+    <td>1000</td>
+    <td>62.5</td>
+    <td>Cat5</td>
+  </tr>
+  <tr>
+    <td>2.5GBASE-T</td>
+    <td>802.3bz 2016</td>
+    <td>2500</td>
+    <td>100</td>
+    <td>Cat5e</td>
+  </tr>
+  <tr>
+    <td>5GBASE-T</td>
+    <td>802.3bz 2016</td>
+    <td>5000</td>
+    <td>200</td>
+    <td>Cat6</td>
+  </tr>
+  <tr>
+    <td>10GBASE-T</td>
+    <td>802.3an 2006</td>
+    <td>10000</td>
+    <td>400</td>
+    <td>Cat6</td>
+  </tr>
+  <tr>
+    <td>25GBASE-T</td>
+    <td>802.3bq 2016</td>
+    <td>25000</td>
+    <td>1000</td>
+    <td>Cat8</td>
+  </tr>
+  <tr>
+    <td>40GBASE-T</td>
+    <td>802.3bq 2016</td>
+    <td>40000</td>
+    <td>1600</td>
+    <td>Cat8</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
 <hr>
-<h3 id="四、网络传输速度测试"><a href="#四、网络传输速度测试" class="headerlink" title="四、网络传输速度测试"></a>四、网络传输速度测试</h3><p>访问<a target="_blank" rel="noopener" href="https://github.com/librespeed/speedtest">Speedtest的仓库</a>并下载解压，丢到带php的web服务器里<br>至于怎么搭建服务器，请参考<a href="/posts/2001/">搭建Web服务器</a><br>访问http:&#x2F;&#x2F;你的ip&#x2F;speedtest&#x2F;example-singleServer-full.html，点击Start开始测速，测试完毕就能得到传输数据的实际带宽了</p>
+<h3 id="网络传输速度测试"><a href="#网络传输速度测试" class="headerlink" title="网络传输速度测试"></a>网络传输速度测试</h3><p>访问<a target="_blank" rel="noopener" href="https://github.com/librespeed/speedtest">Speedtest的仓库</a>并下载解压，丢到带php的web服务器里<br>至于怎么搭建服务器，请参考<a href="/posts/2001/">搭建Web服务器</a><br>访问http:&#x2F;&#x2F;你的ip&#x2F;speedtest&#x2F;example-singleServer-full.html，点击Start开始测速，测试完毕就能得到传输数据的实际带宽了</p>
 <div class="figure center" style="width:;"><a class="fancybox" href="01.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="01.jpg" alt=""></a></div>
-<h3 id="五、参考"><a href="#五、参考" class="headerlink" title="五、参考"></a>五、参考</h3><p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/IEEE%20802.11">百度百科.802.11</a><br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/IEEE%20802.3">百度百科.802.3</a><br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/TCP%2FIP%E5%8D%8F%E8%AE%AE">百度百科.TCP&#x2F;IP协议</a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/IEEE%20802.11">百度百科.802.11</a><br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/IEEE%20802.3">百度百科.802.3</a><br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/TCP%2FIP%E5%8D%8F%E8%AE%AE">百度百科.TCP&#x2F;IP协议</a></p>
 
             
 
@@ -414,7 +421,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Network/" rel="tag">Network</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/Server/" rel="tag">Server</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Network/" rel="tag">Network</a> <a class="tag tag--primary tag--small t-none-link" href="/p1/tags/Server/" rel="tag">Server</a>
 
             </div>
         
@@ -427,7 +434,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/3001/"
+                    href="/p1/posts/3001/"
                     data-tooltip="你知道量子力学可以有三种写法么？"
                     aria-label="上一篇: 你知道量子力学可以有三种写法么？"
                 >
@@ -441,7 +448,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2004/"
+                    href="/p1/posts/2004/"
                     data-tooltip="一些设备的跑分"
                     aria-label="下一篇: 一些设备的跑分"
                 >
@@ -457,7 +464,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -468,7 +475,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -503,7 +510,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/3001/"
+                    href="/p1/posts/3001/"
                     data-tooltip="你知道量子力学可以有三种写法么？"
                     aria-label="上一篇: 你知道量子力学可以有三种写法么？"
                 >
@@ -517,7 +524,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/posts/2004/"
+                    href="/p1/posts/2004/"
                     data-tooltip="一些设备的跑分"
                     aria-label="下一篇: 一些设备的跑分"
                 >
@@ -533,7 +540,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -544,7 +551,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -571,7 +578,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/mitu.jpg" alt="作者的图片"/>
+            <img id="about-card-picture" src="/p1/assets/images/mitu.jpg" alt="作者的图片"/>
         
             <h4 id="about-card-name">Sean Pan</h4>
         
@@ -598,10 +605,10 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/p1/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
 
-<script src="/assets/js/script-jdvti9wmukv4wcugu4n5gx1lcnhwquswimdl0eouvt0tamjqglxwx4wzuhyy.min.js"></script>
+<script src="/p1/assets/js/script-l5h9qen9be4vrigrbevlkouofvxbojlpmu3agrf6vyrdfuvaamibpmcdf7kz.min.js"></script>
 
 <!--SCRIPTS END-->
 
