@@ -23,11 +23,17 @@
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文介绍了域名与DNS的内容">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2010/05.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2010/01.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2010/02.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2010/03.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2010/04.jpg">
 <meta property="article:published_time" content="2022-06-20T16:00:00.000Z">
 <meta property="article:modified_time" content="2024-01-05T15:34:36.379Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Network">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panxiuwen.github.io/p1/posts/2010/05.jpg">
 <meta name="twitter:creator" content="@982202733">
 <meta property="fb:app_id" content="[object Object]">
     
@@ -328,7 +334,7 @@
 <hr>
 <h3 id="百度网盘上传异常解决"><a href="#百度网盘上传异常解决" class="headerlink" title="百度网盘上传异常解决"></a>百度网盘上传异常解决</h3><p>在<code>C:\Windows\System32\drivers\etc\hosts</code>中写入</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">117.34.84.18   c.pcs.baidu.com</span><br><span class="line">140.249.34.14  c2.pcs.baidu.com</span><br><span class="line">119.167.143.26 c3.pcs.baidu.com</span><br><span class="line">220.181.111.86 c4.pcs.baidu.com</span><br><span class="line">111.177.8.38   c5.pcs.baidu.com</span><br></pre></td></tr></table></figure>
-<img class="fancybox center 05.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="05.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="05.jpg" alt=""></a></div>
 <hr>
 <h3 id="测试工具"><a href="#测试工具" class="headerlink" title="测试工具"></a>测试工具</h3><p><a target="_blank" rel="noopener" href="https://boce.aliyun.com/detect/dns">阿里云解析测试工具</a>：阿里云自带<br><a target="_blank" rel="noopener" href="https://site.ip138.com/">查域网</a>：也不错</p>
 <hr>
@@ -345,18 +351,18 @@
 <p>重启后生效</p>
 <hr>
 <h4 id="注册dynv6"><a href="#注册dynv6" class="headerlink" title="注册dynv6"></a>注册dynv6</h4><p>先在<a target="_blank" rel="noopener" href="https://dynv6.com/">dynv6</a>上注册一个账号，创建一个域名并用邮箱验证，一定要确认否则无法登录，再创建一个token</p>
-<img class="fancybox center 01.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="01.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="01.jpg" alt=""></a></div>
 <hr>
 <h4 id="运行DDNS客户端"><a href="#运行DDNS客户端" class="headerlink" title="运行DDNS客户端"></a>运行DDNS客户端</h4><p>下载<a target="_blank" rel="noopener" href="https://github.com/jeessy2/ddns-go/releases/">DDNS-go</a>，运行后自动或手动打开<a target="_blank" rel="noopener" href="http://127.0.0.1:9876/">管理界面</a>，按照图片配置</p>
-<img class="fancybox center 02.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="02.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="02.jpg" alt=""></a></div>
 <p>对于两个ipv6的情况，可以在下面下面填@2<br>如果使用命令获取，使用<code>ip -6 addr list scope global | grep -v &quot; fd&quot; | sed -n &#39;s/.*inet6 \([0-9a-f:]\+\).*/\1/p&#39; | head -n 1</code><br><a target="_blank" rel="noopener" href="http://dynv6.com/api/update?zone=%E4%BD%A0%E7%9A%84%E5%9F%9F%E5%90%8D.dynv6.net&token=%E4%BD%A0%E7%9A%84token&ipv6=#{ip}">http://dynv6.com/api/update?zone=你的域名.dynv6.net&amp;token=你的token&amp;ipv6=#{ip}</a><br>填完了点Save，如果参数正确，log中会显示</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Callback调用成功，返回数据：adress updated</span><br></pre></td></tr></table></figure>
 <p>推荐配置服务启动</p>
 <hr>
 <h4 id="验证DDNS"><a href="#验证DDNS" class="headerlink" title="验证DDNS"></a>验证DDNS</h4><p>打开<a target="_blank" rel="noopener" href="https://dynv6.com/zones">dynv6的域名管理</a>，选择域名后看Records里是否有指向正确IPv6的AAAA记录</p>
-<img class="fancybox center 03.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="03.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="03.jpg" alt=""></a></div>
 <p>再执行ping XXX.dynv6.net，看能否解析出正确的ipv6</p>
-<img class="fancybox center 04.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="04.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="04.jpg" alt=""></a></div>
 <hr>
 <h4 id="其他笔记"><a href="#其他笔记" class="headerlink" title="其他笔记"></a>其他笔记</h4><p>假如ipv6分发前缀为<code>240c:cf81:5:22dd::/64</code><br>路由器Lan口为<code>192.168.X.1</code>，那么Lan的ipv6为<code>240c:cf81:5:22dd::1</code><br>客户端的ip为<code>192.168.X.100</code>，那么客户端的ipv6地址为为<code>240c:cf81:5:22dd::100</code>(无法ping通)和<code>240c:cf81:5:22dd:f07b:f512:8cf5:afcd</code><br>客户端的ip为<code>192.168.X.102</code>，那么客户端的ipv6地址为为<code>240c:cf81:5:22dd::102</code>(无法ping通)和<code>240c:cf81:5:22dd:195e:e735:f9f6:d450</code></p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/529172876/answer/2748637240">百度网盘的上传域名到底是啥？</a></p>
@@ -414,7 +420,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -490,7 +496,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>

@@ -23,12 +23,14 @@
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文介绍了各种各样的网络传输协议">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/10001/Tcp_01.jpg">
 <meta property="article:published_time" content="2020-08-13T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-08-12T14:01:51.834Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Network">
 <meta property="article:tag" content="Server">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panxiuwen.github.io/p1/posts/10001/Tcp_01.jpg">
 <meta name="twitter:creator" content="@982202733">
 <meta property="fb:app_id" content="[object Object]">
     
@@ -558,7 +560,7 @@
 <h3 id="TCP-IP协议"><a href="#TCP-IP协议" class="headerlink" title="TCP&#x2F;IP协议"></a>TCP&#x2F;IP协议</h3><p>分别介绍TCP&#x2F;IP协议中的四个层次。<br>应用层：应用层是TCP&#x2F;IP协议的第一层，是直接为应用进程提供服务的。<br>（1）对不同种类的应用程序它们会根据自己的需要来使用应用层的不同协议，邮件传输应用使用了SMTP协议、万维网应用使用了HTTP协议、远程登录服务应用使用了有TELNET协议。<br>（2）应用层还能加密、解密、格式化数据。<br>（3）应用层可以建立或解除与其他节点的联系，这样可以充分节省网络资源。<br>运输层：作为TCP&#x2F;IP协议的第二层，运输层在整个TCP&#x2F;IP协议中起到了中流砥柱的作用。且在运输层中，TCP和UDP也同样起到了中流砥柱的作用。<br>网络层：网络层在TCP&#x2F;IP协议中的位于第三层。在TCP&#x2F;IP协议中网络层可以进行网络连接的建立和终止以及IP地址的寻找等功能。<br>网络接口层：在TCP&#x2F;IP协议中，网络接口层位于第四层。由于网络接口层兼并了物理层和数据链路层所以，网络接口层既是传输数据的物理媒介，也可以为网络层提供一条准确无误的线路。<br>WOL协议采用UDP传输</p>
 <hr>
 <h3 id="网络传输速度测试"><a href="#网络传输速度测试" class="headerlink" title="网络传输速度测试"></a>网络传输速度测试</h3><p>访问<a target="_blank" rel="noopener" href="https://github.com/librespeed/speedtest">Speedtest的仓库</a>并下载解压，丢到带php的web服务器里<br>至于怎么搭建服务器，请参考<a href="/p1/posts/2001/">搭建Web服务器</a><br>访问http:&#x2F;&#x2F;你的ip&#x2F;speedtest&#x2F;example-singleServer-full.html，点击Start开始测速，测试完毕就能得到传输数据的实际带宽了</p>
-<img class="fancybox center ..&#x2F;10001&#x2F;Tcp_01.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="../10001/Tcp_01.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="../10001/Tcp_01.jpg" alt=""></a></div>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/IEEE%20802.11">百度百科.802.11</a><br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/IEEE%20802.3">百度百科.802.3</a><br><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/TCP%2FIP%E5%8D%8F%E8%AE%AE">百度百科.TCP&#x2F;IP协议</a></p>
 
             
@@ -614,7 +616,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -690,7 +692,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>

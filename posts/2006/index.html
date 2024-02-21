@@ -23,11 +23,18 @@
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文介绍如何在Linux环境搭建Minecraft服务器">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2006/01.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2006/02.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2006/03.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2006/04.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2006/05.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2006/06.jpg">
 <meta property="article:published_time" content="2017-11-11T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-08-16T02:13:38.506Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Server">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panxiuwen.github.io/p1/posts/2006/01.jpg">
 <meta name="twitter:creator" content="@982202733">
 <meta property="fb:app_id" content="[object Object]">
     
@@ -333,14 +340,14 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alias sl=&quot;screen -ls&quot;				//输入sl就可以查看运行中的screen</span><br><span class="line">alias sb=&quot;screen bash&quot;				//输入sb就可以打开一个sreen</span><br><span class="line">alias sr=&#x27;func() &#123; screen -D -r $1;&#125;; func&#x27;	//输入sr +screen_id就可以返回screen</span><br></pre></td></tr></table></figure>
 <p>在建立screen后，按Ctrl+A后再按D暂时退出Screen<br>screen -dm +运行的命令在后台执行命令，例如<br><code>cd /app/MCS&amp;&amp;screen -dm java -jar server.jar</code></p>
 <h3 id="配置Minecraft服务器"><a href="#配置Minecraft服务器" class="headerlink" title="配置Minecraft服务器"></a>配置Minecraft服务器</h3><h4 id="1-获取Minecraft服务器-V1-18之前"><a href="#1-获取Minecraft服务器-V1-18之前" class="headerlink" title="1.获取Minecraft服务器(V1.18之前)"></a>1.获取Minecraft服务器(V1.18之前)</h4><p>在<a target="_blank" rel="noopener" href="https://files.minecraftforge.net/net/minecraftforge/forge/">Forge</a> 上下载喜欢的版本的Forge Installer，</p>
-<img class="fancybox center 01.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="01.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="01.jpg" alt=""></a></div>
 <p>安装时选择Install server</p>
-<img class="fancybox center 02.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="02.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="02.jpg" alt=""></a></div>
 <p>其实这个可以断点续传的，它会自动校验已经存在的jar的特征码，所以可以把下载好的jar放到目录里面，比如第一个下载的minecraft_server.1.14.4.jar，足足有34.2MB，建议直接复制链接用迅雷下载，或者在启动jar时使用代理，见<a href="/p1/posts/2015/">搭建代理服务器</a></p>
-<img class="fancybox center 03.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="03.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="03.jpg" alt=""></a></div>
 <p>下载非常容易崩掉，我下了8次终于下完了，下完了就可以编译了<br>假设主jar是<code>/app/mcs/forge-1.12.2-14.23.5.2854.jar</code>，测试命令行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /app/mcs&amp;&amp;/usr/local/jdk1.8.0_341/bin/java -Xms10G -Xmx10G -jar /app/mcs/forge-1.12.2-14.23.5.2854.jar nogui</span><br></pre></td></tr></table></figure>
-<img class="fancybox center 04.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="04.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="04.jpg" alt=""></a></div>
 <p>先命令行测试一下，如果启动成功，则可以为此命令设置alias，并启动执行</p>
 <h4 id="获取Minecraft服务器-V1-18之后"><a href="#获取Minecraft服务器-V1-18之后" class="headerlink" title="获取Minecraft服务器(V1.18之后)"></a>获取Minecraft服务器(V1.18之后)</h4><p>安装forge</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/lib/jvm/jdk-18/bin/java -jar forge-1.19.2-43.2.0-installer.jar nogui --installServer</span><br></pre></td></tr></table></figure>
@@ -355,10 +362,10 @@
 <p>编辑server.properties</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pvp=false</span><br><span class="line">online-mode=false</span><br></pre></td></tr></table></figure>
 <p>最终效果图</p>
-<img class="fancybox center 05.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="05.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="05.jpg" alt=""></a></div>
 <hr>
 <h3 id="其他内容"><a href="#其他内容" class="headerlink" title="其他内容"></a>其他内容</h3><h4 id="配置pi-dashboard用于服务器性能监测"><a href="#配置pi-dashboard用于服务器性能监测" class="headerlink" title="配置pi-dashboard用于服务器性能监测"></a>配置pi-dashboard用于服务器性能监测</h4><p>配置方法详见<a href="/p1/posts/2019/">服务器性能监控</a></p>
-<img class="fancybox center 06.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="06.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="06.jpg" alt=""></a></div>
 <h4 id="Minecraft指令"><a href="#Minecraft指令" class="headerlink" title="Minecraft指令"></a>Minecraft指令</h4><p>死亡不掉落</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/gamerule keepInventory true</span><br></pre></td></tr></table></figure>
 <p>防爆</p>
@@ -423,7 +430,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -499,7 +506,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>

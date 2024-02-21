@@ -23,11 +23,21 @@
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文记录了html&#x2F;CSS使用的相关笔记">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4017/01.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4017/02.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4017/03.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4017/04.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4017/05.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4017/06.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4017/07.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4017/08.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4017/09.jpg">
 <meta property="article:published_time" content="2023-01-11T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-07-12T15:51:31.000Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Develop">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panxiuwen.github.io/p1/posts/4017/01.jpg">
 <meta name="twitter:creator" content="@982202733">
 <meta property="fb:app_id" content="[object Object]">
     
@@ -323,20 +333,20 @@
 <span id="more"></span>
 <hr>
 <h3 id="一、CSS改透明度"><a href="#一、CSS改透明度" class="headerlink" title="一、CSS改透明度"></a>一、CSS改透明度</h3><p>使用chrome打开需要修改的网页</p>
-<img class="fancybox center 01.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="01.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="01.jpg" alt=""></a></div>
 <p>按F12打开开发者工具</p>
-<img class="fancybox center 02.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="02.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="02.jpg" alt=""></a></div>
 <p>点击按钮，将光标移到想要修改的模块上，然后单击左键，即可在开发者工具的“样式”栏中找到定义块的代码</p>
-<img class="fancybox center 03.jpg">
-<img class="fancybox center 04.jpg">
-<img class="fancybox center 05.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="03.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="03.jpg" alt=""></a></div>
+<div class="figure center" style="width:;"><a class="fancybox" href="04.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="04.jpg" alt=""></a></div>
+<div class="figure center" style="width:;"><a class="fancybox" href="05.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="05.jpg" alt=""></a></div>
 <p>修改background字段后面的颜色即可，有两种方法：1、直接修改颜色代码，如果是#xxx或者#xxxxxx格式，则代表无alpha通道，即无透明度，三位代表每种颜色为4bit（0-F共16个量化值），六位代表每种颜色为8bit（00-FF共256个量化值，也就是一个字节），可以手动在结尾加上一位或者两位的alpha通道值，也就是半透明度，值越大越不透明，值越小越透明，如果alpha通道值为F或者FF的话，会被默认省略掉变成前面说的三位或者六位颜色代码，如果本身就是四位或者八位的格式，则说明已经启用了alpha通道，直接改最后一位或者两位的alpha通道值即可；2、鼠标点击颜色代码#xxx或者#xxxxxx之前的颜色小方块即可弹出颜色编辑菜单。</p>
-<img class="fancybox center 06.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="06.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="06.jpg" alt=""></a></div>
 <p>确定好自己想要的颜色值以后，可以将光标移至右上角css文件名这里，不需要点击，停留在文件名上即可看到css文件相对于网页的路径，比如说这里的主页面地址为192.168.192.200:2333，路径后就是style.css，说明该文件在网页的根目录中</p>
-<img class="fancybox center 07.jpg">
-<img class="fancybox center 08.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="07.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="07.jpg" alt=""></a></div>
+<div class="figure center" style="width:;"><a class="fancybox" href="08.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="08.jpg" alt=""></a></div>
 <p>打开第5步中对应的文件，把第5步中自己修改过的background颜色代码原封不动的替换掉服务器css文件中对应的代码</p>
-<img class="fancybox center 09.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="09.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="09.jpg" alt=""></a></div>
 
 <h3 id="二、插入带滚动条的表格"><a href="#二、插入带滚动条的表格" class="headerlink" title="二、插入带滚动条的表格"></a>二、插入带滚动条的表格</h3><h4 id="1-表格写法"><a href="#1-表格写法" class="headerlink" title="1.表格写法"></a>1.表格写法</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div style=&quot;overflow-x:scroll;white-space:nowrap;&quot;&gt;</span><br><span class="line">&lt;table&gt;</span><br><span class="line">....</span><br><span class="line">&lt;/table&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
 <h4 id="2-表格写法"><a href="#2-表格写法" class="headerlink" title="2.表格写法"></a>2.表格写法</h4>
@@ -393,7 +403,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -404,7 +414,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -469,7 +479,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -480,7 +490,7 @@
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Nach oben">
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>

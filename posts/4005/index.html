@@ -23,12 +23,25 @@
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文介绍了定制WEPE和的方法">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/01.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/02.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/03.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/04.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/05.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/06.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/07.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/08.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/09.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/10.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/11.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/4005/12.jpg">
 <meta property="article:published_time" content="2018-09-29T16:00:00.000Z">
 <meta property="article:modified_time" content="2024-01-01T14:53:09.369Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Windows">
 <meta property="article:tag" content="System">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panxiuwen.github.io/p1/posts/4005/01.jpg">
 <meta name="twitter:creator" content="@982202733">
 <meta property="fb:app_id" content="[object Object]">
     
@@ -327,28 +340,28 @@
 <hr>
 <h3 id="Ventoy"><a href="#Ventoy" class="headerlink" title="Ventoy"></a>Ventoy</h3><p>在<a target="_blank" rel="noopener" href="https://github.com/ventoy/Ventoy/releases">Github</a>上下载<br>启动<a target="_blank" rel="noopener" href="https://www.ventoy.net/cn/plugin_plugson.html">VentoyPlugson</a>后可配置Ventoy<br>配置安全启动：安全启动错误-&gt;选择证书-&gt;VTOYEFI盘-&gt;ENROLL_THIS_KEY_IN_MOKMANAGER.cer-&gt;导入</p>
 <h3 id="WEPE"><a href="#WEPE" class="headerlink" title="WEPE"></a>WEPE</h3><p>Windows PE (Preinstallation Environment) 是方便Windows安装和维护的基础工具，而微PE工具箱毫无疑问是非常优秀的PE版本。虽然没有出官方修改教程，但是笔者还是自己摸索了一下，尝试对其进行适度定制。<br><a target="_blank" rel="noopener" href="https://www.wepe.com.cn/">下载微PE工具箱</a>，解压后运行</p>
-<img class="fancybox center 01.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="01.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="01.jpg" alt=""></a></div>
 <p>进度跑完后就在目录生成了一个ISO，双击进行挂载</p>
-<img class="fancybox center 02.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="02.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="02.jpg" alt=""></a></div>
 <p>这里的WEPE64.WIM就是微PE的核心了<br>我推荐使用WimTool，我使用的版本是1.30.2011<br>亲测WimFbaIso不行，应该是不能添加启动标记；Dism++感觉有点复杂没有仔细琢磨，应该是可以的，请读者自行测试</p>
-<img class="fancybox center 03.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="03.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="03.jpg" alt=""></a></div>
 <p>我们将WEPE64.WIM解压，得到封装的文件，我们就可以随意修改了</p>
-<img class="fancybox center 04.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="04.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="04.jpg" alt=""></a></div>
 <p>比如替换为我们喜欢的壁纸</p>
-<img class="fancybox center 05.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="05.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="05.jpg" alt=""></a></div>
 <p>直接放个破解版的完整的DiskGenius进去</p>
-<img class="fancybox center 06.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="06.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="06.jpg" alt=""></a></div>
 <p>360急救箱PE版也可以放进去，个人觉得挺好用的，杀了不少严重的病毒<br>本人也喜欢用DiskMark跑分，毕竟加载了主题之后还是有颜有料的</p>
-<img class="fancybox center 07.jpg">
-<img class="fancybox center 08.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="07.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="07.jpg" alt=""></a></div>
+<div class="figure center" style="width:;"><a class="fancybox" href="08.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="08.jpg" alt=""></a></div>
 <p>然后我们把添加的软件快捷方式放到桌面上，按照这个格式写就行,也可以删除一些东西</p>
-<img class="fancybox center 09.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="09.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="09.jpg" alt=""></a></div>
 <p>改完之后压缩回去</p>
-<img class="fancybox center 10.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="10.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="10.jpg" alt=""></a></div>
 <p>在UltraISO里替换掉我们修改的WIM文件，另存</p>
-<img class="fancybox center 11.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="11.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="11.jpg" alt=""></a></div>
 <p>得到的ios文件既可以用UltraISO写到U盘里，又可以使用Ventoy启动，不过我更倾向于后者，把ios丢到U盘里就行了</p>
-<img class="fancybox center 12.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="12.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="12.jpg" alt=""></a></div>
 
 <h3 id="若系统显示了EFI分区"><a href="#若系统显示了EFI分区" class="headerlink" title="若系统显示了EFI分区"></a>若系统显示了EFI分区</h3><p>则可使用DiskGenius直接删除分区</p>
 
@@ -405,7 +418,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -481,7 +494,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>

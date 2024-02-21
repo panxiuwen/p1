@@ -23,12 +23,15 @@
 <meta property="og:site_name" content="Pan&#39;s websit">
 <meta property="og:description" content="本文介绍了Gaussian、Materials Studio、Gamess、PyQuante、PySCF、Autodock、Gromacs和Castep的编译安装">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2002/01.jpg">
+<meta property="og:image" content="https://panxiuwen.github.io/p1/posts/2002/02.jpg">
 <meta property="article:published_time" content="2020-06-24T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-09-12T03:56:39.095Z">
 <meta property="article:author" content="Sean Pan">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Research">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://panxiuwen.github.io/p1/posts/2002/01.jpg">
 <meta name="twitter:creator" content="@982202733">
 <meta property="fb:app_id" content="[object Object]">
     
@@ -370,7 +373,7 @@
 <p>(3)在Selected Molecule一栏里选择vtx.pdb，Drawing Method选Points，Size大使分子表面上的顶点紧密相连，不留明显空隙，Coloring Method选Beta，在Trajectory标签页里将Color Scale Data Range取证并点击Set，代表色彩刻度设用默认的色彩刻度范围并且取整。现在分子表面填色图就出现了。越蓝的区域静电势越负，越红的区域越正，白色区域的静电势数值在0附近。</p>
 <p>之后给图上加上色彩刻度轴。选Extensions-Visualization-Color Scale Bar，Color bar width设为0.08，Display title选on并且将Color bar title里写上ESP (kcal&#x2F;mol)，Minimum和Maximum scale value分别填-22和22，Number of axis labels输入10，Color labels选Black，Label format选Decimal。然后点Draw Color Scale Bar按钮，色彩刻度就出现在画面中了，并且VMD Main窗口中多出了一个名为Color Scale Bar的一项。然后调整它的大小和位置，即双击VMD Main窗口中Color Scale Bar那一项当中的F标签使之变为红色，而双击其它项目的F标签使它们的F变为黑色。然后点击VMD的OpenGL图形窗口激活之，按t键进入平移模式，然后拖动鼠标将色彩刻度轴放置到合适位置，并且用鼠标滚轮调整它的大小。调合适之后再按r键恢复旋转视角模式，并且在VMD Main里将Color Scale Bar那一项的F重新双击成黑色，而其它三项的F重新双击为红色。</p>
 <p>(4)双击furan.pdb和surfanalysis.pdb对应的条目的D标签使其变红，此时窗口内就只有分子表面和色彩刻度轴显示了出来,然后按Alt+Printscreen键将窗口截图，粘贴到PS中</p>
-<img class="fancybox center 01.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="01.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="01.jpg" alt=""></a></div>
 <h4 id="使用Multiwfn-VMD快速绘制高质量分子轨道"><a href="#使用Multiwfn-VMD快速绘制高质量分子轨道" class="headerlink" title="使用Multiwfn+VMD快速绘制高质量分子轨道"></a>使用Multiwfn+VMD快速绘制高质量分子轨道</h4><p>首先把Multiwfn文件包的examples\scripts目录下的showorb.bat和showorb.txt都拷到Multiwfn可执行文件所在目录下。<br>修改showorb.txt文件的第三行数字为要计算的分子轨道，比如查看的轨道为48(HOMO),49(LUMO)，就输48-49或者48,49，保存文件<br>在Multiwfn打开cmd，运行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Multiwfn 1.fchk &lt; showorb.txt</span><br></pre></td></tr></table></figure>
 <p>然后将生成的orb000048.cub和orb000049.cub复制到VMD根目录里<br>把Multiwfn文件包的examples\scripts目录下的VMD绘图脚本showorb.vmd，在VMD文件夹下的vmd.rc文件末尾添加</p>
@@ -380,7 +383,7 @@
 <p>再输入下面的代码</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">color Name C tan</span><br><span class="line">color change rgb tan 0.700000 0.560000 0.360000</span><br><span class="line">material change mirror Opaque 0.15</span><br><span class="line">material change outline Opaque 4.000000</span><br><span class="line">material change outlinewidth Opaque 0.5</span><br><span class="line">material change ambient Glossy 0.1</span><br><span class="line">material change diffuse Glossy 0.600000</span><br><span class="line">material change opacity Glossy 0.75</span><br><span class="line">material change shininess Glossy 1.0</span><br><span class="line">mol modcolor 1 top ColorID 12</span><br><span class="line">mol modcolor 2 top ColorID 22</span><br><span class="line">display distance -7.0</span><br><span class="line">display height 10</span><br><span class="line">light 3 on</span><br></pre></td></tr></table></figure>
 <p>截图保存即可</p>
-<img class="fancybox center 02.jpg">
+<div class="figure center" style="width:;"><a class="fancybox" href="02.jpg" title="" data-caption="" data-fancybox="default"><img class="fig-img" src="02.jpg" alt=""></a></div>
 <h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a target="_blank" rel="noopener" href="http://gaussian.com/running/?tabid=5">Running Gaussian Using GPUs</a><br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/KI3iLC7ko1Fn_ZdSKx_aeQ">在Gaussian 16计算中使用GPU</a><br><a target="_blank" rel="noopener" href="http://sobereva.com/196">使用Multiwfn结合VMD分析和绘制分子表面静电势分布</a><br><a target="_blank" rel="noopener" href="http://sobereva.com/447">使用Multiwfn+VMD快速绘制高质量分子轨道等值面图（含视频）</a><br><a target="_blank" rel="noopener" href="http://sobereva.com/449">用VMD绘制艺术级轨道等值面图的方法（含演示视频）</a></p>
 <hr>
 <h3 id="Materials-Studio"><a href="#Materials-Studio" class="headerlink" title="Materials Studio"></a>Materials Studio</h3><p>修改第一行的XXX为PC的设备名称</p>
@@ -517,7 +520,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -593,7 +596,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Diesen Beitrag teilen"
+                aria-label="Share this post"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
