@@ -15,7 +15,7 @@
         <link rel="icon" href="https://panxiuwen.github.io/p1/assets/images/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://space.bilibili.com/39874140","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文是笔者记录的部分Android的笔记\n\n\n\n\n初始化安卓12版miui13启用悬浮窗后触控失灵的问题：使用drop(root)干掉(安卓13没有这个问题)建议关闭miui内存扩展\n小米10S Root和Xposed参考\n解BL锁小米手机可根据官方教程可解锁\n准备工作使用Miflash安装fastboot等驱动在发行的包下载中找到设备安装的镜像并下载，这里是小米10s的包下载安装最新的MagiskPayload-dumper、Platform-tools和Shamiko可以在博主的公共网盘里获取\n生成boot.img并刷入在镜像中寻找payload.bin文件，将此文件拖放到payload-dumperX64.exe程序上，打开提取得到的文件夹就可以看到boot.img文件将boot.img放在手机中，启动Magisk，在主页-&gt;Magisk-&gt;安装-&gt;选择并修补一个文件-&gt;boot.img，会在download目录中生成magisk_patched-XXX.img，将它放在复制到电脑里手机关机，再长按音量键下+关机键进入fastboot模式解压Platform-tools，将magisk生成的magisk_patched-XXX.img放入此目录中，用管理员权限启动powershell，使用下面的命令刷入\n1./fastboot flash boot magisk_patched-26100_g1bdZ.img\n显示Finished .Total time 后重启\n1./fastboot reboot\n重启后在主页-&gt;Magisk里会显示当前 XX.X(总之和软件版本一样)，如果点击安装会多出直接安装和安装到未使用的槽位(OTA后)这两个选项，底栏的超级用户也可以使用了\n隐藏root设置中开启Zygisk，勾上遵守排除列表在配置排除列表中添加需要隐藏的应用，已知如下APP需要隐藏Root才能启动\n1淘宝、支付宝、几乎所有的银行App\n以下APP会启动弹窗提示Root\n1Keepass\n开启Xposed使用Magisk刷入Lsposed zygisk拨号键打*#*#5776733#*#*即可调出Lsposed\n\n其他设置修改充电电流使用Scene4(滑块条反人类)和Scene5(一个使用开源代码的破工具按天付费你敢信？)镧·系统工具箱(貌似不可用)均可\n\n其他应用笔记微信走FCM推送启用Miui的谷歌基础服务安装Google Play版微信使用Magisk刷入FCMHostsForChina，虽然可能不需要安装Thanox，需购买专业版打开Lsposed启用Thanox在Thanox中打开微信代收-&gt;DIAG，显示Server:Connected即可\n知乎知乎live缓存存储位置：/data/data/com.zhihu.android/files/downloadCenter/live/\n","dateCreated":"2018-06-17T00:00:00+08:00","dateModified":"2023-07-31T23:44:17+08:00","datePublished":"2018-06-17T00:00:00+08:00","description":"本文是笔者记录的部分Android的笔记","headline":"Android相关笔记","image":["../10000/Android.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/p1/posts/2003/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://space.bilibili.com/39874140","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/p1/posts/2003/","keywords":"System, Windows","thumbnailUrl":"../10000/Android.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://space.bilibili.com/39874140","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg"},"articleBody":"本文是笔者记录的部分Android的笔记\n\n\n\n\n初始化安卓12版miui13启用悬浮窗后触控失灵的问题：使用drop(root)干掉(安卓13没有这个问题)建议关闭miui内存扩展\n小米10S Root和Xposed参考\n解BL锁小米手机可根据官方教程可解锁\n准备工作使用Miflash安装fastboot等驱动在发行的包下载中找到设备安装的镜像并下载，这里是小米10s的包下载安装最新的MagiskPayload-dumper、Platform-tools和Shamiko可以在博主的公共网盘里获取\n生成boot.img并刷入在镜像中寻找payload.bin文件，将此文件拖放到payload-dumperX64.exe程序上，打开提取得到的文件夹就可以看到boot.img文件将boot.img放在手机中，启动Magisk，在主页-&gt;Magisk-&gt;安装-&gt;选择并修补一个文件-&gt;boot.img，会在download目录中生成magisk_patched-XXX.img，将它放在复制到电脑里手机关机，再长按音量键下+关机键进入fastboot模式解压Platform-tools，将magisk生成的magisk_patched-XXX.img放入此目录中，用管理员权限启动powershell，使用下面的命令刷入\n1./fastboot flash boot magisk_patched-26100_g1bdZ.img\n显示Finished .Total time 后重启\n1./fastboot reboot\n重启后在主页-&gt;Magisk里会显示当前 XX.X(总之和软件版本一样)，如果点击安装会多出直接安装和安装到未使用的槽位(OTA后)这两个选项，底栏的超级用户也可以使用了\n隐藏root设置中开启Zygisk，勾上遵守排除列表在配置排除列表中添加需要隐藏的应用，已知如下APP需要隐藏Root才能启动\n1淘宝、支付宝、几乎所有的银行App\n以下APP会启动弹窗提示Root\n1Keepass\n开启Xposed使用Magisk刷入Lsposed zygisk拨号键打*#*#5776733#*#*即可调出Lsposed\n\n其他设置修改充电电流使用Scene4(滑块条反人类)和Scene5(一个使用开源代码的破工具按天付费你敢信？)镧·系统工具箱(貌似不可用)均可\n\n其他应用笔记微信走FCM推送启用Miui的谷歌基础服务安装Google Play版微信使用Magisk刷入FCMHostsForChina，虽然可能不需要安装Thanox，需购买专业版打开Lsposed启用Thanox在Thanox中打开微信代收-&gt;DIAG，显示Server:Connected即可\n知乎知乎live缓存存储位置：/data/data/com.zhihu.android/files/downloadCenter/live/\n","dateCreated":"2018-06-17T00:00:00+08:00","dateModified":"2024-05-10T23:03:05+08:00","datePublished":"2018-06-17T00:00:00+08:00","description":"本文是笔者记录的部分Android的笔记","headline":"Android相关笔记","image":["../10000/Android.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://panxiuwen.github.io/p1/posts/2003/"},"publisher":{"@type":"Organization","name":"Sean Pan","sameAs":["https://www.zhihu.com/people/gu-ao-de-zhan-dou-zhe","https://music.163.com/#/user/home?id=70816221","https://github.com/panxiuwen/","https://space.bilibili.com/39874140","mailto:panxiuwen_sean@qq.com"],"image":"mitu.jpg","logo":{"@type":"ImageObject","url":"mitu.jpg"}},"url":"https://panxiuwen.github.io/p1/posts/2003/","keywords":"Windows, System","thumbnailUrl":"../10000/Android.jpg"}</script>
     <meta name="description" content="本文是笔者记录的部分Android的笔记">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Android相关笔记">
@@ -24,10 +24,10 @@
 <meta property="og:description" content="本文是笔者记录的部分Android的笔记">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-06-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-31T15:44:17.000Z">
+<meta property="article:modified_time" content="2024-05-10T15:03:05.299Z">
 <meta property="article:author" content="Sean Pan">
-<meta property="article:tag" content="System">
 <meta property="article:tag" content="Windows">
+<meta property="article:tag" content="System">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:creator" content="@982202733">
 <meta property="fb:app_id" content="[object Object]">
@@ -328,7 +328,7 @@
 <h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>安卓12版miui13启用悬浮窗后触控失灵的问题：使用drop(root)干掉(安卓13没有这个问题)<br>建议关闭miui内存扩展</p>
 <h3 id="小米10S-Root和Xposed"><a href="#小米10S-Root和Xposed" class="headerlink" title="小米10S Root和Xposed"></a>小米10S Root和Xposed</h3><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv21829736/">参考</a></p>
 <h4 id="解BL锁"><a href="#解BL锁" class="headerlink" title="解BL锁"></a>解BL锁</h4><p>小米手机可根据<a target="_blank" rel="noopener" href="https://miuiver.com/how-to-unlock-xiaomi-phone/">官方教程</a>可解锁</p>
-<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>使用<a target="_blank" rel="noopener" href="https://miuiver.com/miflash/">Miflash</a>安装fastboot等驱动<br>在<a target="_blank" rel="noopener" href="https://xiaomirom.com/series/">发行的包下载</a>中找到设备安装的镜像并下载，<a target="_blank" rel="noopener" href="https://xiaomirom.com/miui-125/thyme/">这里</a>是小米10s的包<br>下载安装最新的<a target="_blank" rel="noopener" href="https://github.com/topjohnwu/Magisk/releases">Magisk</a><br>Payload-dumper、Platform-tools和Shamiko可以在<a target="_blank" rel="noopener" href="http://982202733.ysepan.com/">博主的公共网盘</a>里获取</p>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>使用<a target="_blank" rel="noopener" href="https://miuiver.com/miflash/">Miflash</a>安装fastboot等驱动<br>在<a target="_blank" rel="noopener" href="https://xiaomirom.com/series/">发行的包下载</a>中找到设备安装的镜像并下载，<a target="_blank" rel="noopener" href="https://xiaomirom.com/rom/mi-10s-thyme-china-fastboot-recovery-rom/">这里</a>是小米10s的包<br>下载安装最新的<a target="_blank" rel="noopener" href="https://github.com/topjohnwu/Magisk/releases">Magisk</a><br>Payload-dumper、Platform-tools和Shamiko可以在<a target="_blank" rel="noopener" href="http://982202733.ysepan.com/">博主的公共网盘</a>里获取</p>
 <h4 id="生成boot-img并刷入"><a href="#生成boot-img并刷入" class="headerlink" title="生成boot.img并刷入"></a>生成boot.img并刷入</h4><p>在镜像中寻找payload.bin文件，将此文件拖放到payload-dumperX64.exe程序上，打开提取得到的文件夹就可以看到boot.img文件<br>将boot.img放在手机中，启动Magisk，在主页-&gt;Magisk-&gt;安装-&gt;选择并修补一个文件-&gt;boot.img，会在download目录中生成<code>magisk_patched-XXX.img</code>，将它放在复制到电脑里<br>手机关机，再长按音量键下+关机键进入fastboot模式<br>解压Platform-tools，将magisk生成的<code>magisk_patched-XXX.img</code>放入此目录中，用管理员权限启动powershell，使用下面的命令刷入</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./fastboot flash boot magisk_patched-26100_g1bdZ.img</span><br></pre></td></tr></table></figure>
 <p>显示Finished .Total time 后重启</p>
@@ -398,7 +398,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
@@ -474,7 +474,7 @@
             <a
                 class="post-action-btn btn btn--default btn-open-shareoptions"
                 href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                aria-label="Diesen Beitrag teilen"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
             </a>
